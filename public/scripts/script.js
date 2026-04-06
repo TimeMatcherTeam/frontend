@@ -1,7 +1,4 @@
-import { auth } from "./auth.js";
-import { getToken } from "./jwtUtils.js";
+import "./globals.js"
+import { showAuthForm } from "./popups/authPopup.js"
 
-let JWT = getToken();
-if (! JWT) {
-  
-}
+showAuthForm();
