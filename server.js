@@ -11,10 +11,11 @@ app.get("/", (req, res) => {
   res.status(200);
 })
 
-app.get("/groups/:groupId", (req, res) => {
-  res.sendFile("/public/pages/group.html", { root: __dirname });
+app.get("/group_meeting/:meetingId", (req, res) => {
+  res.sendFile("/public/pages/group_meeting.html", { root: __dirname });
   res.status(200);
 })
+
 app.get("/profile", (req, res) => {
   res.sendFile("/public/pages/profile.html", { root: __dirname });
   res.status(200);
