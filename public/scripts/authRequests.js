@@ -12,9 +12,7 @@ export async function register(email, username, password) {
   if (response.ok) {
     return json;
   } else {
-    alert(
-      `Не удалось зарегистрировать пользователя, ответ сервера: ${JSON.stringify(json.errors)}, код ответа: ${response.status}`
-    );
+    throw new Error(json.detail || "Ошибка регистрации");
   }
 }
 
@@ -30,9 +28,6 @@ export async function login(email, password) {
   if (response.ok) {
     return json;
   } else {
-    alert(
-      `Не удалось войти, ответ сервера: ${JSON.stringify(json.errors)}, код ответа: ${response.status}`
-    );
+    throw new Error(json.detail || "Ошибка входа");
   }
 }
-

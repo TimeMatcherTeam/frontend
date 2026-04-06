@@ -7,6 +7,7 @@ const formTitle = document.getElementById("formTitle");
 const emailInput = document.getElementById("email");
 const usernameInput = document.getElementById("username");
 const passwordInput = document.getElementById("password");
+const confirmPasswordInput = document.getElementById("confirmPassword");
 const submitBtn = document.getElementById("submitBtn");
 const switchBtn = document.getElementById("switchBtn");
 const errorDiv = document.getElementById("error");
@@ -20,11 +21,13 @@ switchBtn.addEventListener("click", (event) => {
     submitBtn.value = "Войти";
     switchBtn.textContent = "Нет аккаунта? Зарегистрироваться";
     usernameInput.style.display = "none";
+    confirmPasswordInput.style.display = "none";
   } else {
     formTitle.textContent = "Регистрация";
     submitBtn.value = "Зарегистрироваться";
     switchBtn.textContent = "Уже есть аккаунт? Войти";
-    usernameInput.style.display = "block";
+    usernameInput.style.display = "";
+    confirmPasswordInput.style.display = "";
   }
 
   errorDiv.textContent = "";
@@ -42,17 +45,26 @@ authForm.addEventListener("submit", async (event) => {
     return;
   }
 
+  if (confirmPasswordInput.value !== password) {
+    errorDiv.textContent = "Пароли не совпадают";
+    return;
+  }
+
   if (!isLogin && !usernameInput.value) {
     errorDiv.textContent = "Введите имя пользователя";
     return;
   }
-
-  if (isLogin) {
-    await loginAuth(email, password);
-  } else {
-    await registerAuth(email, usernameInput.value, password);
+  try {
+    if (isLogin) {
+      await loginAuth(email, password);
+    } else {
+      await registerAuth(email, usernameInput.value, password);
+    }
+    location.reload()
   }
-  location.reload()
+  catch (error){
+    errorDiv.textContent = error.message;
+  }
 });
 
 export function showAuthForm() {
