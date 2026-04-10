@@ -1,0 +1,68 @@
+:root {
+  --bg-color: #F7F7F7;
+  --element-bg-color: #ECECF2;
+  --element-color: #C9CCD5;
+  --accent-color: #5BB7D5;
+  --accent-color-desaturated: #B4DBE8;
+  --border-radius: 10px;
+
+  font-family: 'Monsterrat', sans-serif;
+}
+
+h2 {
+  font-size: 30px;
+  font-weight: 600;
+  margin: 0;
+}
+
+.input-wrapper {
+  height: 82px;
+  background-color: var(--element-color);
+  display: flex;
+  align-items: center;
+  border-radius: var(--border-radius);
+}
+
+input {
+  background-color: transparent;
+  border: 0;
+  border-radius: var(--border-radius);
+  text-align: center;
+  font-size: 28px;
+  font-weight: 400;
+}
+
+input:autofill {
+  background-color: transparent;
+}
+
+.submit-cancel-wrapper {
+  display: flex;
+  flex-direction: row;
+  gap: 18px;
+  height: 82px;
+}
+
+button {
+  border: 0;
+  border-radius: var(--border-radius);
+  cursor: pointer;
+  font-size: 28px;
+  font-weight: 400;
+}
+
+.submit-button {
+  background-color: var(--accent-color-desaturated);
+  height: 100%;
+  width: 100%;
+}
+
+.cancel-button {
+  background-color: var(--accent-color);
+  height: 100%;
+  width: 100%;
+}
+
+.error {
+  color: red;
+}

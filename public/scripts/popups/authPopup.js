@@ -3,14 +3,19 @@ import { JWT } from "../globals.js";
 
 let isLogin = true;
 
+const authOverlay = document.getElementById("authOverlay");
+const authForm = document.getElementById("authForm");
 const formTitle = document.getElementById("formTitle");
 const emailInput = document.getElementById("email");
 const usernameInput = document.getElementById("username");
+const usernameWrapper = document.getElementById("usernameWrapper");
 const passwordInput = document.getElementById("password");
 const confirmPasswordInput = document.getElementById("confirmPassword");
-const submitBtn = document.getElementById("submitBtn");
-const switchBtn = document.getElementById("switchBtn");
-const errorDiv = document.getElementById("error");
+const confirmPasswordWrapper = document.getElementById("confirmPasswordWrapper");
+const submitBtn = document.getElementById("submitAuthBtn");
+const cancelBtn = document.getElementById("cancelAuthBtn");
+const switchBtn = document.getElementById("switchAuthBtn");
+const errorDiv = document.getElementById("authError");
 
 switchBtn.addEventListener("click", (event) => {
   event.preventDefault();
@@ -18,16 +23,16 @@ switchBtn.addEventListener("click", (event) => {
 
   if (isLogin) {
     formTitle.textContent = "Вход";
-    submitBtn.value = "Войти";
+    submitBtn.textContent = "Войти";
     switchBtn.textContent = "Нет аккаунта? Зарегистрироваться";
-    usernameInput.style.display = "none";
-    confirmPasswordInput.style.display = "none";
+    usernameWrapper.style.display = "none";
+    confirmPasswordWrapper.style.display = "none";
   } else {
     formTitle.textContent = "Регистрация";
-    submitBtn.value = "Зарегистрироваться";
+    submitBtn.textContent = "Зарегистрироваться";
     switchBtn.textContent = "Уже есть аккаунт? Войти";
-    usernameInput.style.display = "";
-    confirmPasswordInput.style.display = "";
+    usernameWrapper.style.display = "";
+    confirmPasswordWrapper.style.display = "";
   }
 
   errorDiv.textContent = "";
@@ -41,16 +46,19 @@ authForm.addEventListener("submit", async (event) => {
   const password = passwordInput.value;
 
   if (!email || !password) {
+    errorDiv.style.display = "";
     errorDiv.textContent = "Заполните email и пароль";
     return;
   }
 
-  if (confirmPasswordInput.value !== password) {
+  if (!isLogin && confirmPasswordInput.value !== password) {
+    errorDiv.style.display = "";
     errorDiv.textContent = "Пароли не совпадают";
     return;
   }
 
   if (!isLogin && !usernameInput.value) {
+    errorDiv.style.display = "";
     errorDiv.textContent = "Введите имя пользователя";
     return;
   }
@@ -60,16 +68,19 @@ authForm.addEventListener("submit", async (event) => {
     } else {
       await registerAuth(email, usernameInput.value, password);
     }
-    location.reload()
-  }
-  catch (error){
+    location.reload();
+  } catch (error) {
+    errorDiv.style.display = "";
     errorDiv.textContent = error.message;
   }
 });
 
+cancelBtn.addEventListener("click", () => {
+  authOverlay.style.display = "none";
+});
+
 export function showAuthForm() {
-  const authForm = document.getElementById("authForm");
   if (!JWT) {
-    authForm.style.display = "";
+    authOverlay.style.display = "";
   }
 }
