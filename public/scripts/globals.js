@@ -1,6 +1,6 @@
 import { loginAuth } from "./auth.js";
 import { getToken } from "./jwtUtils.js";
-import { getAbilities } from "./requests.js";
+import { getAbilities } from "./requests/requests.js";
 
 export let JWT = getToken();
 
