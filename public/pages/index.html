@@ -8,6 +8,7 @@
 
     <link rel="stylesheet" href="styles/style.css">
     <link rel="stylesheet" href="styles/auth.css">
+    <link rel="stylesheet" href="styles/calendar.css">
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -19,6 +20,7 @@
     <header>
     </header>
     главная страница
+
     <div id="authOverlay" style="display: none;">
         <form id="authForm" class="container">
             <h2 id="formTitle">Вход</h2>
@@ -42,14 +44,75 @@
             </div>
         </form>
     </div>
+
     <main>
 
     </main>
 
+    <!-- Календарь -->
+    <div class="cal-root" id="calRoot">
+        <div class="cal-header">
+            <span class="app-title">Календарь</span>
+            <button class="nav-btn" id="prevBtn">&#8249;</button>
+            <button class="nav-btn" id="nextBtn">&#8250;</button>
+            <span class="week-label" id="weekLabel"></span>
+            <button class="today-btn" id="todayBtn">Сегодня</button>
+            <button class="add-btn" id="addBtn">+ Создать</button>
+        </div>
+        <div class="col-head" id="colHead">
+            <div class="th-time"></div>
+        </div>
+        <div class="cal-body" id="calBody">
+            <div class="time-col" id="timeCol"></div>
+            <div class="grid-area" id="gridArea"></div>
+        </div>
+    </div>
+
+    <!-- Модальное окно создания/редактирования события -->
+    <div class="modal-bg" id="modalBg" style="display:none">
+        <div class="modal">
+            <div class="modal-header">
+                <span id="modalTitle">Новое событие</span>
+                <button class="modal-close" id="modalClose">&#215;</button>
+            </div>
+            <div class="modal-body">
+                <label>Название</label>
+                <input type="text" id="evName" placeholder="Добавить название">
+                <label>Дата</label>
+                <input type="date" id="evDate">
+                <div class="time-row">
+                    <div>
+                        <label>Начало</label>
+                        <input type="time" id="evStart" value="09:00">
+                    </div>
+                    <div>
+                        <label>Конец</label>
+                        <input type="time" id="evEnd" value="10:00">
+                    </div>
+                </div>
+                <label>Цвет</label>
+                <div class="color-row" id="colorRow"></div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn-cancel" id="cancelBtn">Отмена</button>
+                <button class="btn-save" id="saveBtn">Сохранить</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Всплывающая подсказка события -->
+    <div class="ev-tooltip" id="evTooltip" style="display:none">
+        <div class="tt-title" id="ttTitle"></div>
+        <div class="tt-time" id="ttTime"></div>
+        <div class="tt-actions">
+            <button class="tt-btn tt-edit" id="ttEdit">Изменить</button>
+            <button class="tt-btn tt-del" id="ttDel">Удалить</button>
+        </div>
+    </div>
+
     <footer>
     </footer>
 </body>
-
+<script type="module" src="scripts/calendar/calendar.js"></script>
 <script type="module" src="scripts/script.js"></script>
-
 </html>
