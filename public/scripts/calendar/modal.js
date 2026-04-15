@@ -3,6 +3,13 @@ import { COLORS } from "./constants.js";
 import { renderEvents } from "./grid.js";
 import { hideTooltip } from "./tooltip.js";
 import { getWeekStart, dateKey } from "./utils.js";
+import {
+    AddSlot,
+    UpdateSlot,
+    mapSlotResponseToCalendarEvent,
+    abilityTypeByColor,
+    colorByAbilityName
+} from "./slotsRequests.js";
 
 export function openModal(ev) {
     state.editId = ev ? ev.id : null;
@@ -13,7 +20,9 @@ export function openModal(ev) {
         document.getElementById('evDate').value  = ev.date;
         document.getElementById('evStart').value = ev.start;
         document.getElementById('evEnd').value   = ev.end;
-        state.selColor = ev.color || 0;
+        state.selColor = Number.isInteger(ev.color)
+            ? ev.color
+            : colorByAbilityName(ev.abilityName);
     } else if (state.pendingTime) {
         document.getElementById('evDate').value  = state.pendingTime.date;
         document.getElementById('evStart').value = state.pendingTime.start;
@@ -39,18 +48,59 @@ export function closeModal() {
     state.pendingTime = null;
 }
 
-export function saveEvent() {
+function isGuid(value) {
+    return typeof value === "string" && /^[0-9a-fA-F-]{36}$/.test(value);
+}
+
+export async function saveEvent() {
     const name  = document.getElementById('evName').value.trim() || '(без названия)';
     const date  = document.getElementById('evDate').value;
     const start = document.getElementById('evStart').value;
     const end   = document.getElementById('evEnd').value;
     if (!date || !start || !end) return;
 
-    if (state.editId) {
-        const ev = state.events.find(e => e.id === state.editId);
-        if (ev) { ev.name = name; ev.date = date; ev.start = start; ev.end = end; ev.color = state.selColor; }
-    } else {
-        state.events.push({ id: Date.now(), name, date, start, end, color: state.selColor });
+    const payload = {
+        name,
+        date,
+        start,
+        end,
+        color: state.selColor,
+        abilityType: abilityTypeByColor(state.selColor)
+    };
+
+    try {
+        if (state.editId) {
+            const ev = state.events.find(e => e.id === state.editId);
+            if (!ev) return;
+
+            if (isGuid(state.editId)) {
+                const updatedSlot = await UpdateSlot(state.editId, {
+                    ...payload,
+                    abilityId: ev.abilityId
+                });
+
+                const normalized = mapSlotResponseToCalendarEvent(updatedSlot, state.selColor);
+                ev.id = normalized.id;
+                ev.name = normalized.name;
+                ev.date = normalized.date;
+                ev.start = normalized.start;
+                ev.end = normalized.end;
+                ev.color = normalized.color;
+                ev.abilityId = normalized.abilityId;
+            } else {
+                ev.name = name;
+                ev.date = date;
+                ev.start = start;
+                ev.end = end;
+                ev.color = state.selColor;
+            }
+        } else {
+            const createdSlot = await AddSlot(payload);
+            state.events.push(mapSlotResponseToCalendarEvent(createdSlot, state.selColor));
+        }
+    } catch (error) {
+        alert(error?.message || "Не удалось сохранить событие");
+        return;
     }
 
     closeModal();
@@ -60,11 +110,12 @@ export function saveEvent() {
 function renderColorPicker() {
     const row = document.getElementById('colorRow');
     row.innerHTML = '';
+    const labels = ['Занят', 'Частично занят'];
     COLORS.forEach((c, i) => {
         const dot = document.createElement('div');
         dot.className = 'color-dot' + (i === state.selColor ? ' selected' : '');
         dot.style.background = c.border;
-        dot.title = ['Синий','Красный','Зелёный','Жёлтый','Фиолетовый','Голубой'][i];
+        dot.title = labels[i] || labels[0];
         dot.onclick = () => { state.selColor = i; renderColorPicker(); };
         row.appendChild(dot);
     });
