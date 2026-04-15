@@ -1,0 +1,40 @@
+.page-header {
+    position: sticky;
+    top: 0;
+    z-index: 60;
+    height: 72px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 20px;
+    border: 1px solid var(--element-color);
+    background: var(--bg-color);
+    box-shadow: 0 8px 28px rgba(21, 32, 53, 0.08);
+    font-family: inherit;
+}
+
+.brand-link {
+    text-decoration: none;
+    color: var(--text-color);
+    font-weight: 700;
+    font-size: 34px;
+    letter-spacing: -0.02em;
+}
+
+.page-nav {
+    display: flex;
+    align-items: center;
+    gap: 18px;
+}
+
+.page-link {
+    color: var(--text-color);
+    font-size: 16px;
+    font-weight: 600;
+    text-decoration: underline;
+    text-underline-offset: 3px;
+}
+
+.page-link:hover {
+    color: var(--accent-color-desaturated);
+}

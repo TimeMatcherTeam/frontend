@@ -1,0 +1,215 @@
+.create-menu {
+    display: none;
+    position: absolute;
+    top: calc(100% + 6px);
+    left: 0;
+    right: 0;
+    border-radius: 10px;
+    border: 1px solid var(--element-color);
+    background: var(--bg-color);
+    box-shadow: 0 10px 24px rgba(15, 23, 42, 0.14);
+    overflow: hidden;
+    z-index: 30;
+}
+
+.create-dropdown.open .create-menu { display: block; }
+
+.create-item {
+    width: 100%;
+    border: none;
+    border-bottom: 1px solid var(--element-color);
+    background: var(--bg-color);
+    text-align: left;
+    padding: 10px 12px;
+    font-size: 14px;
+    color: var(--text-color);
+    cursor: pointer;
+}
+
+.create-item:last-child { border-bottom: none; }
+.create-item:hover:not(:disabled) { background: var(--element-bg-color); }
+.create-item:disabled {
+    color: var(--element-color);
+    cursor: not-allowed;
+}
+
+.modal-bg {
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.38);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 100;
+}
+
+.modal {
+    background: var(--bg-color);
+    border-radius: 12px;
+    width: 360px;
+    box-shadow: 0 8px 40px rgba(0, 0, 0, 0.18);
+    overflow: hidden;
+}
+
+.modal-header {
+    padding: 18px 22px 14px;
+    font-size: 18px;
+    font-weight: 400;
+    color: var(--text-color);
+    border-bottom: 1px solid var(--element-color);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.modal-close {
+    background: none;
+    border: none;
+    font-size: 20px;
+    cursor: pointer;
+    color: var(--text-color);
+    line-height: 1;
+    padding: 0 2px;
+}
+
+.modal-close:hover { color: var(--accent-color-desaturated); }
+
+.modal-body { padding: 16px 22px; }
+
+.modal-body label {
+    display: block;
+    font-size: 12px;
+    color: var(--text-color);
+    margin-bottom: 5px;
+    margin-top: 14px;
+}
+
+.modal-body label:first-child { margin-top: 0; }
+
+.modal-body input,
+.modal-body select {
+    width: 100%;
+    padding: 8px 12px;
+    border: 1px solid var(--element-color);
+    border-radius: 8px;
+    font-size: 14px;
+    color: var(--text-color);
+    background: var(--bg-color);
+    font-family: inherit;
+    transition: border-color 0.15s;
+}
+
+.modal-body input:focus,
+.modal-body select:focus {
+    outline: none;
+    border-color: var(--accent-color);
+    box-shadow: 0 0 0 2px rgba(26, 115, 232, 0.15);
+}
+
+.time-row { display: flex; gap: 10px; }
+.time-row > div { flex: 1; }
+
+.color-row { display: flex; gap: 8px; margin-top: 8px; }
+
+.color-dot {
+    width: 26px;
+    height: 26px;
+    border-radius: 50%;
+    cursor: pointer;
+    border: 3px solid transparent;
+    transition: transform 0.1s;
+}
+
+.color-dot:hover { transform: scale(1.15); }
+.color-dot.selected { border-color: var(--accent-color); }
+
+.modal-footer {
+    padding: 12px 22px 16px;
+    display: flex;
+    justify-content: flex-end;
+    gap: 8px;
+    border-top: 1px solid var(--element-color);
+}
+
+.btn-cancel {
+    padding: 8px 18px;
+    border-radius: 20px;
+    border: none;
+    background: transparent;
+    cursor: pointer;
+    font-size: 13px;
+    color: var(--text-color);
+    font-family: inherit;
+    font-weight: 500;
+}
+
+.btn-cancel:hover { background: var(--element-bg-color); }
+
+.btn-save {
+    padding: 8px 18px;
+    border-radius: 20px;
+    border: none;
+    background: var(--accent-color);
+    color: var(--bg-color);
+    cursor: pointer;
+    font-size: 13px;
+    font-weight: 500;
+    font-family: inherit;
+    transition: background 0.15s;
+}
+
+.btn-save:hover { background: var(--accent-color-desaturated); }
+
+.ev-tooltip {
+    position: fixed;
+    background: var(--bg-color);
+    border: 1px solid var(--element-color);
+    border-radius: 10px;
+    padding: 12px 16px;
+    z-index: 200;
+    font-size: 13px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.14);
+    min-width: 160px;
+    pointer-events: none;
+}
+
+.ev-tooltip.visible { pointer-events: all; }
+
+.ev-tooltip .tt-title {
+    font-size: 14px;
+    font-weight: 500;
+    margin-bottom: 5px;
+}
+
+.ev-tooltip .tt-time {
+    color: var(--text-color);
+    font-size: 12px;
+}
+
+.tt-actions { display: flex; gap: 8px; margin-top: 10px; }
+
+.tt-btn {
+    padding: 4px 12px;
+    border-radius: 12px;
+    font-size: 12px;
+    cursor: pointer;
+    font-family: inherit;
+    font-weight: 500;
+    transition: background 0.12s;
+}
+
+.tt-edit {
+    border: 1px solid var(--accent-color);
+    background: transparent;
+    color: var(--text-color);
+}
+
+.tt-edit:hover { background: var(--element-bg-color); }
+
+.tt-del {
+    border: 1px solid var(--accent-color-desaturated);
+    background: transparent;
+    color: var(--accent-color-desaturated);
+}
+
+.tt-del:hover { background: var(--element-bg-color); }
