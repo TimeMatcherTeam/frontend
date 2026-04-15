@@ -8,6 +8,7 @@
 
     <link rel="stylesheet" href="styles/style.css">
     <link rel="stylesheet" href="styles/auth.css">
+    <link rel="stylesheet" href="styles/header.css">
     <link rel="stylesheet" href="styles/calendar.css">
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -17,9 +18,8 @@
 </head>
 
 <body>
-    <header>
-    </header>
-    главная страница
+    <div class="page-shell">
+        <header id="pageHeader"></header>
 
     <div id="authOverlay" style="display: none;">
         <form id="authForm" class="container">
@@ -45,27 +45,38 @@
         </form>
     </div>
 
-    <main>
+        <main class="page-main">
+            <aside class="calendar-sidebar">
+                <div class="mini-calendar-box">календарик</div>
 
-    </main>
+                <div class="create-dropdown" id="createDropdown">
+                    <button class="add-btn" id="addBtn">Создать <span class="add-caret">&#9662;</span></button>
+                    <div class="create-menu" id="createMenu">
+                        <button class="create-item" id="actionEvent">мероприятие</button>
+                        <button class="create-item" type="button" disabled>встреча</button>
+                        <button class="create-item" type="button" disabled>группа</button>
+                    </div>
+                </div>
+            </aside>
 
-    <!-- Календарь -->
-    <div class="cal-root" id="calRoot">
-        <div class="cal-header">
-            <span class="app-title">Календарь</span>
-            <button class="nav-btn" id="prevBtn">&#8249;</button>
-            <button class="nav-btn" id="nextBtn">&#8250;</button>
-            <span class="week-label" id="weekLabel"></span>
-            <button class="today-btn" id="todayBtn">Сегодня</button>
-            <button class="add-btn" id="addBtn">+ Создать</button>
-        </div>
-        <div class="col-head" id="colHead">
-            <div class="th-time"></div>
-        </div>
-        <div class="cal-body" id="calBody">
-            <div class="time-col" id="timeCol"></div>
-            <div class="grid-area" id="gridArea"></div>
-        </div>
+            <!-- Календарь -->
+            <div class="cal-root" id="calRoot">
+                <div class="cal-header">
+                    <span class="app-title">Календарь</span>
+                    <button class="nav-btn" id="prevBtn">&#8249;</button>
+                    <button class="nav-btn" id="nextBtn">&#8250;</button>
+                    <span class="week-label" id="weekLabel"></span>
+                    <button class="today-btn" id="todayBtn">Сегодня</button>
+                </div>
+                <div class="col-head" id="colHead">
+                    <div class="th-time"></div>
+                </div>
+                <div class="cal-body" id="calBody">
+                    <div class="time-col" id="timeCol"></div>
+                    <div class="grid-area" id="gridArea"></div>
+                </div>
+            </div>
+        </main>
     </div>
 
     <!-- Модальное окно создания/редактирования события -->
@@ -110,9 +121,8 @@
         </div>
     </div>
 
-    <footer>
-    </footer>
 </body>
+<script type="module" src="scripts/header.js"></script>
 <script type="module" src="scripts/calendar/calendar.js"></script>
 <script type="module" src="scripts/script.js"></script>
 </html>

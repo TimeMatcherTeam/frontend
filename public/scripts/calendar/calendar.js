@@ -23,7 +23,16 @@ document.getElementById('todayBtn').onclick = () => {
     buildAll();
 };
 
-document.getElementById('addBtn').onclick = () => openModal();
+document.getElementById('addBtn').onclick = e => {
+    e.stopPropagation();
+    document.getElementById('createDropdown').classList.toggle('open');
+};
+
+document.getElementById('actionEvent').onclick = () => {
+    document.getElementById('createDropdown').classList.remove('open');
+    openModal();
+};
+
 document.getElementById('saveBtn').onclick = saveEvent;
 document.getElementById('cancelBtn').onclick = closeModal;
 document.getElementById('modalClose').onclick = closeModal;
@@ -65,9 +74,11 @@ document.getElementById('ttEdit').onclick = () => {
 };
 
 document.addEventListener('click', e => {
+    if (!e.target.closest('.create-dropdown')) {
+        document.getElementById('createDropdown').classList.remove('open');
+    }
     if (!e.target.closest('.ev-tooltip') && !e.target.closest('.event-block')) hideTooltip();
 });
-
 
 function buildAll() { buildHeader(); buildTimeCol(); buildGrid(); }
 buildAll();
