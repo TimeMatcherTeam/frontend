@@ -16,6 +16,10 @@ const submitBtn = document.getElementById("submitAuthBtn");
 const cancelBtn = document.getElementById("cancelAuthBtn");
 const switchBtn = document.getElementById("switchAuthBtn");
 const errorDiv = document.getElementById("authError");
+const togglePassword = document.getElementById("togglePassword");
+const toggleConfirmPassword = document.getElementById("toggleConfirmPassword");
+const passwordEye = document.getElementById("passwordEye");
+const confirmPasswordEye = document.getElementById("confirmPasswordEye");
 
 switchBtn.addEventListener("click", (event) => {
   event.preventDefault();
@@ -84,3 +88,23 @@ export function showAuthForm() {
     authOverlay.style.display = "";
   }
 }
+
+togglePassword.addEventListener("click", () => {
+  if (passwordInput.type === 'password') {
+    passwordInput.type = "text";
+    passwordEye.src = "/assets/closed_eye.svg"
+  } else {
+    passwordInput.type = "password"
+    passwordEye.src = "/assets/eye.svg"
+  }
+})
+
+toggleConfirmPassword.addEventListener("click", () => {
+  if (confirmPasswordInput.type === 'password') {
+    confirmPasswordInput.type = "text";
+    confirmPasswordEye.src = "/assets/closed_eye.svg"
+  } else {
+    confirmPasswordInput.type = "password"
+    confirmPasswordEye.src = "/assets/eye.svg"
+  }
+})

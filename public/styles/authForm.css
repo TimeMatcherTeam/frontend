@@ -12,17 +12,13 @@
   text-align: center;
 }
 
-#authForm input {
-  width: 100%;
-  height: 100%;
-}
-
 #switchAuthBtn {
   background-color: var(--accent-color-desaturated);
   height: 82px;
 }
 
-#authOverlay {
+.form-overlay {
+  display: none;
   position: fixed;
   inset: 0;
   background-color: rgba(0, 0, 0, 0.55);
@@ -35,4 +31,24 @@
 #authError {
   font-size: 28px;
   font-weight: 400;
+}
+
+.password-eye {
+  position: absolute;
+  right: 30px;
+  top: 50%;
+  transform: translateY(-50%);
+  background: transparent;
+  cursor: pointer;
+  width: 30px;
+  height: 30px;
+}
+
+.password-eye img {
+  width: 30px;
+  height: 30px;
+}
+
+.password-input {
+  padding-right: 50px;
 }
