@@ -22,6 +22,8 @@ function formatDateTimeLocal(date) {
 
 import { closeMeetingUsersPopup, initMeetingUsersPopup } from "./userSearchPopup.js";
 import { closeMeetingGroupsPopup, initMeetingGroupsPopup } from "./groupSearchPopup.js";
+import { getCookie } from "../jwtUtils.js";
+import { getMeetingSelectedUsers } from "./userSearchPopup.js";
 
 function parseDurationMinutes(value) {
     if (!value) {
@@ -37,6 +39,33 @@ function parseDurationMinutes(value) {
     }
 
     return hours * 60 + minutes;
+}
+
+function buildMeetingDraft() {
+    const nameInput = document.getElementById("meetingName");
+    const commentInput = document.getElementById("meetingComment");
+    const startInput = document.getElementById("meetingStart");
+    const endInput = document.getElementById("meetingEnd");
+    const durationInput = document.getElementById("meetingDuration");
+
+    const selectedUsers = getMeetingSelectedUsers();
+    const currentUserId = getCookie("userId");
+
+    const participantIds = Array.from(
+        new Set([
+            ...selectedUsers.map(user => user.id).filter(Boolean),
+            ...(currentUserId ? [currentUserId] : [])
+        ])
+    );
+
+    return {
+        name: nameInput?.value?.trim() || "Новая встреча",
+        comment: commentInput?.value?.trim() || "",
+        start: startInput?.value || null,
+        end: endInput?.value || null,
+        duration: durationInput?.value || null,
+        participantIds
+    };
 }
 
 export function initMeetingModal() {
@@ -77,7 +106,9 @@ export function initMeetingModal() {
             return;
         }
 
-        closeMeetingModal();
+        const draft = buildMeetingDraft();
+        sessionStorage.setItem("meetingDraft", JSON.stringify(draft));
+        window.location.href = "/meeting";
     });
 
     initMeetingUsersPopup();

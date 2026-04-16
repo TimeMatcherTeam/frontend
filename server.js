@@ -21,6 +21,11 @@ app.get("/profile", (req, res) => {
   res.status(200);
 })
 
+app.get("/meeting", (req, res) => {
+  res.sendFile("/public/pages/meeting.html", { root: __dirname });
+  res.status(200);
+})
+
 
 app.listen(PORT, () => {
   console.log(`Сервер запущен на http://localhost:${PORT}`);
