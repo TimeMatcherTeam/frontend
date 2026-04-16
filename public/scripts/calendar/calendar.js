@@ -7,6 +7,7 @@ import { openModal, closeModal, saveEvent } from "./slotModal.js";
 import { hideTooltip } from "./tooltip.js";
 import { DeleteSlot } from "./slotsRequests.js";
 import { initMeetingModal, openMeetingModal } from "./meetingModal.js";
+import { initMiniCalendar, renderMiniCalendar } from "./miniCalendar.js";
 
 
 document.getElementById('prevBtn').onclick = () => {
@@ -86,9 +87,15 @@ document.addEventListener('click', e => {
     if (!e.target.closest('.ev-tooltip') && !e.target.closest('.event-block')) hideTooltip();
 });
 
-function buildAll() { buildHeader(); buildTimeCol(); buildGrid(); }
+function buildAll() {
+    buildHeader();
+    buildTimeCol();
+    buildGrid();
+    renderMiniCalendar();
+}
 buildAll();
 initMeetingModal();
+initMiniCalendar(buildAll);
 
 /* Scroll to current hour */
 const now = new Date();
