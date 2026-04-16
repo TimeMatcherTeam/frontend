@@ -1,6 +1,12 @@
-import { DAYS_RU, MONTHS_RU } from "./constants.js";
 import { state } from "./state.js";
 import { dateKey, getWeekStart } from "./utils.js";
+
+export const DAYS_RU = ['Пн','Вт','Ср','Чт','Пт','Сб','Вс'];
+
+export const MONTHS_RU = [
+    'январь','февраль','март','апрель','май','июнь',
+    'июль','август','сентябрь','октябрь','ноябрь','декабрь'
+];
 
 let visibleMonth = null;
 let selectedDateKey = null;
