@@ -4,8 +4,6 @@
   --element-color: #C9CCD5;
   --accent-color: #5BB7D5;
   --accent-color-desaturated: #B4DBE8;
-  --red-accent: #ea4335;
-  --text-color: #2f3743;
   --border-radius: 10px;
 
   font-family: 'Monsterrat', sans-serif;
@@ -17,21 +15,41 @@ h2 {
   margin: 0;
 }
 
-.input-wrapper {
+.label-input-container {
+  height: 49px;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.big-input-wrapper {
+  position: relative;
   height: 82px;
+  border-radius: var(--border-radius);
   background-color: var(--element-color);
   display: flex;
   align-items: center;
-  border-radius: var(--border-radius);
 }
 
-input {
-  background-color: transparent;
-  border: 0;
-  border-radius: var(--border-radius);
-  text-align: center;
+.big-input {
   font-size: 28px;
   font-weight: 400;
+  border-radius: var(--border-radius);
+  background-color: transparent;
+  border: 0;
+  text-align: center;
+  width: 100%;
+  height: 100%;
+}
+
+.big-input:focus {
+  outline: none;
+}
+
+.big-input-wrapper:focus-within {
+  outline: 2px solid var(--accent-color);
+  
 }
 
 input:autofill {

@@ -1,6 +1,7 @@
 import { API_URL } from "../requests.js";
 import { getCookie, getToken } from "../jwtUtils.js";
 import { dateKey, fmt2 } from "./utils.js";
+import { showAuthForm } from "../popups/authPopup.js";
 
 let cachedAbilities = null;
 
@@ -35,6 +36,7 @@ export function colorByAbilityName(name) {
 function getCurrentUserId() {
 	const userId = getCookie("userId");
 	if (!userId) {
+		showAuthForm();
 		throw new Error("Не удалось определить пользователя: отсутствует userId.");
 	}
 	return userId;
@@ -43,6 +45,7 @@ function getCurrentUserId() {
 function getAuthHeaders() {
 	const token = getToken();
 	if (!token) {
+		showAuthForm()
 		throw new Error("Необходима авторизация.");
 	}
 	return {
