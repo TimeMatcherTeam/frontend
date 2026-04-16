@@ -28,17 +28,19 @@
             <div class="big-input-wrapper">
                 <input type="email" id="email" placeholder="Email" class="big-input" required>
             </div>
-            <div class="big-input-wrapper" id="usernameWrapper"  style="display:none">
+            <div class="big-input-wrapper" id="usernameWrapper" style="display:none">
                 <input type="text" id="username" placeholder="Имя" class="big-input">
             </div>
             <div class="big-input-wrapper password-input">
-                <input type="password" id="password" placeholder="Пароль" class="big-input" required>
+                <input type="password" id="password" placeholder="        Пароль" class="big-input" required>
+                <!--так и надо, это костыль-->
                 <button id="togglePassword" type="button" class="password-eye">
                     <img src="/assets/eye.svg" alt="eye" id="passwordEye">
                 </button>
             </div>
-            <div class="big-input-wrapper password-input" id="confirmPasswordWrapper"  style="display:none">
-                <input type="password" id="confirmPassword" placeholder="Подтвердите пароль" class="big-input">
+            <div class="big-input-wrapper password-input" id="confirmPasswordWrapper" style="display:none">
+                <input type="password" id="confirmPassword" placeholder="      Подтвердите пароль" class="big-input">
+                <!--так и надо, это костыль-->
                 <button id="toggleConfirmPassword" type="button" class="password-eye">
                     <img src="/assets/eye.svg" alt="eye" id="confirmPasswordEye">
                 </button>
@@ -53,20 +55,69 @@
 
     <div id="intervalFormOverlay" class="form-overlay">
         <form action="" id="intervalForm">
-            <div class="label-input-container">
-                <label for="title">
-                    Название
-                </label>
-                <div class="input-wrapper">
-                    <input type="text" id="title">
-                </div>
+            <div class="form-header">
+                <h2>Создание временного промежутка</h2>
             </div>
-            <input type="text" id="comment">
-            <input type="time" id="timeStart">
-            <input type="time" id="timeEnd">
-            <div class="submit-cancel-wrapper">
-                <button type="submit" class="submit-button" id="submitIntervalBtn">Подтвердить</button>
-                <button type="reset" class="cancel-button" id="cancelIntervalBtn">Отмена</button>
+            <div class="form-content">
+                <div class="label-input-container">
+                    <label for="title" class="input-label">
+                        <h2>Название</h2>
+                    </label>
+                    <div class="input-wrapper">
+                        <input type="text" id="title" class="small-input">
+                    </div>
+                </div>
+                <div class="label-input-container">
+                    <label for="comment" class="input-label">
+                        <h2>Комментарий</h2>
+                    </label>
+                    <div class="input-wrapper">
+                        <input type="text" id="comment" class="small-input">
+                    </div>
+                </div>
+                <div class="label-input-container">
+                    <label class="input-label">
+                        <h2>Время</h2>
+                    </label>
+                    <div class="time-wrapper">
+                        <div class="input-wrapper">
+                            <input type="time" id="timeStart" class="small-input">
+                        </div>
+                        <h2 class="time-minus">-</h2>
+                        <div class="input-wrapper">
+                            <input type="time" id="timeEnd" class="small-input">
+                        </div>
+                    </div>
+                </div>
+                <div class="label-input-container">
+                    <label class="input-label">
+                        <h2>Тип занятости</h2>
+                    </label>
+                    <div class="abilities-wrapper">
+                        <div class="ability-wrapper">
+                            <div class="ability-square" style="background-color: red;">
+                                <input type="radio" name="ability" id="abilityBusy" class="ability-radio" value="busy">
+                            </div>
+                            <p>
+                                &nbsp;- занят
+                            </p>
+                        </div>
+
+                        <div class="ability-wrapper">
+                            <div class="ability-square" style="background-color: yellow;">
+                                <input type="radio" name="ability" id="abilityUnwanted" class="ability-radio"
+                                    value="unwanted">
+                            </div>
+                            <p>
+                                &nbsp;- не желательно
+                            </p>
+                        </div>
+                    </div>
+                </div>
+                <div class="submit-cancel-wrapper">
+                    <button type="submit" class="submit-button" id="submitIntervalBtn">Подтвердить</button>
+                    <button type="reset" class="cancel-button" id="cancelIntervalBtn">Отмена</button>
+                </div>
             </div>
         </form>
     </div>

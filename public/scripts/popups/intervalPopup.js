@@ -1,4 +1,4 @@
-import { JWT } from "../globals.js";
+import { JWT, ABILITIES } from "../globals.js";
 
 
 const intervalOverlay = document.getElementById("intervalFormOverlay");

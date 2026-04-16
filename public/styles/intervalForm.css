@@ -1,9 +1,80 @@
 #intervalForm {
   background-color: var(--element-bg-color);
-  width: 672px;
+  width: 736px;
+  border-radius: var(--border-radius);
+}
+
+.form-header {
+  padding: 16px;
+  background-color: var(--accent-color);
+  display: flex;
+  justify-content: center;
+  border-top-left-radius: var(--border-radius);
+  border-top-right-radius: var(--border-radius);
+}
+
+.form-content {
   display: flex;
   flex-direction: column;
   gap: 10px;
-  border-radius: var(--border-radius);
-  padding: 32px 32px 22px 32px;
+  margin: 32px 32px 22px 32px;
+}
+
+.input-label {
+  width: 50%;
+  flex-shrink: 0;
+}
+
+.time-wrapper {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  flex: 1;
+}
+
+
+.time-minus {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+}
+
+.abilities-wrapper {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+}
+
+.ability-wrapper {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  width: 100%;
+}
+
+.ability-square {
+  width: 49px;
+  height: 49px;
+  cursor: pointer;
+  border-radius: 50%;
+}
+
+.ability-square::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 0;
+  height: 0;
+  background-color: white;
+  border-radius: 50%;
+  transition: all 0.2s ease;
+}
+
+.ability-radio {
+  width: 100%;
+  height: 100%;
+  display: none;
 }
