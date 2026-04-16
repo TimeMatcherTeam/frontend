@@ -16,9 +16,11 @@ h2 {
 }
 
 .label-input-container {
+  height: 49px;
   display: flex;
   flex-direction: row;
   justify-content: space-between;
+  align-items: center;
 }
 
 .big-input-wrapper {
@@ -48,23 +50,6 @@ h2 {
 .big-input-wrapper:focus-within {
   outline: 2px solid var(--accent-color);
   
-}
-
-.input-wrapper {
-  height: 49px;
-  background-color: var(--element-color);
-  display: flex;
-  align-items: center;
-}
-
-.small-input {
-  background-color: transparent;
-  border: 0;
-  text-align: center;
-  width: 100%;
-  height: 100%;
-  font-size: 28px;
-  font-weight: 400;
 }
 
 .submit-cancel-wrapper {

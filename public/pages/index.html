@@ -8,7 +8,10 @@
 
     <link rel="stylesheet" href="styles/style.css">
     <link rel="stylesheet" href="styles/authForm.css">
-    <link rel="stylesheet" href="styles/intervalForm.css">
+    <link rel="stylesheet" href="styles/header.css">
+    <link rel="stylesheet" href="styles/calendar.css">
+    <link rel="stylesheet" href="styles/calendar-popups.css">
+    <link rel="stylesheet" href="styles/meeting-modal.css">
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -17,30 +20,143 @@
 </head>
 
 <body>
-    <header>
-    </header>
-    главная страница
+    <header id="pageHeader"></header>
 
-    <div id="authOverlay" class="form-overlay">
+    <div class="page-shell">
+        <main class="page-main">
+            <aside class="calendar-sidebar">
+                <div class="mini-calendar-box" id="miniCalendarBox"></div>
+
+                <div class="create-dropdown" id="createDropdown">
+                    <button class="add-btn" id="addBtn">Создать <span class="add-caret">&#9662;</span></button>
+                    <div class="create-menu" id="createMenu">
+                        <button class="create-item" id="actionEvent">мероприятие</button>
+                        <button class="create-item" id="actionMeeting" type="button">встреча</button>
+                        <button class="create-item" type="button" disabled>группа</button>
+                    </div>
+                </div>
+            </aside>
+
+            <!-- Календарь -->
+            <div class="cal-root" id="calRoot">
+                <div class="cal-header">
+                    <span class="app-title">Календарь</span>
+                    <button class="nav-btn" id="prevBtn">&#8249;</button>
+                    <button class="nav-btn" id="nextBtn">&#8250;</button>
+                    <span class="week-label" id="weekLabel"></span>
+                    <button class="today-btn" id="todayBtn">Сегодня</button>
+                </div>
+                <div class="col-head" id="colHead">
+                    <div class="th-time"></div>
+                </div>
+                <div class="cal-body" id="calBody">
+                    <div class="time-col" id="timeCol"></div>
+                    <div class="grid-area" id="gridArea"></div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- Модальное окно создания/редактирования события -->
+    <div class="modal-bg" id="modalBg" style="display:none">
+        <div class="modal">
+            <div class="modal-header">
+                <span id="modalTitle">Новое событие</span>
+                <button class="modal-close" id="modalClose">&#215;</button>
+            </div>
+            <div class="modal-body">
+                <label>Название</label>
+                <input type="text" id="evName" placeholder="Добавить название">
+                <label>Дата</label>
+                <input type="date" id="evDate">
+                <div class="time-row">
+                    <div>
+                        <label>Начало</label>
+                        <input type="time" id="evStart" value="09:00">
+                    </div>
+                    <div>
+                        <label>Конец</label>
+                        <input type="time" id="evEnd" value="10:00">
+                    </div>
+                </div>
+                <label>Цвет</label>
+                <div class="color-row" id="colorRow"></div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn-cancel" id="cancelBtn">Отмена</button>
+                <button class="btn-save" id="saveBtn">Сохранить</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Всплывающая подсказка события -->
+    <div class="ev-tooltip" id="evTooltip" style="display:none">
+        <div class="tt-title" id="ttTitle"></div>
+        <div class="tt-time" id="ttTime"></div>
+        <div class="tt-actions">
+            <button class="tt-btn tt-edit" id="ttEdit">Изменить</button>
+            <button class="tt-btn tt-del" id="ttDel">Удалить</button>
+        </div>
+    </div>
+
+    <!-- Модальное окно создания встречи -->
+    <div class="meeting-modal-bg" id="meetingModalBg" style="display:none">
+        <div class="meeting-modal">
+            <div class="meeting-modal-title">создание встречи</div>
+            <div class="meeting-modal-body">
+                <div class="meeting-row">
+                    <label for="meetingName">Название:</label>
+                    <input id="meetingName" type="text">
+                </div>
+
+                <div class="meeting-row">
+                    <label for="meetingComment">коментарий:</label>
+                    <input id="meetingComment" type="text">
+                </div>
+
+                <div class="meeting-row meeting-row-time">
+                    <label>Время:</label>
+                    <div class="meeting-time-fields">
+                        <input id="meetingStart" type="datetime-local">
+                        <span>-</span>
+                        <input id="meetingEnd" type="datetime-local">
+                    </div>
+                </div>
+
+                <div class="meeting-row meeting-row-duration">
+                    <label>Продолжительность:</label>
+                    <input id="meetingDuration" type="time" value="01:00" step="60">
+                </div>
+
+                <button type="button" class="meeting-secondary-btn" disabled>Добавить участников</button>
+                <button type="button" class="meeting-secondary-btn" disabled>Добавить участников из группы</button>
+            </div>
+
+            <div class="meeting-modal-footer">
+                <button type="button" class="meeting-primary-btn" id="meetingConfirmBtn">Подтвердить</button>
+                <button type="button" class="meeting-primary-btn meeting-cancel-btn" id="meetingCancelBtn">Отмена</button>
+            </div>
+        </div>
+    </div>
+
+    <div id="authOverlay" class="modal-bg"  style="display: none;">
         <form id="authForm" class="container">
             <h2 id="formTitle">Вход</h2>
             <div class="error" id="authError" style="display: none;"></div>
             <div class="big-input-wrapper">
                 <input type="email" id="email" placeholder="Email" class="big-input" required>
             </div>
-            <div class="big-input-wrapper" id="usernameWrapper" style="display:none">
+            <div class="big-input-wrapper" id="usernameWrapper"  style="display:none">
                 <input type="text" id="username" placeholder="Имя" class="big-input">
             </div>
             <div class="big-input-wrapper password-input">
-                <input type="password" id="password" placeholder="        Пароль" class="big-input" required>
-                <!--так и надо, это костыль-->
+                <input type="password" id="password" placeholder="Пароль" class="big-input" required>
                 <button id="togglePassword" type="button" class="password-eye">
                     <img src="/assets/eye.svg" alt="eye" id="passwordEye">
                 </button>
             </div>
-            <div class="big-input-wrapper password-input" id="confirmPasswordWrapper" style="display:none">
-                <input type="password" id="confirmPassword" placeholder="      Подтвердите пароль" class="big-input">
-                <!--так и надо, это костыль-->
+            <div class="big-input-wrapper password-input" id="confirmPasswordWrapper"  style="display:none">
+                <input type="password" id="confirmPassword" placeholder="Подтвердите пароль" class="big-input">
                 <button id="toggleConfirmPassword" type="button" class="password-eye">
                     <img src="/assets/eye.svg" alt="eye" id="confirmPasswordEye">
                 </button>
@@ -53,82 +169,8 @@
         </form>
     </div>
 
-    <div id="intervalFormOverlay" class="form-overlay">
-        <form action="" id="intervalForm">
-            <div class="form-header">
-                <h2>Создание временного промежутка</h2>
-            </div>
-            <div class="form-content">
-                <div class="label-input-container">
-                    <label for="title" class="input-label">
-                        <h2>Название</h2>
-                    </label>
-                    <div class="input-wrapper">
-                        <input type="text" id="title" class="small-input">
-                    </div>
-                </div>
-                <div class="label-input-container">
-                    <label for="comment" class="input-label">
-                        <h2>Комментарий</h2>
-                    </label>
-                    <div class="input-wrapper">
-                        <input type="text" id="comment" class="small-input">
-                    </div>
-                </div>
-                <div class="label-input-container">
-                    <label class="input-label">
-                        <h2>Время</h2>
-                    </label>
-                    <div class="time-wrapper">
-                        <div class="input-wrapper">
-                            <input type="time" id="timeStart" class="small-input">
-                        </div>
-                        <h2 class="time-minus">-</h2>
-                        <div class="input-wrapper">
-                            <input type="time" id="timeEnd" class="small-input">
-                        </div>
-                    </div>
-                </div>
-                <div class="label-input-container">
-                    <label class="input-label">
-                        <h2>Тип занятости</h2>
-                    </label>
-                    <div class="abilities-wrapper">
-                        <div class="ability-wrapper">
-                            <div class="ability-square" style="background-color: red;">
-                                <input type="radio" name="ability" id="abilityBusy" class="ability-radio" value="busy">
-                            </div>
-                            <p>
-                                &nbsp;- занят
-                            </p>
-                        </div>
-
-                        <div class="ability-wrapper">
-                            <div class="ability-square" style="background-color: yellow;">
-                                <input type="radio" name="ability" id="abilityUnwanted" class="ability-radio"
-                                    value="unwanted">
-                            </div>
-                            <p>
-                                &nbsp;- не желательно
-                            </p>
-                        </div>
-                    </div>
-                </div>
-                <div class="submit-cancel-wrapper">
-                    <button type="submit" class="submit-button" id="submitIntervalBtn">Подтвердить</button>
-                    <button type="reset" class="cancel-button" id="cancelIntervalBtn">Отмена</button>
-                </div>
-            </div>
-        </form>
-    </div>
-    <main>
-
-    </main>
-
-    <footer>
-    </footer>
 </body>
-
+<script type="module" src="scripts/header.js"></script>
+<script type="module" src="scripts/calendar/calendar.js"></script>
 <script type="module" src="scripts/script.js"></script>
-
 </html>

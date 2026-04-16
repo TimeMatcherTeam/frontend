@@ -1,0 +1,384 @@
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+    height: 100vh;
+    overflow: hidden;
+    background: var(--bg-color);
+    color: var(--text-color);
+}
+
+.page-shell {
+    width: min(1240px, 100%);
+    height: 100%;
+    margin: 0 auto;
+    padding: 14px;
+    display: flex;
+    flex-direction: column;
+}
+
+.page-main {
+    margin-top: 14px;
+    display: grid;
+    grid-template-columns: 188px 1fr;
+    gap: 14px;
+    align-items: start;
+    flex: 1;
+    min-height: 0;
+}
+
+.calendar-sidebar {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.mini-calendar-box {
+    width: 188px;
+    min-height: 220px;
+    border-radius: 14px;
+    border: 1px solid var(--element-color);
+    background: var(--bg-color);
+    color: var(--text-color);
+    padding: 10px;
+}
+
+.mini-cal {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.mini-cal-header {
+    display: grid;
+    grid-template-columns: 28px 1fr 28px;
+    align-items: center;
+    gap: 6px;
+}
+
+.mini-cal-title {
+    text-align: center;
+    font-size: 13px;
+    font-weight: 600;
+    text-transform: capitalize;
+}
+
+.mini-cal-nav {
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    border: 1px solid var(--element-color);
+    background: transparent;
+    color: var(--text-color);
+    font-size: 14px;
+    line-height: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+}
+
+.mini-cal-nav:hover {
+    background: var(--element-bg-color);
+}
+
+.mini-cal-weekdays,
+.mini-cal-grid {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    gap: 4px;
+}
+
+.mini-cal-weekday {
+    text-align: center;
+    font-size: 10px;
+    font-weight: 600;
+    color: #667182;
+}
+
+.mini-cal-day {
+    border: 0;
+    background: transparent;
+    color: var(--text-color);
+    border-radius: 8px;
+    min-height: 22px;
+    font-size: 11px;
+    cursor: pointer;
+}
+
+.mini-cal-day:hover {
+    background: var(--element-bg-color);
+}
+
+.mini-cal-day.is-outside {
+    color: #9ca5b3;
+}
+
+.mini-cal-day.is-week {
+    background: var(--accent-color-desaturated);
+}
+
+.mini-cal-day.is-selected {
+    background: var(--accent-color);
+    color: var(--bg-color);
+    font-weight: 600;
+}
+
+.mini-cal-day.is-today {
+    box-shadow: inset 0 0 0 1px var(--text-color);
+}
+
+.create-dropdown {
+    width: 188px;
+    position: relative;
+}
+
+/* ── Calendar root ── */
+.cal-root {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    height: 90%;
+    min-height: 0;
+    background: var(--bg-color);
+    border-radius: 12px;
+    border: 1px solid var(--element-color);
+    overflow: hidden;
+    box-shadow: 0 10px 28px rgba(21, 32, 53, 0.08);
+}
+
+/* ── Header ── */
+.cal-header {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 12px 20px;
+    border-bottom: 1px solid var(--element-color);
+    flex-shrink: 0;
+    background: var(--accent-color-desaturated);
+}
+
+.app-title {
+    font-size: 20px;
+    font-weight: 600;
+    color: var(--text-color);
+    margin-right: 8px;
+    letter-spacing: -0.3px;
+}
+
+.nav-btn {
+    width: 32px; height: 32px;
+    border-radius: 50%;
+    border: 1px solid var(--text-color);
+    background: transparent;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 16px;
+    color: var(--text-color);
+    transition: background 0.15s;
+}
+.nav-btn:hover { background: var(--element-bg-color); }
+.week-label {
+    font-size: 16px;
+    font-weight: 600;
+    color: var(--text-color);
+    min-width: 200px;
+}
+.today-btn {
+    padding: 8px 18px;
+    border-radius: 20px;
+    border: 1px solid var(--text-color);
+    background: transparent;
+    font-size: 13px;
+    cursor: pointer;
+    color: var(--text-color);
+    font-family: inherit;
+    transition: background 0.15s;
+}
+.today-btn:hover { background: var(--element-bg-color); }
+.add-btn {
+    width: 188px;
+    height: 46px;
+    padding: 0 14px;
+    border-radius: 20px;
+    background: var(--bg-color);
+    color: var(--text-color);
+    border: 1px solid var(--element-color);
+    font-size: 16px;
+    font-weight: 500;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    transition: background 0.15s, border-color 0.15s;
+}
+.add-btn:hover {
+    background: var(--element-bg-color);
+    border-color: var(--text-color);
+}
+
+.add-caret {
+    font-size: 12px;
+    line-height: 1;
+}
+
+/* ── Day column headers ── */
+.col-head {
+    display: grid;
+    grid-template-columns: 56px repeat(7, 1fr);
+    flex-shrink: 0;
+    border-bottom: 1px solid var(--element-color);
+    background: var(--bg-color);
+}
+.th-time { width: 56px; }
+
+.th-day {
+    text-align: center;
+    padding: 8px 0 6px;
+    font-size: 11px;
+    color: var(--text-color);
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 0.8px;
+}
+.th-num {
+    display: block;
+    font-size: 26px;
+    font-weight: 300;
+    color: var(--text-color);
+    line-height: 1.2;
+    margin-top: 2px;
+}
+.th-num.today {
+    width: 40px; height: 40px;
+    border-radius: 50%;
+    background: var(--accent-color);
+    color: var(--bg-color);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 2px auto 0;
+    font-size: 22px;
+    font-weight: 500;
+}
+
+/* ── Scrollable body ── */
+.cal-body {
+    display: flex;
+    overflow-y: auto;
+    flex: 1;
+    min-height: 0;
+}
+.cal-body::-webkit-scrollbar { width: 6px; }
+
+.cal-body::-webkit-scrollbar-thumb { background: var(--element-color); border-radius: 3px; }
+
+/* ── Time column ── */
+.time-col {
+    width: 56px;
+    flex-shrink: 0;
+    position: relative;
+}
+.time-label {
+    position: absolute;
+    right: 10px;
+    font-size: 10px;
+    color: var(--text-color);
+    line-height: 1;
+    transform: translateY(-50%);
+    white-space: nowrap;
+    user-select: none;
+}
+
+/* ── Grid ── */
+.grid-area {
+    flex: 1;
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    position: relative;
+    cursor: crosshair;
+}
+.day-col {
+    border-left: 1px solid var(--element-color);
+    position: relative;
+}
+.hour-line {
+    position: absolute;
+    left: 0; right: 0;
+    border-top: 1px solid var(--element-color);
+}
+.half-line {
+    position: absolute;
+    left: 0; right: 0;
+    border-top: 1px dashed var(--element-color);
+}
+
+/* ── Now line ── */
+.now-line {
+    position: absolute;
+    left: 0; right: 0;
+    z-index: 3;
+    pointer-events: none;
+}
+.now-line::before {
+    content: '';
+    position: absolute;
+    left: -5px; top: -5px;
+    width: 10px; height: 10px;
+    border-radius: 50%;
+    background: var(--accent-color);
+}
+.now-line::after {
+    content: '';
+    position: absolute;
+    left: 5px; top: -1px;
+    right: 0; height: 2px;
+    background: var(--accent-color);
+}
+
+/* ── Event blocks ── */
+.event-block {
+    position: absolute;
+    left: 2px; right: 2px;
+    border-radius: 4px;
+    padding: 2px 6px;
+    font-size: 11px;
+    font-weight: 500;
+    cursor: pointer;
+    overflow: hidden;
+    line-height: 1.4;
+    z-index: 2;
+    border-left: 3px solid;
+    transition: filter 0.1s;
+}
+.event-block:hover { filter: brightness(0.93); }
+.event-block .ev-name { font-weight: 600; font-size: 11px; display: block; }
+.event-block .ev-time { font-weight: 400; font-size: 10px; opacity: 0.85; }
+
+@media (max-width: 980px) {
+    body {
+        height: auto;
+        min-height: 100vh;
+        overflow: auto;
+    }
+
+    .page-shell {
+        height: auto;
+    }
+
+    .page-main {
+        grid-template-columns: 1fr;
+        min-height: auto;
+    }
+
+    .calendar-sidebar {
+        flex-direction: row;
+        flex-wrap: wrap;
+    }
+
+    .cal-root {
+        min-height: calc(100vh - 210px);
+    }
+}
