@@ -11,6 +11,7 @@
     <link rel="stylesheet" href="styles/header.css">
     <link rel="stylesheet" href="styles/calendar.css">
     <link rel="stylesheet" href="styles/calendar-popups.css">
+    <link rel="stylesheet" href="styles/meeting-modal.css">
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -55,7 +56,7 @@
                     <button class="add-btn" id="addBtn">Создать <span class="add-caret">&#9662;</span></button>
                     <div class="create-menu" id="createMenu">
                         <button class="create-item" id="actionEvent">мероприятие</button>
-                        <button class="create-item" type="button" disabled>встреча</button>
+                        <button class="create-item" id="actionMeeting" type="button">встреча</button>
                         <button class="create-item" type="button" disabled>группа</button>
                     </div>
                 </div>
@@ -120,6 +121,46 @@
         <div class="tt-actions">
             <button class="tt-btn tt-edit" id="ttEdit">Изменить</button>
             <button class="tt-btn tt-del" id="ttDel">Удалить</button>
+        </div>
+    </div>
+
+    <!-- Модальное окно создания встречи -->
+    <div class="meeting-modal-bg" id="meetingModalBg" style="display:none">
+        <div class="meeting-modal">
+            <div class="meeting-modal-title">создание встречи</div>
+            <div class="meeting-modal-body">
+                <div class="meeting-row">
+                    <label for="meetingName">Название:</label>
+                    <input id="meetingName" type="text">
+                </div>
+
+                <div class="meeting-row">
+                    <label for="meetingComment">коментарий:</label>
+                    <input id="meetingComment" type="text">
+                </div>
+
+                <div class="meeting-row meeting-row-time">
+                    <label>Время:</label>
+                    <div class="meeting-time-fields">
+                        <input id="meetingStart" type="datetime-local">
+                        <span>-</span>
+                        <input id="meetingEnd" type="datetime-local">
+                    </div>
+                </div>
+
+                <div class="meeting-row meeting-row-duration">
+                    <label>Продолжительность:</label>
+                    <input id="meetingDuration" type="time" value="01:00" step="60">
+                </div>
+
+                <button type="button" class="meeting-secondary-btn" disabled>Добавить участников</button>
+                <button type="button" class="meeting-secondary-btn" disabled>Добавить участников из группы</button>
+            </div>
+
+            <div class="meeting-modal-footer">
+                <button type="button" class="meeting-primary-btn" id="meetingConfirmBtn">Подтвердить</button>
+                <button type="button" class="meeting-primary-btn meeting-cancel-btn" id="meetingCancelBtn">Отмена</button>
+            </div>
         </div>
     </div>
 

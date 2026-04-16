@@ -1,7 +1,7 @@
 import { HOUR_H, COLORS } from "./constants.js";
 import { state } from "./state.js";
 import { getWeekStart, dateKey, fmt2 } from "./utils.js";
-import { openModal } from "./modal.js";
+import { openModal } from "./slotModal.js";
 import { showTooltip } from "./tooltip.js";
 
 export function buildTimeCol() {

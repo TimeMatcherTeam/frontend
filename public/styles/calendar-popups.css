@@ -207,9 +207,9 @@
 .tt-edit:hover { background: var(--element-bg-color); }
 
 .tt-del {
-    border: 1px solid var(--accent-color-desaturated);
+    border: 1px solid var(--red-accent);
     background: transparent;
-    color: var(--accent-color-desaturated);
+    color: var(--red-accent);
 }
 
 .tt-del:hover { background: var(--element-bg-color); }

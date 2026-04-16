@@ -3,9 +3,10 @@ import { HOUR_H} from "./constants.js";
 import { state } from "./state.js";
 import { buildHeader } from "./header.js";
 import { buildTimeCol, buildGrid, renderEvents, renderNowLine } from "./grid.js";
-import { openModal, closeModal, saveEvent } from "./modal.js";
+import { openModal, closeModal, saveEvent } from "./slotModal.js";
 import { hideTooltip } from "./tooltip.js";
 import { DeleteSlot } from "./slotsRequests.js";
+import { initMeetingModal, openMeetingModal } from "./meetingModal.js";
 
 
 document.getElementById('prevBtn').onclick = () => {
@@ -31,6 +32,11 @@ document.getElementById('addBtn').onclick = e => {
 document.getElementById('actionEvent').onclick = () => {
     document.getElementById('createDropdown').classList.remove('open');
     openModal();
+};
+
+document.getElementById('actionMeeting').onclick = () => {
+    document.getElementById('createDropdown').classList.remove('open');
+    openMeetingModal();
 };
 
 document.getElementById('saveBtn').onclick = saveEvent;
@@ -82,6 +88,7 @@ document.addEventListener('click', e => {
 
 function buildAll() { buildHeader(); buildTimeCol(); buildGrid(); }
 buildAll();
+initMeetingModal();
 
 /* Scroll to current hour */
 const now = new Date();

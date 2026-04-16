@@ -5,7 +5,6 @@ body {
     overflow: hidden;
     background: var(--bg-color);
     color: var(--text-color);
-    font-family: inherit;
 }
 
 .page-shell {
@@ -57,7 +56,7 @@ body {
     display: flex;
     flex-direction: column;
     width: 100%;
-    height: 100%;
+    height: 90%;
     min-height: 0;
     background: var(--bg-color);
     border-radius: 12px;
