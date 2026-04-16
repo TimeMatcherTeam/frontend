@@ -1,11 +1,11 @@
-import { dateKey,} from "./utils.js";
+import { dateKey, getCurrentWeekBorders,} from "./utils.js";
 import { HOUR_H} from "./constants.js";
 import { state } from "./state.js";
 import { buildHeader } from "./header.js";
 import { buildTimeCol, buildGrid, renderEvents, renderNowLine } from "./grid.js";
 import { openModal, closeModal, saveEvent } from "./slotModal.js";
 import { hideTooltip } from "./tooltip.js";
-import { DeleteSlot } from "./slotsRequests.js";
+import { DeleteSlot, getUserCalendar } from "./slotsRequests.js";
 import { initMeetingModal, openMeetingModal } from "./meetingModal.js";
 import { initMiniCalendar, renderMiniCalendar } from "./miniCalendar.js";
 
@@ -105,9 +105,17 @@ document.getElementById('calBody').scrollTop = Math.max((now.getHours() - 1) * H
 setInterval(renderNowLine, 60000);
 
 /* Sample events */
-state.events.push(
-    { id: 1, name: 'Встреча команды', date: dateKey(new Date()), start: '10:00', end: '11:00', color: 0 },
-    { id: 2, name: 'Обед',            date: dateKey(new Date()), start: '13:00', end: '14:00', color: 1 },
-    { id: 3, name: 'Code review',     date: dateKey(new Date()), start: '15:30', end: '16:30', color: 0 },
-);
+const currentWeekBorders = getCurrentWeekBorders()
+console.log(currentWeekBorders)
+getUserCalendar(currentWeekBorders[0], currentWeekBorders[1])
+    .then(calendar => {
+        console.log(calendar);
+        if (calendar.slots) {
+            state.events.push(...calendar.slots);
+        }
+        renderEvents();
+    })
+    .catch(error => {
+        console.error('Ошибка:', error);
+    });
 renderEvents();

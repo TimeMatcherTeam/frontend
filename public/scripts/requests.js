@@ -1,5 +1,4 @@
 export const API_URL = "http://localhost:5000/api";
-import { JWT } from "../globals.js";
 
 export async function getAbilities() {
   const response = await fetch(`${API_URL}/abilities`);

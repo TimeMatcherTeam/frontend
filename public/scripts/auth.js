@@ -1,5 +1,5 @@
 import { setCookie, setToken } from "./jwtUtils.js";
-import { login, register } from "./requests/authRequests.js";
+import { login, register } from "./authRequests.js";
 
 export async function loginAuth(email, password) {
   const resp = await login(email, password);

@@ -146,6 +146,7 @@ export async function AddSlot(eventData) {
 	const abilityType = eventData.abilityType || abilityTypeByColor(eventData.color);
 	const abilityId = eventData.abilityId || await getAbilityIdByType(abilityType);
 	const payload = buildSlotPayload(eventData, abilityId);
+	console.log(JSON.stringify(payload));
 
 	return requestJson(`${API_URL}/users/${userId}/calendar/slots`, {
 		method: "POST",
@@ -170,4 +171,18 @@ export async function DeleteSlot(slotId) {
 	return requestJson(`${API_URL}/users/${userId}/calendar/slots/${slotId}`, {
 		method: "DELETE"
 	});
+}
+
+export async function getUserCalendar(start, end) {
+    const startISO = start.toISOString();
+    const endISO = end.toISOString();
+    console.log(startISO, endISO)
+    const userId = getCurrentUserId();
+    const query = new URLSearchParams({
+        Start: startISO,
+        End: endISO,
+    });
+    const json = await requestJson(`${API_URL}/users/${userId}/calendar/?${query}`);
+    json.slots = json.slots.map(slot => mapSlotResponseToCalendarEvent(slot))
+    return json
 }
