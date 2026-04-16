@@ -20,6 +20,9 @@ function formatDateTimeLocal(date) {
     return `${date.getFullYear()}-${pad(date.getMonth() + 1)}-${pad(date.getDate())}T${pad(date.getHours())}:${pad(date.getMinutes())}`;
 }
 
+import { closeMeetingUsersPopup, initMeetingUsersPopup } from "./userSearchPopup.js";
+import { closeMeetingGroupsPopup, initMeetingGroupsPopup } from "./groupSearchPopup.js";
+
 function parseDurationMinutes(value) {
     if (!value) {
         return null;
@@ -76,6 +79,9 @@ export function initMeetingModal() {
 
         closeMeetingModal();
     });
+
+    initMeetingUsersPopup();
+    initMeetingGroupsPopup();
 }
 
 export function openMeetingModal() {
@@ -105,4 +111,6 @@ export function closeMeetingModal() {
     }
 
     modalBg.style.display = 'none';
+    closeMeetingUsersPopup();
+    closeMeetingGroupsPopup();
 }

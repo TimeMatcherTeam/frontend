@@ -12,6 +12,7 @@
     <link rel="stylesheet" href="styles/calendar.css">
     <link rel="stylesheet" href="styles/calendar-popups.css">
     <link rel="stylesheet" href="styles/meeting-modal.css">
+    <link rel="stylesheet" href="styles/user-groups-block.css">
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -153,13 +154,71 @@
                     <input id="meetingDuration" type="time" value="01:00" step="60">
                 </div>
 
-                <button type="button" class="meeting-secondary-btn" disabled>Добавить участников</button>
-                <button type="button" class="meeting-secondary-btn" disabled>Добавить участников из группы</button>
+                <button type="button" class="meeting-secondary-btn" id="meetingAddParticipantsBtn">Добавить участников</button>
+                <button type="button" class="meeting-secondary-btn" id="meetingAddGroupsBtn">Добавить участников из группы</button>
             </div>
 
             <div class="meeting-modal-footer">
                 <button type="button" class="meeting-primary-btn" id="meetingConfirmBtn">Подтвердить</button>
                 <button type="button" class="meeting-primary-btn meeting-cancel-btn" id="meetingCancelBtn">Отмена</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="meeting-users-popup-bg" id="meetingUsersPopupBg" style="display:none">
+        <div class="meeting-users-popup">
+            <div class="meeting-users-popup-header">
+                <div class="meeting-users-popup-title">поиск пользователей</div>
+                <button type="button" class="meeting-users-popup-close" id="meetingUsersPopupCloseBtn">&times;</button>
+            </div>
+
+            <div class="meeting-users-popup-body">
+                <label for="meetingUsersSearchInput">Введите имя или email</label>
+                <input id="meetingUsersSearchInput" type="search" placeholder="например, ivan или mail@example.com">
+                <div class="meeting-users-search-status" id="meetingUsersSearchStatus"></div>
+
+                <div class="meeting-users-section">
+                    <div class="meeting-users-section-title">Найденные пользователи</div>
+                    <div class="meeting-users-results" id="meetingUsersResults"></div>
+                </div>
+
+                <div class="meeting-users-section">
+                    <div class="meeting-users-section-title">Выбранные участники</div>
+                    <div class="meeting-users-selected" id="meetingUsersSelected"></div>
+                </div>
+            </div>
+
+            <div class="meeting-users-popup-footer">
+                <button type="button" class="meeting-primary-btn meeting-cancel-btn" id="meetingUsersPopupCancelBtn">Закрыть</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="meeting-groups-popup-bg" id="meetingGroupsPopupBg" style="display:none">
+        <div class="meeting-groups-popup">
+            <div class="meeting-users-popup-header">
+                <div class="meeting-users-popup-title">поиск групп</div>
+                <button type="button" class="meeting-users-popup-close" id="meetingGroupsPopupCloseBtn">&times;</button>
+            </div>
+
+            <div class="meeting-users-popup-body">
+                <label for="meetingGroupsSearchInput">Введите название группы или имя участника</label>
+                <input id="meetingGroupsSearchInput" type="search" placeholder="например, разработка">
+                <div class="meeting-users-search-status" id="meetingGroupsSearchStatus"></div>
+
+                <div class="meeting-users-section">
+                    <div class="meeting-users-section-title">Найденные группы</div>
+                    <div class="meeting-groups-results" id="meetingGroupsResults"></div>
+                </div>
+
+                <div class="meeting-users-section">
+                    <div class="meeting-users-section-title">Все группы пользователя</div>
+                    <div id="meetingAllGroupsBlock"></div>
+                </div>
+            </div>
+
+            <div class="meeting-users-popup-footer">
+                <button type="button" class="meeting-primary-btn meeting-cancel-btn" id="meetingGroupsPopupCancelBtn">Закрыть</button>
             </div>
         </div>
     </div>

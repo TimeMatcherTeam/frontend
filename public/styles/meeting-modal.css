@@ -92,8 +92,11 @@
     color: var(--text-color);
     font-size: 13px;
     font-weight: 400;
-    cursor: not-allowed;
+    cursor: pointer;
     opacity: 0.75;
+}
+.meeting-secondary-btn:hover {
+    background: var(--accent-color-desaturated);
 }
 
 .meeting-modal-footer {
@@ -127,6 +130,286 @@
     color: var(--text-color);
 }
 
+.meeting-users-popup-bg {
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.38);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 12px;
+    box-sizing: border-box;
+    z-index: 1000;
+}
+
+.meeting-users-popup {
+    width: min(520px, calc(100vw - 24px));
+    max-height: min(72vh, 720px);
+    background: var(--bg-color);
+    border-radius: 12px;
+    box-shadow: 0 8px 40px rgba(0, 0, 0, 0.18);
+    border: 1px solid var(--element-color);
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+}
+
+.meeting-groups-popup {
+    width: min(540px, calc(100vw - 24px));
+    max-height: min(72vh, 720px);
+    background: var(--bg-color);
+    border-radius: 12px;
+    box-shadow: 0 8px 40px rgba(0, 0, 0, 0.18);
+    border: 1px solid var(--element-color);
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+}
+
+.meeting-groups-popup-bg {
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.38);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 12px;
+    box-sizing: border-box;
+    z-index: 1001;
+}
+
+.meeting-groups-popup-bg .meeting-groups-popup {
+    margin: auto;
+}
+
+.meeting-users-popup-header {
+    padding: 18px 22px 14px;
+    border-bottom: 1px solid var(--element-color);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+}
+
+.meeting-users-popup-title {
+    color: var(--text-color);
+    font-size: 18px;
+    font-weight: 400;
+    text-transform: lowercase;
+}
+
+.meeting-users-popup-close {
+    width: 30px;
+    height: 30px;
+    border: 1px solid var(--element-color);
+    border-radius: 50%;
+    background: transparent;
+    color: var(--text-color);
+    font-size: 20px;
+    line-height: 1;
+    cursor: pointer;
+}
+
+.meeting-users-popup-body {
+    padding: 16px 22px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    overflow: auto;
+}
+
+.meeting-users-popup-body label {
+    font-size: 12px;
+    color: var(--text-color);
+}
+
+.meeting-users-popup-body input {
+    height: 38px;
+    width: 100%;
+    border: 1px solid var(--element-color);
+    border-radius: 8px;
+    background: var(--bg-color);
+    color: var(--text-color);
+    font-size: 14px;
+    padding: 0 12px;
+    font-family: inherit;
+}
+
+.meeting-users-popup-body input:focus {
+    outline: none;
+    border-color: var(--accent-color);
+    box-shadow: 0 0 0 2px rgba(26, 115, 232, 0.15);
+}
+
+.meeting-users-search-status {
+    min-height: 18px;
+    font-size: 12px;
+    color: #667182;
+}
+
+.meeting-users-search-status.is-error {
+    color: var(--red-accent);
+}
+
+.meeting-users-section {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.meeting-users-section-title {
+    font-size: 12px;
+    color: var(--text-color);
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+}
+
+.meeting-users-results,
+.meeting-users-selected,
+.meeting-groups-results {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.meeting-user-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    padding: 10px 12px;
+    border: 1px solid var(--element-color);
+    border-radius: 10px;
+    background: var(--element-bg-color);
+}
+
+.meeting-user-row.is-selected {
+    border-color: var(--accent-color);
+}
+
+.meeting-user-info {
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+}
+
+.meeting-user-name {
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--text-color);
+}
+
+.meeting-user-email {
+    font-size: 12px;
+    color: #667182;
+    word-break: break-word;
+}
+
+.meeting-user-add-btn {
+    flex-shrink: 0;
+    border: 1px solid var(--accent-color);
+    border-radius: 18px;
+    background: transparent;
+    color: var(--text-color);
+    font-family: inherit;
+    font-size: 12px;
+    font-weight: 500;
+    padding: 6px 12px;
+    cursor: pointer;
+}
+
+.meeting-user-add-btn:hover:not(:disabled) {
+    background: var(--element-bg-color);
+}
+
+.meeting-user-add-btn:disabled {
+    cursor: default;
+    border-color: var(--element-color);
+    color: #7a8494;
+}
+
+.meeting-user-chip {
+    width: 100%;
+    border: 1px solid var(--accent-color-desaturated);
+    border-radius: 10px;
+    background: transparent;
+    color: var(--text-color);
+    font-family: inherit;
+    text-align: left;
+    padding: 8px 12px;
+    font-size: 13px;
+    cursor: pointer;
+}
+
+.meeting-user-chip:hover {
+    background: var(--element-bg-color);
+}
+
+.meeting-users-empty {
+    padding: 10px 12px;
+    border: 1px dashed var(--element-color);
+    border-radius: 10px;
+    color: #667182;
+    font-size: 13px;
+    text-align: center;
+}
+
+.meeting-group-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    padding: 10px 12px;
+    border: 1px solid var(--element-color);
+    border-radius: 10px;
+    background: var(--element-bg-color);
+}
+
+.meeting-group-info {
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+}
+
+.meeting-group-name {
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--text-color);
+}
+
+.meeting-group-meta {
+    font-size: 12px;
+    color: #667182;
+}
+
+.meeting-group-add-btn {
+    flex-shrink: 0;
+    border: 1px solid var(--accent-color);
+    border-radius: 18px;
+    background: transparent;
+    color: var(--text-color);
+    font-family: inherit;
+    font-size: 12px;
+    font-weight: 500;
+    padding: 6px 12px;
+    cursor: pointer;
+}
+
+.meeting-group-add-btn:hover {
+    background: var(--element-bg-color);
+}
+
+.meeting-users-popup-footer {
+    padding: 12px 22px 16px;
+    display: flex;
+    justify-content: flex-end;
+    gap: 8px;
+    border-top: 1px solid var(--element-color);
+}
+
 @media (max-width: 900px) {
     .meeting-modal-title {
         font-size: 16px;
@@ -140,5 +423,16 @@
 
     .meeting-modal-footer {
         padding: 10px 16px 14px;
+    }
+
+    .meeting-users-popup-header,
+    .meeting-users-popup-body,
+    .meeting-users-popup-footer {
+        padding-left: 16px;
+        padding-right: 16px;
+    }
+
+    .meeting-groups-popup {
+        width: min(540px, calc(100vw - 24px));
     }
 }

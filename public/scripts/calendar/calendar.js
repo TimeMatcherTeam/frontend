@@ -104,10 +104,4 @@ document.getElementById('calBody').scrollTop = Math.max((now.getHours() - 1) * H
 /* Update now-line every minute */
 setInterval(renderNowLine, 60000);
 
-/* Sample events */
-state.events.push(
-    { id: 1, name: 'Встреча команды', date: dateKey(new Date()), start: '10:00', end: '11:00', color: 0 },
-    { id: 2, name: 'Обед',            date: dateKey(new Date()), start: '13:00', end: '14:00', color: 1 },
-    { id: 3, name: 'Code review',     date: dateKey(new Date()), start: '15:30', end: '16:30', color: 0 },
-);
 renderEvents();
