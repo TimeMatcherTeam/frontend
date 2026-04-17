@@ -1,4 +1,4 @@
-import { dateKey, getCurrentWeekBorders,} from "./utils.js";
+import { dateKey, getCurrentWeekBorders, getWeekStart} from "./utils.js";
 import { HOUR_H} from "./constants.js";
 import { state } from "./state.js";
 import { buildHeader } from "./header.js";
@@ -87,11 +87,32 @@ document.addEventListener('click', e => {
     if (!e.target.closest('.ev-tooltip') && !e.target.closest('.event-block')) hideTooltip();
 });
 
+function updateCalendar() {
+    const ws = getWeekStart(state.weekOffset);
+    const we = new Date(ws);
+    console.log(ws, we)
+    we.setDate(ws.getDate() + 6);
+    we.setHours(23, 59, 59, 999);
+    getUserCalendar(ws, we)
+        .then(calendar => {
+            console.log(calendar);
+            if (calendar.slots) {
+                state.events = state.events.filter(e => e.id <= 3);
+                state.events.push(...calendar.slots);
+            }
+            renderEvents();
+        })
+        .catch(error => {
+            console.error('Ошибка загрузки календаря:', error);
+        });
+}
+
 function buildAll() {
     buildHeader();
     buildTimeCol();
     buildGrid();
     renderMiniCalendar();
+    updateCalendar();
 }
 buildAll();
 initMeetingModal();
@@ -103,19 +124,3 @@ document.getElementById('calBody').scrollTop = Math.max((now.getHours() - 1) * H
 
 /* Update now-line every minute */
 setInterval(renderNowLine, 60000);
-
-/* Sample events */
-const currentWeekBorders = getCurrentWeekBorders()
-console.log(currentWeekBorders)
-getUserCalendar(currentWeekBorders[0], currentWeekBorders[1])
-    .then(calendar => {
-        console.log(calendar);
-        if (calendar.slots) {
-            state.events.push(...calendar.slots);
-        }
-        renderEvents();
-    })
-    .catch(error => {
-        console.error('Ошибка:', error);
-    });
-renderEvents();

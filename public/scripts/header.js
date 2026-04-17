@@ -1,5 +1,6 @@
 import { API_URL } from "./requests.js";
 import { getCookie, getToken } from "./jwtUtils.js";
+import { showAuthForm } from "./popups/authPopup.js";
 
 const HEADER_MARKUP = `
     <div class="page-header">
@@ -26,7 +27,7 @@ async function hydrateUserHeader() {
     const token = getToken();
 
     if (!userId || !token) {
-        return;
+        showAuthForm();
     }
 
     try {
