@@ -26,7 +26,7 @@ document.addEventListener("DOMContentLoaded", async () => {
             case "busy":
                 color = "red";
                 break;
-            case "unwanted":
+            case "partially_busy":
                 color = "yellow";
                 break;
             default:

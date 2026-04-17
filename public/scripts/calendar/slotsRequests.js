@@ -123,11 +123,11 @@ function buildSlotPayload(eventData, abilityId) {
 	};
 }
 
-export function mapSlotResponseToCalendarEvent(slot, color = 0) {
+export function mapSlotResponseToCalendarEvent(slot) {
 	const start = new Date(slot.startTime);
 	const end = new Date(slot.endTime);
 	const abilityName = slot.ability?.ability || slot.ability?.name || "";
-	const resolvedColor = Number.isInteger(color) ? color : colorByAbilityName(abilityName);
+	const resolvedColor = colorByAbilityName(abilityName);
 
 	return {
 		id: slot.id,
