@@ -29,10 +29,12 @@
 }
 
 .meeting-modal-body {
-    padding: 16px 22px;
+    padding: 16px 22px 20px;
     display: flex;
     flex-direction: column;
     gap: 12px;
+    overflow-y: auto;
+    max-height: calc(90vh - 120px);
 }
 
 .meeting-row {
@@ -435,4 +437,167 @@
     .meeting-groups-popup {
         width: min(540px, calc(100vw - 24px));
     }
+}
+
+.meeting-slots-section {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    border-top: 1px solid var(--element-color);
+    padding-top: 12px;
+    margin-top: 4px;
+    margin: 0 6px;
+}
+
+.meeting-slots-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.meeting-slots-title {
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--text-color);
+    text-transform: lowercase;
+    letter-spacing: 0.04em;
+}
+
+.meeting-slots-refresh {
+    width: 26px;
+    height: 26px;
+    border: 1px solid var(--element-color);
+    border-radius: 50%;
+    background: transparent;
+    color: var(--text-color);
+    font-size: 15px;
+    line-height: 1;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0;
+}
+
+.meeting-slots-refresh:hover {
+    background: var(--element-bg-color);
+}
+
+.meeting-slots-refresh.is-loading {
+    animation: slots-spin 0.8s linear infinite;
+}
+
+@keyframes slots-spin {
+    to { transform: rotate(360deg); }
+}
+
+.meeting-slots-status {
+    min-height: 16px;
+    font-size: 11px;
+    color: #667182;
+}
+
+.meeting-slots-status.is-error {
+    color: var(--red-accent);
+}
+
+.meeting-slots-list {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    gap: 6px;
+    padding: 2px;
+}
+
+.meeting-slots-list::-webkit-scrollbar {
+    width: 5px;
+}
+
+.meeting-slots-list::-webkit-scrollbar-thumb {
+    background: var(--element-color);
+    border-radius: 3px;
+}
+
+.meeting-slot-item {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    padding: 8px 12px;
+    border: 1px solid var(--element-color);
+    border-radius: 8px;
+    background: var(--element-bg-color);
+    cursor: pointer;
+    transition: border-color 0.15s, background 0.15s;
+    min-width: 130px;
+}
+
+.meeting-slot-item:hover {
+    border-color: var(--accent-color);
+    background: var(--bg-color);
+}
+
+.meeting-slot-item.is-selected {
+    border-color: var(--accent-color);
+    background: var(--accent-color-desaturated);
+}
+
+.meeting-slot-time {
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--text-color);
+}
+
+.meeting-slot-date {
+    font-size: 11px;
+    color: #667182;
+    margin-top: 2px;
+}
+
+.meeting-slot-pick-btn {
+    flex-shrink: 0;
+    border: 1px solid var(--accent-color);
+    border-radius: 14px;
+    background: transparent;
+    color: var(--text-color);
+    font-family: inherit;
+    font-size: 11px;
+    font-weight: 500;
+    padding: 4px 10px;
+    cursor: pointer;
+}
+
+.meeting-slot-pick-btn:hover {
+    background: var(--accent-color-desaturated);
+}
+
+.meeting-slots-empty {
+    padding: 10px;
+    border: 1px dashed var(--element-color);
+    border-radius: 8px;
+    color: #667182;
+    font-size: 12px;
+    text-align: center;
+}
+
+.meeting-duration-fields {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.meeting-duration-fields input {
+    width: 56px;
+    height: 36px;
+    border: 1px solid var(--element-color);
+    border-radius: 8px;
+    background: var(--bg-color);
+    color: var(--text-color);
+    font-size: 14px;
+    text-align: center;
+    padding: 0;
+}
+
+.meeting-duration-fields span {
+    font-size: 13px;
+    color: var(--text-color);
 }

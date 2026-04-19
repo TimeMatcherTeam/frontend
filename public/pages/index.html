@@ -151,7 +151,12 @@
 
                 <div class="meeting-row meeting-row-duration">
                     <label>Продолжительность:</label>
-                    <input id="meetingDuration" type="time" value="01:00" step="60">
+                    <div class="meeting-duration-fields">
+                        <input id="meetingDurationH" type="number" min="0" max="23" value="1" placeholder="ч">
+                        <span>ч</span>
+                        <input id="meetingDurationM" type="number" min="0" max="59" step="5" value="0" placeholder="мин">
+                        <span>мин</span>
+                    </div>
                 </div>
 
                 <button type="button" class="meeting-secondary-btn" id="meetingAddParticipantsBtn">Добавить участников</button>
@@ -227,4 +232,5 @@
 <script type="module" src="scripts/header.js"></script>
 <script type="module" src="scripts/calendar/calendar.js"></script>
 <script type="module" src="scripts/script.js"></script>
+
 </html>

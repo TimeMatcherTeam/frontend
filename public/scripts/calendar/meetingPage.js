@@ -5,6 +5,8 @@ import { state } from "./state.js";
 import { buildHeader } from "./header.js";
 import { initMiniCalendar, renderMiniCalendar } from "./miniCalendar.js";
 import { getWeekStart, dateKey, fmt2 } from "./utils.js";
+import { openTimePickerPopup, restoreSelectedTime } from "./timePickerPopup.js";
+import { getLastSlots, getDuration, triggerSlotSuggester } from "./slotSuggester.js";
 
 const SEARCH_LIMIT = 8;
 
@@ -390,7 +392,7 @@ function buildGrid() {
     renderMergedEvents();
 }
 
-function renderMergedEvents() {
+export function renderMergedEvents() {
     document.querySelectorAll(".merged-event-block").forEach(el => el.remove());
 
     const ws = getWeekStart(state.weekOffset);
@@ -419,11 +421,19 @@ function renderMergedEvents() {
         const height = Math.max((((eh * 60 + em) - (sh * 60 + sm)) / 60) * HOUR_H, 8);
 
         const c = COLORS[ev.color || 0];
+        const isSelected = ev.id === "__selected_slot__";
+        const alpha = isSelected ? 0.5 : 0.15;
+
         const block = document.createElement("div");
         block.className = "merged-event-block";
         block.style.top = `${top}px`;
         block.style.height = `${height}px`;
-        block.style.background = hexToRgba(c.border, 0.15);
+        block.style.background = hexToRgba(c.border, alpha);
+
+        if (isSelected) {
+            block.style.border = `2px solid ${c.border}`;
+            block.style.borderLeft = `4px solid ${c.border}`;
+        }
 
         col.appendChild(block);
     });
@@ -445,9 +455,29 @@ async function buildAll() {
 
     try {
         await loadMergedCalendar();
+        restoreSelectedTime();
+        renderMergedEvents();
+        const draft = readDraft();
+        const durationMinutes = parseDraftDuration(draft?.duration);
+        const now = new Date();
+        const weekAhead = new Date(now.getTime() + 7 * 24 * 60 * 60000);
+        void triggerSlotSuggester(participantUsers, { start: now, end: weekAhead }, durationMinutes ?? 60);
     } catch (error) {
         alert(error?.message || "Не удалось загрузить объединенный календарь");
     }
+}
+
+function parseDraftDuration(value) {
+    if (!value) {
+        return null;
+    }
+
+    const [h, m] = value.split(":").map(Number);
+    if (Number.isNaN(h) || Number.isNaN(m)) {
+        return null;
+    }
+
+    return h * 60 + m;
 }
 
 document.getElementById("prevBtn").onclick = async () => {
@@ -475,3 +505,46 @@ initMiniCalendar(() => {
 
 const now = new Date();
 document.getElementById("calBody").scrollTop = Math.max((now.getHours() - 1) * HOUR_H, 0);
+
+document.getElementById("meetingSelectTimeBtn")?.addEventListener("click", () => {
+    openTimePickerPopup(getLastSlots(), getDuration());
+});
+
+document.addEventListener("slots:slotSelected", () => {
+    renderMergedEvents();
+});
+
+document.getElementById("meetingConfirmBtn")?.addEventListener("click", async () => {
+    const draft = readDraft();
+    if (!draft?.start || !draft?.end) {
+        alert("Выберите время встречи");
+        return;
+    }
+
+    try {
+        const token = getToken();
+        const response = await fetch(`${API_URL}/meetings`, {
+            method: "POST",
+            headers: getAuthHeaders(),
+            body: JSON.stringify({
+                startTime: new Date(draft.start).toISOString(),
+                endTime: new Date(draft.end).toISOString(),
+                name: draft.name || "Новая встреча",
+                comment: draft.comment || "",
+                isOnline: false,
+                participantIds: draft.participantIds || []
+            })
+        });
+
+        if (!response.ok) {
+            const errorText = await response.text();
+            throw new Error(`Ошибка создания встречи: ${response.status}`);
+        }
+
+
+        sessionStorage.removeItem("meetingDraft");
+        window.location.href = "/";
+    } catch (error) {
+        alert(error?.message || "Не удалось создать встречу");
+    }
+});

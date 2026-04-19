@@ -158,3 +158,136 @@
     border-left: 0;
     pointer-events: none;
 }
+
+.meeting-slots-section {
+    padding: 10px;
+    border: 1px solid var(--element-color);
+    border-radius: 14px;
+    background: var(--bg-color);
+    width: 188px;
+    box-sizing: border-box;
+}
+
+.meeting-slots-list {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    gap: 6px;
+    max-height: none;
+}
+
+.meeting-slot-item {
+    min-width: 0;
+    width: 100%;
+}
+
+.meeting-time-popup-bg {
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.38);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 200;
+}
+
+.meeting-time-popup {
+    width: min(480px, calc(100vw - 24px));
+    max-height: min(80vh, 700px);
+    background: var(--bg-color);
+    border-radius: 12px;
+    box-shadow: 0 8px 40px rgba(0, 0, 0, 0.18);
+    border: 1px solid var(--element-color);
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+}
+
+.meeting-time-popup-body {
+    padding: 16px 22px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    overflow-y: auto;
+}
+
+.meeting-time-manual {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.meeting-time-manual label {
+    font-size: 12px;
+    color: var(--text-color);
+}
+
+.meeting-time-manual input {
+    height: 36px;
+    width: 100%;
+    border: 1px solid var(--element-color);
+    border-radius: 8px;
+    background: var(--bg-color);
+    color: var(--text-color);
+    font-size: 14px;
+    padding: 0 10px;
+    font-family: inherit;
+    box-sizing: border-box;
+}
+
+.meeting-time-apply-btn {
+    height: 34px;
+    border: 0;
+    border-radius: 20px;
+    background: var(--accent-color);
+    color: var(--bg-color);
+    font-size: 13px;
+    font-weight: 500;
+    font-family: inherit;
+    cursor: pointer;
+    margin-top: 4px;
+}
+
+.meeting-time-apply-btn:hover {
+    background: var(--accent-color-desaturated);
+}
+
+.meeting-time-divider {
+    text-align: center;
+    font-size: 11px;
+    color: #667182;
+    position: relative;
+}
+
+.meeting-time-divider::before,
+.meeting-time-divider::after {
+    content: "";
+    position: absolute;
+    top: 50%;
+    width: 35%;
+    height: 1px;
+    background: var(--element-color);
+}
+
+.meeting-time-divider::before { left: 0; }
+.meeting-time-divider::after { right: 0; }
+
+.meeting-time-slots-list {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    gap: 6px;
+}
+
+.meeting-selected-time {
+    width: 188px;
+    padding: 8px 12px;
+    border: 1px solid var(--accent-color);
+    border-radius: 10px;
+    background: var(--accent-color-desaturated);
+    color: var(--text-color);
+    font-size: 12px;
+    font-weight: 600;
+    text-align: center;
+    box-sizing: border-box;
+}
