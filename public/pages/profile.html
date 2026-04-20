@@ -5,21 +5,51 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <link rel="stylesheet" href="styles/header.css">
     <link rel="stylesheet" href="styles/style.css">
+    <link rel="stylesheet" href="styles/header.css">
+    <link rel="stylesheet" href="styles/user-groups-block.css">
+    <link rel="stylesheet" href="styles/profile.css">
 
     <title>Time Matcher</title>
 </head>
 
-<body>
+<body class="profile-page">
     <header id="pageHeader"></header>
 
-    <main>
-        страница профиля
+    <main class="profile-shell">
+        <section class="profile-layout">
+            <section class="profile-card profile-editor-card" aria-labelledby="profileEditorTitle">
+                <div class="profile-card-title" id="profileEditorTitle">Профиль</div>
+
+                <div class="profile-field">
+                    <label for="profileNickname">Ник</label>
+                    <input id="profileNickname" type="text" autocomplete="nickname">
+                </div>
+
+                <div class="profile-field">
+                    <label for="profileEmail">Почта</label>
+                    <input id="profileEmail" type="email" autocomplete="email">
+                </div>
+
+                <div class="profile-actions">
+                    <button type="button" class="profile-save-btn" id="profileSaveBtn">Сохранить изменения</button>
+                    <button type="button" class="profile-password-btn" disabled>Сменить пароль</button>
+                </div>
+
+                <div class="profile-status" id="profileStatus" aria-live="polite"></div>
+            </section>
+
+            <section class="profile-card profile-groups-card" aria-labelledby="profileGroupsTitle">
+                <div class="profile-card-title" id="profileGroupsTitle">Мои группы</div>
+
+                <div class="profile-groups-host" id="profileGroupsHost"></div>
+
+                <button type="button" class="profile-add-group-btn" disabled>Добавить группу</button>
+            </section>
+        </section>
     </main>
 
-    <footer>
-    </footer>
 </body>
 <script type="module" src="scripts/header.js"></script>
+<script type="module" src="scripts/profile/profile.js"></script>
 </html>
