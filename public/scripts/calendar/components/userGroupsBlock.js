@@ -37,7 +37,7 @@ export function createUserGroupsBlock(hostNode, onAddGroup) {
         };
     }
 
-    hostNode.innerHTML = "";
+    hostNode.replaceChildren();
 
     const root = document.createElement("div");
     root.className = "user-groups-block";
@@ -49,7 +49,7 @@ export function createUserGroupsBlock(hostNode, onAddGroup) {
     hostNode.appendChild(root);
 
     const render = groups => {
-        list.innerHTML = "";
+        list.replaceChildren();
 
         if (!Array.isArray(groups) || groups.length === 0) {
             const empty = document.createElement("div");

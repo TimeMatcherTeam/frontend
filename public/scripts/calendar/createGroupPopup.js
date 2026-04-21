@@ -87,7 +87,7 @@ function renderSelectedUsers() {
         return;
     }
 
-    selectedList.innerHTML = "";
+    selectedList.replaceChildren();
 
     if (selectedUsers.length === 0) {
         const empty = document.createElement("div");

@@ -98,7 +98,7 @@ function clearResults() {
         return;
     }
 
-    results.innerHTML = "";
+    results.replaceChildren();
 }
 
 function normalizeText(value) {
@@ -128,7 +128,7 @@ function renderResults(groups) {
         return;
     }
 
-    results.innerHTML = "";
+    results.replaceChildren();
 
     if (!Array.isArray(groups) || groups.length === 0) {
         const empty = document.createElement("div");

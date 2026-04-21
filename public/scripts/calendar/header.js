@@ -18,7 +18,11 @@ export function buildHeader() {
         getWeekLabel(ws, we);
 
     const head = document.getElementById('colHead');
-    head.innerHTML = '<div class="th-time"></div>';
+    head.replaceChildren();
+
+    const thTime = document.createElement('div');
+    thTime.className = 'th-time';
+    head.appendChild(thTime);
 
     const todayStr = dateKey(new Date());
 
@@ -28,7 +32,13 @@ export function buildHeader() {
 
         const div = document.createElement('div');
         div.className = 'th-day';
-        div.innerHTML = `${DAYS_RU[i]}<span class="th-num${isToday ? ' today' : ''}">${d.getDate()}</span>`;
+        div.textContent = DAYS_RU[i];
+
+        const dayNumber = document.createElement('span');
+        dayNumber.className = `th-num${isToday ? ' today' : ''}`;
+        dayNumber.textContent = String(d.getDate());
+
+        div.appendChild(dayNumber);
         head.appendChild(div);
     }
 }

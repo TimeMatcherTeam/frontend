@@ -6,7 +6,7 @@ import { showTooltip } from "./tooltip.js";
 
 export function buildTimeCol() {
     const tc = document.getElementById('timeCol');
-    tc.innerHTML = '';
+    tc.replaceChildren();
     tc.style.position = 'relative';
     tc.style.height = (HOUR_H * 24) + 'px';
     for (let h = 1; h < 24; h++) {
@@ -20,7 +20,7 @@ export function buildTimeCol() {
 
 export function buildGrid() {
     const ga = document.getElementById('gridArea');
-    ga.innerHTML = '';
+    ga.replaceChildren();
     ga.style.height = (HOUR_H * 24) + 'px';
     const ws = getWeekStart(state.weekOffset);
 
@@ -96,10 +96,17 @@ export function renderEvents() {
         block.style.borderLeftColor = c.border;
         block.style.color = c.text;
 
+        const nameSpan = document.createElement('span');
+        nameSpan.className = 'ev-name';
+        nameSpan.textContent = ev.name || '(без названия)';
+
         if (height > 28) {
-            block.innerHTML = `<span class="ev-name">${ev.name || '(без названия)'}</span><span class="ev-time">${ev.start}–${ev.end}</span>`;
+            const timeSpan = document.createElement('span');
+            timeSpan.className = 'ev-time';
+            timeSpan.textContent = `${ev.start}–${ev.end}`;
+            block.append(nameSpan, timeSpan);
         } else {
-            block.innerHTML = `<span class="ev-name">${ev.name || '(без названия)'}</span>`;
+            block.appendChild(nameSpan);
         }
 
         block.addEventListener('click', e => { e.stopPropagation(); showTooltip(ev, e); });

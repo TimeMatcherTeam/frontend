@@ -109,7 +109,7 @@ export async function saveEvent() {
 
 function renderColorPicker() {
     const row = document.getElementById('colorRow');
-    row.innerHTML = '';
+    row.replaceChildren();
     const labels = ['Занят', 'Частично занят'];
     COLORS.forEach((c, i) => {
         const dot = document.createElement('div');

@@ -83,7 +83,7 @@ function fmtTime(date) {
 }
 
 function renderSlotsInPopup(slots) {
-    slotsList.innerHTML = "";
+    slotsList.replaceChildren();
 
     if (!slots.length) {
         const empty = document.createElement("div");

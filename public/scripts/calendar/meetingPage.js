@@ -146,7 +146,7 @@ function renderParticipants() {
         return;
     }
 
-    participantsList.innerHTML = "";
+    participantsList.replaceChildren();
 
     if (participantUsers.length === 0) {
         const empty = document.createElement("div");
@@ -189,7 +189,7 @@ function renderSearchResults(users) {
         return;
     }
 
-    searchResults.innerHTML = "";
+    searchResults.replaceChildren();
 
     if (!Array.isArray(users) || users.length === 0) {
         return;
@@ -393,7 +393,7 @@ async function loadMergedCalendar() {
 
 function buildTimeCol() {
     const tc = document.getElementById("timeCol");
-    tc.innerHTML = "";
+    tc.replaceChildren();
     tc.style.position = "relative";
     tc.style.height = `${HOUR_H * 24}px`;
 
@@ -408,7 +408,7 @@ function buildTimeCol() {
 
 function buildGrid() {
     const ga = document.getElementById("gridArea");
-    ga.innerHTML = "";
+    ga.replaceChildren();
     ga.style.height = `${HOUR_H * 24}px`;
 
     const ws = getWeekStart(state.weekOffset);

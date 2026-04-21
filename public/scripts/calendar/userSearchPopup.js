@@ -116,7 +116,7 @@ function renderSelectedUsers() {
         return;
     }
 
-    selected.innerHTML = "";
+    selected.replaceChildren();
 
     if (selectedUsers.length === 0) {
         const empty = document.createElement("div");
@@ -156,7 +156,7 @@ function renderResults(users) {
         return;
     }
 
-    results.innerHTML = "";
+    results.replaceChildren();
 
     if (!Array.isArray(users) || users.length === 0) {
         const empty = document.createElement("div");
@@ -208,7 +208,7 @@ function clearResults() {
         return;
     }
 
-    results.innerHTML = "";
+    results.replaceChildren();
 }
 
 async function runSearch() {
