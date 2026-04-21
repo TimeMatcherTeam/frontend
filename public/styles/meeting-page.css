@@ -132,6 +132,19 @@
     gap: 8px;
 }
 
+.meeting-range-label {
+    width: 188px;
+    padding: 8px 12px;
+    border: 1px solid var(--element-color);
+    border-radius: 10px;
+    background: var(--element-bg-color);
+    color: var(--text-color);
+    font-size: 12px;
+    font-weight: 600;
+    line-height: 1.35;
+    box-sizing: border-box;
+}
+
 .meeting-sidebar-btn {
     width: 100%;
     height: 34px;
@@ -179,6 +192,17 @@
 .meeting-slot-item {
     min-width: 0;
     width: 100%;
+}
+
+.meeting-slot-item.is-initial {
+    border-style: dashed;
+}
+
+.meeting-slot-badge {
+    font-size: 11px;
+    font-weight: 600;
+    color: #667182;
+    margin-bottom: 4px;
 }
 
 .meeting-time-popup-bg {

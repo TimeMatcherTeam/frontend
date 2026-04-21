@@ -99,7 +99,7 @@ function renderSlotsInPopup(slots) {
 
     const maxScore = Math.max(...slots.map(s => s.score));
 
-    slots.forEach(slot => {
+    slots.forEach((slot, index) => {
         const item = document.createElement("div");
         item.className = "meeting-slot-item";
         item.style.borderColor = slotColor(slot.score, maxScore);
@@ -117,6 +117,11 @@ function renderSlotsInPopup(slots) {
         });
 
         item.append(time, date);
+        if (index === 0) {
+            item.classList.add("is-selected");
+            startInput.value = toDateTimeLocal(slot.start);
+            endInput.value = toDateTimeLocal(slot.end);
+        }
         item.addEventListener("click", () => {
             slotsList.querySelectorAll(".meeting-slot-item").forEach(el => el.classList.remove("is-selected"));
             item.classList.add("is-selected");
@@ -129,11 +134,9 @@ function renderSlotsInPopup(slots) {
 }
 
 export function openTimePickerPopup(slots) {
-    const draft = JSON.parse(sessionStorage.getItem("meetingDraft") || "{}");
-    if (startInput && draft.start) startInput.value = draft.start;
-    if (endInput && draft.end) endInput.value = draft.end;
+    const slotsToRender = Array.isArray(slots) ? [...slots] : [];
 
-    renderSlotsInPopup(slots || []);
+    renderSlotsInPopup(slotsToRender);
     popupBg.style.display = "flex";
 }
 

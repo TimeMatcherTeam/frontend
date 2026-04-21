@@ -15,6 +15,10 @@ export function getDuration() {
     return currentDuration;
 }
 
+export function getCurrentRange() {
+    return currentRange;
+}
+
 function getAuthHeaders() {
     const token = getToken();
     if (!token) {
@@ -69,7 +73,7 @@ function findBestSlots(participants, searchRange, durationMinutes, maxResults = 
     const SLOT_STEP = 5;
     const MS_PER_SLOT = SLOT_STEP * 60000;
     const ABILITY_WEIGHTS = {
-        busy: 100,
+        busy: 10000,
         partial: 40,
     };
     const EXTRA_WEIGHTS = [
@@ -80,7 +84,11 @@ function findBestSlots(participants, searchRange, durationMinutes, maxResults = 
     const rangeStart = searchRange.start.getTime() + MS_PER_SLOT - searchRange.start.getTime() % MS_PER_SLOT;
     const rangeEnd = searchRange.end.getTime() - searchRange.end.getTime() % MS_PER_SLOT;
     const totalSlots = Math.floor((rangeEnd - rangeStart) / MS_PER_SLOT);
-
+    console.log(searchRange.start);
+    console.log(rangeStart);
+    console.log(searchRange.end);
+    console.log(rangeEnd);
+    console.log(totalSlots);
     if (totalSlots <= 0 || durationMinutes <= 0) {
         return [];
     }
@@ -161,8 +169,7 @@ function findBestSlots(participants, searchRange, durationMinutes, maxResults = 
         const startMs = rangeStart + candidate.index * MS_PER_SLOT;
         const endMs = startMs + durationMinutes * 60000;
 
-        const overlaps = usedRanges.some(([s]) => Math.abs(startMs - s) < 30 * 60000);
-        if (overlaps) {
+        if(candidate.score >= ABILITY_WEIGHTS.busy) {
             continue;
         }
 

@@ -68,6 +68,54 @@ function saveDraftParticipants() {
     sessionStorage.setItem("meetingDraft", JSON.stringify(updated));
 }
 
+function parseDraftDateTime(value) {
+    if (!value) {
+        return null;
+    }
+
+    const date = new Date(value);
+    if (Number.isNaN(date.getTime())) {
+        return null;
+    }
+
+    return date;
+}
+
+function formatMeetingRange(date) {
+    return date.toLocaleString("ru-RU", {
+        day: "numeric",
+        month: "short",
+        hour: "2-digit",
+        minute: "2-digit"
+    });
+}
+
+function renderMeetingRangeLabel(range) {
+    const label = document.getElementById("meetingRangeLabel");
+    if (!label) {
+        return;
+    }
+
+    if (!range?.start || !range?.end) {
+        label.textContent = "Диапазон встречи не выбран";
+        return;
+    }
+
+    label.textContent = `Диапазон встречи: ${formatMeetingRange(range.start)} – ${formatMeetingRange(range.end)}`;
+}
+
+function getMeetingRangeFromDraft() {
+    const draft = readDraft();
+    const start = parseDraftDateTime(draft?.start);
+    const end = parseDraftDateTime(draft?.end);
+
+    if (!start || !end || end <= start) {
+        return null;
+    }
+
+    return { start, end };
+}
+
 function getSearchElements() {
     return {
         searchInput: document.getElementById("meetingParticipantSearch"),
@@ -459,9 +507,13 @@ async function buildAll() {
         renderMergedEvents();
         const draft = readDraft();
         const durationMinutes = parseDraftDuration(draft?.duration);
-        const now = new Date();
-        const weekAhead = new Date(now.getTime() + 7 * 24 * 60 * 60000);
-        void triggerSlotSuggester(participantUsers, { start: now, end: weekAhead }, durationMinutes ?? 60);
+        const meetingRange = getMeetingRangeFromDraft();
+
+        renderMeetingRangeLabel(meetingRange);
+
+        if (meetingRange) {
+            void triggerSlotSuggester(participantUsers, meetingRange, durationMinutes ?? 60);
+        }
     } catch (error) {
         alert(error?.message || "Не удалось загрузить объединенный календарь");
     }
