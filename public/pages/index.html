@@ -13,6 +13,7 @@
     <link rel="stylesheet" href="styles/calendar-popups.css">
     <link rel="stylesheet" href="styles/meeting-modal.css">
     <link rel="stylesheet" href="styles/user-groups-block.css">
+    <link rel="stylesheet" href="styles/group-popups.css">
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -58,7 +59,7 @@
                     <div class="create-menu" id="createMenu">
                         <button class="create-item" id="actionEvent">мероприятие</button>
                         <button class="create-item" id="actionMeeting" type="button">встреча</button>
-                        <button class="create-item" type="button" disabled>группа</button>
+                        <button class="create-item" id="actionGroup" type="button">группа</button>
                     </div>
                 </div>
             </aside>
@@ -224,6 +225,37 @@
 
             <div class="meeting-users-popup-footer">
                 <button type="button" class="meeting-primary-btn meeting-cancel-btn" id="meetingGroupsPopupCancelBtn">Закрыть</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Popup для создания группы -->
+    <div class="create-group-popup-bg" id="createGroupPopupBg" style="display:none">
+        <div class="create-group-popup">
+            <div class="create-group-popup-header">
+                <div class="create-group-popup-title">Создание группы</div>
+                <button type="button" class="create-group-popup-close" id="createGroupPopupCloseBtn">&times;</button>
+            </div>
+
+            <div class="create-group-popup-body">
+                <div class="create-group-field">
+                    <label for="createGroupTitleInput">Название группы:</label>
+                    <input id="createGroupTitleInput" type="text" placeholder="например, Команда разработки">
+                </div>
+
+                <button type="button" class="create-group-secondary-btn" id="createGroupAddParticipantsBtn">Добавить участников</button>
+
+                <div class="create-group-section">
+                    <div class="create-group-section-title">Выбранные участники</div>
+                    <div id="createGroupSelectedList"></div>
+                </div>
+
+                <div class="create-group-status" id="createGroupStatus"></div>
+            </div>
+
+            <div class="create-group-popup-footer">
+                <button type="button" class="create-group-primary-btn" id="createGroupConfirmBtn">Создать</button>
+                <button type="button" class="create-group-primary-btn create-group-cancel-btn" id="createGroupCancelBtn">Отмена</button>
             </div>
         </div>
     </div>

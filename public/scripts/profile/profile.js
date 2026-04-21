@@ -86,24 +86,37 @@ function setProfileForm(user) {
     }
 }
 
+async function loadGroups() {
+    try {
+        const userId = getCurrentUserId();
+        const groups = await requestJson(`${API_URL}/users/${userId}/groups`);
+        const { groupsHost } = getElements();
+        
+        if (groupsHost) {
+            const groupsBlock = createUserGroupsBlock(groupsHost, null);
+            groupsBlock.render(Array.isArray(groups) ? groups : []);
+        }
+    } catch (error) {
+        console.error("Ошибка при загрузке групп:", error);
+    }
+}
+
 async function loadProfile() {
     const userId = getCurrentUserId();
-    const [user, groups] = await Promise.all([
-        requestJson(`${API_URL}/users/${userId}`),
-        requestJson(`${API_URL}/users/${userId}/groups`)
-    ]);
+    try {
+        const user = await requestJson(`${API_URL}/users/${userId}`);
+        setProfileForm(user);
 
-    setProfileForm(user);
+        const { profileLink } = getElements();
+        if (profileLink && user?.userName) {
+            profileLink.textContent = user.userName;
+        }
 
-    const { profileLink, groupsHost } = getElements();
-    if (profileLink && user?.userName) {
-        profileLink.textContent = user.userName;
+        await loadGroups();
+        renderStatus("Данные профиля загружены");
+    } catch (error) {
+        renderStatus(error?.message || "Не удалось загрузить профиль", true);
     }
-
-    const groupsBlock = createUserGroupsBlock(groupsHost, null);
-    groupsBlock.render(Array.isArray(groups) ? groups : []);
-
-    renderStatus("Данные профиля загружены");
 }
 
 async function saveProfile() {
@@ -150,6 +163,11 @@ function initProfilePage() {
     if (!saveBtn) {
         return;
     }
+
+    // Set up global handlers for group updates
+    window.onGroupCreated = () => {
+        void loadGroups();
+    };
 
     saveBtn.addEventListener("click", () => {
         void saveProfile();

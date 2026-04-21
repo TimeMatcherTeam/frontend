@@ -263,6 +263,10 @@ function openPopup() {
     }
 }
 
+export function openMeetingUsersPopup() {
+    openPopup();
+}
+
 export function closeMeetingUsersPopup() {
     const { popupBg } = getElements();
     if (!popupBg) {
@@ -270,6 +274,7 @@ export function closeMeetingUsersPopup() {
     }
 
     popupBg.style.display = "none";
+    window.dispatchEvent(new CustomEvent("meetingUsersPopupClosed"));
 }
 
 export function addMeetingUsers(users) {
@@ -293,8 +298,12 @@ export function initMeetingUsersPopup() {
     popupInitialized = true;
 
     const openBtn = document.getElementById("meetingAddParticipantsBtn");
-
-    openBtn?.addEventListener("click", openPopup);
+    
+    // Только если кнопка существует
+    if (openBtn) {
+        openBtn.addEventListener("click", openPopup);
+    }
+    
     closeBtn.addEventListener("click", closeMeetingUsersPopup);
     cancelBtn.addEventListener("click", closeMeetingUsersPopup);
     popupBg.addEventListener("click", event => {
