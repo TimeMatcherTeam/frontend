@@ -315,3 +315,18 @@
     text-align: center;
     box-sizing: border-box;
 }
+
+.meeting-slot-reasons {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    margin-top: 4px;
+    padding-top: 4px;
+    border-top: 1px solid var(--element-color);
+}
+
+.meeting-slot-reason {
+    font-size: 10px;
+    color: #667182;
+    line-height: 1.3;
+}

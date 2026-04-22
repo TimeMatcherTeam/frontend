@@ -6,7 +6,7 @@ import { buildHeader } from "./header.js";
 import { initMiniCalendar, renderMiniCalendar } from "./miniCalendar.js";
 import { getWeekStart, dateKey, fmt2 } from "./utils.js";
 import { openTimePickerPopup, restoreSelectedTime } from "./timePickerPopup.js";
-import { getLastSlots, getDuration, triggerSlotSuggester } from "./slotSuggester.js";
+import { getLastSlots, triggerSlotSuggester } from "./slotSuggester.js";
 
 const SEARCH_LIMIT = 8;
 
@@ -106,8 +106,8 @@ function renderMeetingRangeLabel(range) {
 
 function getMeetingRangeFromDraft() {
     const draft = readDraft();
-    const start = parseDraftDateTime(draft?.start);
-    const end = parseDraftDateTime(draft?.end);
+    const start = parseDraftDateTime(draft?.rangeStart);
+    const end = parseDraftDateTime(draft?.rangeEnd);
 
     if (!start || !end || end <= start) {
         return null;
@@ -506,6 +506,12 @@ async function buildAll() {
         restoreSelectedTime();
         renderMergedEvents();
         const draft = readDraft();
+        if (draft?.meetingStart && draft?.meetingEnd) {
+            const confirmBtn = document.getElementById("meetingConfirmBtn");
+            if (confirmBtn) {
+                confirmBtn.disabled = false;
+            }
+        }
         const durationMinutes = parseDraftDuration(draft?.duration);
         const meetingRange = getMeetingRangeFromDraft();
 
@@ -559,7 +565,7 @@ const now = new Date();
 document.getElementById("calBody").scrollTop = Math.max((now.getHours() - 1) * HOUR_H, 0);
 
 document.getElementById("meetingSelectTimeBtn")?.addEventListener("click", () => {
-    openTimePickerPopup(getLastSlots(), getDuration());
+    openTimePickerPopup(getLastSlots());
 });
 
 document.addEventListener("slots:slotSelected", () => {
@@ -568,7 +574,7 @@ document.addEventListener("slots:slotSelected", () => {
 
 document.getElementById("meetingConfirmBtn")?.addEventListener("click", async () => {
     const draft = readDraft();
-    if (!draft?.start || !draft?.end) {
+    if (!draft?.meetingStart || !draft?.meetingEnd) {
         alert("Выберите время встречи");
         return;
     }
@@ -579,8 +585,8 @@ document.getElementById("meetingConfirmBtn")?.addEventListener("click", async ()
             method: "POST",
             headers: getAuthHeaders(),
             body: JSON.stringify({
-                startTime: new Date(draft.start).toISOString(),
-                endTime: new Date(draft.end).toISOString(),
+                startTime: new Date(draft.meetingStart).toISOString(),
+                endTime: new Date(draft.meetingEnd).toISOString(),
                 name: draft.name || "Новая встреча",
                 comment: draft.comment || "",
                 isOnline: false,

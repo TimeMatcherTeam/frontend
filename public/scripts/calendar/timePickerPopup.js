@@ -1,5 +1,4 @@
 import { state } from "./state.js";
-import { getDuration } from "./slotSuggester.js";
 
 const popupBg = document.getElementById("meetingTimePopupBg");
 const closeBtn = document.getElementById("meetingTimePopupClose");
@@ -16,8 +15,8 @@ function toDateTimeLocal(date) {
 
 function applyTime(start, end) {
     const draft = JSON.parse(sessionStorage.getItem("meetingDraft") || "{}");
-    draft.start = toDateTimeLocal(start);
-    draft.end = toDateTimeLocal(end);
+    draft.meetingStart = toDateTimeLocal(start);
+    draft.meetingEnd = toDateTimeLocal(end);
     sessionStorage.setItem("meetingDraft", JSON.stringify(draft));
 
     const fmt2 = n => String(n).padStart(2, "0");
@@ -47,9 +46,7 @@ function applyTime(start, end) {
 
 function updateSelectedTimeLabel(start, end) {
     const label = document.getElementById("meetingSelectedTimeLabel");
-    if (!label) {
-        return;
-    }
+    if (!label) return;
 
     if (!start || !end) {
         label.textContent = "";
@@ -68,14 +65,10 @@ function updateSelectedTimeLabel(start, end) {
     label.style.display = "";
 }
 
-function slotColor(score, maxScore) {
-    const ratio = maxScore > 0 ? Math.min(score / maxScore, 1) : 0;
-
-    if (ratio < 0.5) {
-        return `color-mix(in srgb, #5BB7D5 ${100 - ratio * 200}%, #F5A623 ${ratio * 200}%)`;
-    }
-
-    return `color-mix(in srgb, #F5A623 ${100 - (ratio - 0.5) * 200}%, #EA4335 ${(ratio - 0.5) * 200}%)`;
+function slotBorderColor(reasonsCount) {
+    if (reasonsCount === 0) return "#5BB7D5";
+    if (reasonsCount === 1) return "#F5A623";
+    return "#EA4335";
 }
 
 function fmtTime(date) {
@@ -83,7 +76,7 @@ function fmtTime(date) {
 }
 
 function renderSlotsInPopup(slots) {
-    slotsList.replaceChildren();
+    slotsList.innerHTML = "";
 
     if (!slots.length) {
         const empty = document.createElement("div");
@@ -97,12 +90,10 @@ function renderSlotsInPopup(slots) {
         status.textContent = `найдено ${slots.length} вариантов`;
     }
 
-    const maxScore = Math.max(...slots.map(s => s.score));
-
-    slots.forEach((slot, index) => {
+    slots.forEach(slot => {
         const item = document.createElement("div");
         item.className = "meeting-slot-item";
-        item.style.borderColor = slotColor(slot.score, maxScore);
+        item.style.borderColor = slotBorderColor(slot.reasons.length);
 
         const time = document.createElement("div");
         time.className = "meeting-slot-time";
@@ -117,11 +108,19 @@ function renderSlotsInPopup(slots) {
         });
 
         item.append(time, date);
-        if (index === 0) {
-            item.classList.add("is-selected");
-            startInput.value = toDateTimeLocal(slot.start);
-            endInput.value = toDateTimeLocal(slot.end);
+
+        if (slot.reasons.length > 0) {
+            const reasonsList = document.createElement("div");
+            reasonsList.className = "meeting-slot-reasons";
+            slot.reasons.forEach(reason => {
+                const r = document.createElement("div");
+                r.className = "meeting-slot-reason";
+                r.textContent = reason;
+                reasonsList.appendChild(r);
+            });
+            item.appendChild(reasonsList);
         }
+
         item.addEventListener("click", () => {
             slotsList.querySelectorAll(".meeting-slot-item").forEach(el => el.classList.remove("is-selected"));
             item.classList.add("is-selected");
@@ -134,20 +133,20 @@ function renderSlotsInPopup(slots) {
 }
 
 export function openTimePickerPopup(slots) {
-    const slotsToRender = Array.isArray(slots) ? [...slots] : [];
+    const draft = JSON.parse(sessionStorage.getItem("meetingDraft") || "{}");
+    if (startInput && draft.meetingStart) startInput.value = draft.meetingStart;
+    if (endInput && draft.meetingEnd) endInput.value = draft.meetingEnd;
 
-    renderSlotsInPopup(slotsToRender);
+    renderSlotsInPopup(slots || []);
     popupBg.style.display = "flex";
 }
 
 export function restoreSelectedTime() {
     const draft = JSON.parse(sessionStorage.getItem("meetingDraft") || "{}");
-    if (!draft.start || !draft.end) {
-        return;
-    }
+    if (!draft.meetingStart || !draft.meetingEnd) return;
 
-    const start = new Date(draft.start);
-    const end = new Date(draft.end);
+    const start = new Date(draft.meetingStart);
+    const end = new Date(draft.meetingEnd);
 
     updateSelectedTimeLabel(start, end);
 
@@ -183,33 +182,27 @@ applyBtn?.addEventListener("click", () => {
 });
 
 startInput?.addEventListener("change", () => {
-    if (!startInput.value) {
-        return;
-    }
+    if (!startInput.value) return;
 
-    const durationMinutes = getDuration();
-    if (!durationMinutes) {
-        return;
-    }
+    const draft = JSON.parse(sessionStorage.getItem("meetingDraft") || "{}");
+    const [h, m] = (draft.duration || "1:00").split(":").map(Number);
+    const durationMinutes = h * 60 + m;
+    if (!durationMinutes) return;
 
     const start = new Date(startInput.value);
-    const end = new Date(start.getTime() + durationMinutes * 60000);
-    endInput.value = toDateTimeLocal(end);
+    endInput.value = toDateTimeLocal(new Date(start.getTime() + durationMinutes * 60000));
 });
 
 endInput?.addEventListener("change", () => {
-    if (!endInput.value) {
-        return;
-    }
+    if (!endInput.value) return;
 
-    const durationMinutes = getDuration();
-    if (!durationMinutes) {
-        return;
-    }
+    const draft = JSON.parse(sessionStorage.getItem("meetingDraft") || "{}");
+    const [h, m] = (draft.duration || "1:00").split(":").map(Number);
+    const durationMinutes = h * 60 + m;
+    if (!durationMinutes) return;
 
     const end = new Date(endInput.value);
-    const start = new Date(end.getTime() - durationMinutes * 60000);
-    startInput.value = toDateTimeLocal(start);
+    startInput.value = toDateTimeLocal(new Date(end.getTime() - durationMinutes * 60000));
 });
 
 closeBtn?.addEventListener("click", closePopup);

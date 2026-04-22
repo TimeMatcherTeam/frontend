@@ -60,8 +60,8 @@ function buildMeetingDraft() {
     return {
         name: nameInput?.value?.trim() || "Новая встреча",
         comment: commentInput?.value?.trim() || "",
-        start: startInput?.value || null,
-        end: endInput?.value || null,
+        rangeStart: startInput?.value || null,
+        rangeEnd: endInput?.value || null,
         duration: `${h}:${m}`,
         participantIds
     };
