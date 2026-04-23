@@ -35,7 +35,7 @@
 
                 <div class="profile-actions">
                     <button type="button" class="profile-save-btn" id="profileSaveBtn">Сохранить изменения</button>
-                    <button type="button" class="profile-password-btn" disabled>Сменить пароль</button>
+                    <button type="button" class="profile-password-btn" id="profileChangePasswordBtn">Сменить пароль</button>
                 </div>
 
                 <div class="profile-status" id="profileStatus" aria-live="polite"></div>
@@ -110,6 +110,41 @@
             </div>
         </div>
     </div>
+
+    <!-- Popup для смены пароля -->
+    <div class="password-popup-bg" id="passwordPopupBg" style="display:none">
+        <div class="password-popup">
+            <div class="password-popup-header">
+                <div class="password-popup-title">Смена пароля</div>
+                <button type="button" class="password-popup-close" id="passwordPopupCloseBtn">&times;</button>
+            </div>
+
+            <div class="password-popup-body">
+                <div class="password-field">
+                    <label for="oldPasswordInput">Старый пароль</label>
+                    <input id="oldPasswordInput" type="password" placeholder="Введите текущий пароль">
+                </div>
+
+                <div class="password-field">
+                    <label for="newPasswordInput">Новый пароль</label>
+                    <input id="newPasswordInput" type="password" placeholder="Придумайте новый пароль">
+                </div>
+
+                <div class="password-field">
+                    <label for="confirmPasswordInput">Повторите новый пароль</label>
+                    <input id="confirmPasswordInput" type="password" placeholder="Подтвердите новый пароль">
+                </div>
+
+                <div class="password-status" id="passwordStatus"></div>
+            </div>
+
+            <div class="password-popup-footer">
+                <button type="button" class="password-primary-btn" id="passwordConfirmBtn">Сохранить</button>
+                <button type="button" class="password-primary-btn password-cancel-btn" id="passwordCancelBtn">Отмена</button>
+            </div>
+        </div>
+    </div>
+
 
 </body>
 <script type="module" src="scripts/header.js"></script>

@@ -60,6 +60,7 @@ function getElements() {
         nicknameInput: document.getElementById("profileNickname"),
         emailInput: document.getElementById("profileEmail"),
         saveBtn: document.getElementById("profileSaveBtn"),
+        changePasswordButton: document.getElementById("profileChangePasswordBtn"),
         status: document.getElementById("profileStatus"),
         groupsHost: document.getElementById("profileGroupsHost"),
         profileLink: document.getElementById("userProfileLink")
@@ -160,9 +161,6 @@ async function saveProfile() {
 
 function initProfilePage() {
     const { saveBtn } = getElements();
-    if (!saveBtn) {
-        return;
-    }
 
     // Set up global handlers for group updates
     window.onGroupCreated = () => {
@@ -176,6 +174,78 @@ function initProfilePage() {
     void loadProfile().catch(error => {
         renderStatus(error?.message || "Не удалось загрузить профиль", true);
     });
+
+    const passEl = getPasswordElements();
+    const changePassBtn = document.getElementById("profileChangePasswordBtn");
+
+    if (changePassBtn) {
+        changePassBtn.onclick = () => togglePasswordModal(true);
+    }
+    if (passEl.closeBtn) passEl.closeBtn.onclick = () => togglePasswordModal(false);
+    if (passEl.cancelBtn) passEl.cancelBtn.onclick = () => togglePasswordModal(false);
+    if (passEl.confirmBtn) passEl.confirmBtn.onclick = () => void handlePasswordChange();
+}
+
+function getPasswordElements() {
+    return {
+        bg: document.getElementById("passwordPopupBg"),
+        oldInput: document.getElementById("oldPasswordInput"),
+        newInput: document.getElementById("newPasswordInput"),
+        confirmInput: document.getElementById("confirmPasswordInput"),
+        status: document.getElementById("passwordStatus"),
+        confirmBtn: document.getElementById("passwordConfirmBtn"),
+        cancelBtn: document.getElementById("passwordCancelBtn"),
+        closeBtn: document.getElementById("passwordPopupCloseBtn")
+    };
+}
+
+function togglePasswordModal(show) {
+    const el = getPasswordElements();
+    if (!el.bg) return;
+    el.bg.style.display = show ? "flex" : "none";
+    if (show) {
+        el.oldInput.value = "";
+        el.newInput.value = "";
+        el.confirmInput.value = "";
+        el.status.textContent = "";
+    }
+}
+
+async function handlePasswordChange() {
+    const el = getPasswordElements();
+    const oldPassword = el.oldInput.value.trim();
+    const newPassword = el.newInput.value.trim();
+    const confirmPassword = el.confirmInput.value.trim();
+
+    if (!oldPassword || !newPassword || !confirmPassword) {
+        el.status.textContent = "Заполните все поля";
+        el.status.classList.add("is-error");
+        return;
+    }
+
+    if (newPassword !== confirmPassword) {
+        el.status.textContent = "Пароли не совпадают";
+        el.status.classList.add("is-error");
+        return;
+    }
+
+    try {
+        el.confirmBtn.disabled = true;
+        const userId = getCurrentUserId();
+
+        await requestJson(`${API_URL}/users/${userId}/change-password`, {
+            method: "PUT",
+            body: JSON.stringify({ oldPassword, newPassword })
+        });
+
+        togglePasswordModal(false);
+        renderStatus("Пароль успешно изменен");
+    } catch (error) {
+        el.status.textContent = error.message;
+        el.status.classList.add("is-error");
+    } finally {
+        el.confirmBtn.disabled = false;
+    }
 }
 
 initProfilePage();
