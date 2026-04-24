@@ -115,7 +115,7 @@ export function renderMiniCalendar(syncWithWeek = true) {
     weekEnd.setDate(weekEnd.getDate() + 6);
     const todayKey = dateKey(new Date());
 
-    host.innerHTML = "";
+    host.replaceChildren();
 
     const root = document.createElement("div");
     root.className = "mini-cal";

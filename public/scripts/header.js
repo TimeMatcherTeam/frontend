@@ -1,15 +1,35 @@
 import { API_URL } from "./requests.js";
 import { getCookie, getToken } from "./jwtUtils.js";
 
-const HEADER_MARKUP = `
-    <div class="page-header">
-        <a class="brand-link" href="/">TimeMatcher</a>
-        <nav class="page-nav">
-            <a id="myCalendarLink" class="page-link" href="/">мой календарь</a>
-            <a id="userProfileLink" class="page-link" href="/profile">my_nickname</a>
-        </nav>
-    </div>
-`;
+function buildHeaderNode() {
+    const header = document.createElement("div");
+    header.className = "page-header";
+
+    const brandLink = document.createElement("a");
+    brandLink.className = "brand-link";
+    brandLink.href = "/";
+    brandLink.textContent = "TimeMatcher";
+
+    const nav = document.createElement("nav");
+    nav.className = "page-nav";
+
+    const myCalendarLink = document.createElement("a");
+    myCalendarLink.id = "myCalendarLink";
+    myCalendarLink.className = "page-link";
+    myCalendarLink.href = "/";
+    myCalendarLink.textContent = "мой календарь";
+
+    const userProfileLink = document.createElement("a");
+    userProfileLink.id = "userProfileLink";
+    userProfileLink.className = "page-link";
+    userProfileLink.href = "/profile";
+    userProfileLink.textContent = "my_nickname";
+
+    nav.append(myCalendarLink, userProfileLink);
+    header.append(brandLink, nav);
+
+    return header;
+}
 
 async function hydrateUserHeader() {
     const userProfileLink = document.getElementById("userProfileLink");
@@ -56,7 +76,7 @@ function initPageHeader() {
         return;
     }
 
-    host.innerHTML = HEADER_MARKUP;
+    host.replaceChildren(buildHeaderNode());
     hydrateUserHeader();
 }
 

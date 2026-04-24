@@ -5,21 +5,163 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <link rel="stylesheet" href="styles/header.css">
     <link rel="stylesheet" href="styles/style.css">
+    <link rel="stylesheet" href="styles/header.css">
+    <link rel="stylesheet" href="styles/user-groups-block.css">
+    <link rel="stylesheet" href="styles/profile.css">
+    <link rel="stylesheet" href="styles/group-popups.css">
+    <link rel="stylesheet" href="styles/meeting-modal.css">
 
     <title>Time Matcher</title>
 </head>
 
-<body>
+<body class="profile-page">
     <header id="pageHeader"></header>
 
-    <main>
-        страница профиля
+    <main class="profile-shell">
+        <section class="profile-layout">
+            <section class="profile-card profile-editor-card" aria-labelledby="profileEditorTitle">
+                <div class="profile-card-title" id="profileEditorTitle">Профиль</div>
+
+                <div class="profile-field">
+                    <label for="profileNickname">Ник</label>
+                    <input id="profileNickname" type="text" autocomplete="nickname">
+                </div>
+
+                <div class="profile-field">
+                    <label for="profileEmail">Почта</label>
+                    <input id="profileEmail" type="email" autocomplete="email">
+                </div>
+
+                <div class="profile-actions">
+                    <button type="button" class="profile-save-btn" id="profileSaveBtn">Сохранить изменения</button>
+                    <button type="button" class="profile-password-btn" id="profileChangePasswordBtn">Сменить пароль</button>
+                </div>
+
+                <div class="profile-status" id="profileStatus" aria-live="polite"></div>
+            </section>
+
+            <section class="profile-card profile-groups-card" aria-labelledby="profileGroupsTitle">
+                <div class="profile-card-title" id="profileGroupsTitle">Мои группы</div>
+
+                <div class="profile-groups-host" id="profileGroupsHost"></div>
+
+                <button type="button" class="profile-add-group-btn" id="profileAddGroupBtn">Добавить группу</button>
+            </section>
+        </section>
     </main>
 
-    <footer>
-    </footer>
+    <div class="meeting-users-popup-bg" id="meetingUsersPopupBg" style="display:none">
+        <div class="meeting-users-popup">
+            <div class="meeting-users-popup-header">
+                <div class="meeting-users-popup-title">поиск пользователей</div>
+                <button type="button" class="meeting-users-popup-close" id="meetingUsersPopupCloseBtn">&times;</button>
+            </div>
+
+            <div class="meeting-users-popup-body">
+                <label for="meetingUsersSearchInput">Введите имя или email</label>
+                <input id="meetingUsersSearchInput" type="search" placeholder="например, ivan или mail@example.com">
+                <div class="meeting-users-search-status" id="meetingUsersSearchStatus"></div>
+
+                <div class="meeting-users-section">
+                    <div class="meeting-users-section-title">Найденные пользователи</div>
+                    <div class="meeting-users-results" id="meetingUsersResults"></div>
+                </div>
+
+                <div class="meeting-users-section">
+                    <div class="meeting-users-section-title">Выбранные участники</div>
+                    <div class="meeting-users-selected" id="meetingUsersSelected"></div>
+                </div>
+            </div>
+
+            <div class="meeting-users-popup-footer">
+                <button type="button" class="meeting-primary-btn meeting-cancel-btn" id="meetingUsersPopupCancelBtn">Закрыть</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Popup для создания группы -->
+    <div class="create-group-popup-bg" id="createGroupPopupBg" style="display:none">
+        <div class="create-group-popup">
+            <div class="create-group-popup-header">
+                <div class="create-group-popup-title">Создание группы</div>
+                <button type="button" class="create-group-popup-close" id="createGroupPopupCloseBtn">&times;</button>
+            </div>
+
+            <div class="create-group-popup-body">
+                <div class="create-group-field">
+                    <label for="createGroupTitleInput">Название группы:</label>
+                    <input id="createGroupTitleInput" type="text" placeholder="например, Команда разработки">
+                </div>
+
+                <button type="button" class="create-group-secondary-btn" id="createGroupAddParticipantsBtn">Добавить участников</button>
+
+                <div class="create-group-section">
+                    <div class="create-group-section-title">Выбранные участники</div>
+                    <div id="createGroupSelectedList"></div>
+                </div>
+
+                <div class="create-group-status" id="createGroupStatus"></div>
+            </div>
+
+            <div class="create-group-popup-footer">
+                <button type="button" class="create-group-primary-btn" id="createGroupConfirmBtn">Создать</button>
+                <button type="button" class="create-group-primary-btn create-group-cancel-btn" id="createGroupCancelBtn">Отмена</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Popup для смены пароля -->
+    <div class="password-popup-bg" id="passwordPopupBg" style="display:none">
+        <div class="password-popup">
+            <div class="password-popup-header">
+                <div class="password-popup-title">Смена пароля</div>
+                <button type="button" class="password-popup-close" id="passwordPopupCloseBtn">&times;</button>
+            </div>
+
+            <div class="password-popup-body">
+                <div class="password-field">
+                    <label for="oldPasswordInput">Старый пароль</label>
+                    <input id="oldPasswordInput" type="password" placeholder="Введите текущий пароль">
+                </div>
+
+                <div class="password-field">
+                    <label for="newPasswordInput">Новый пароль</label>
+                    <input id="newPasswordInput" type="password" placeholder="Придумайте новый пароль">
+                </div>
+
+                <div class="password-field">
+                    <label for="confirmPasswordInput">Повторите новый пароль</label>
+                    <input id="confirmPasswordInput" type="password" placeholder="Подтвердите новый пароль">
+                </div>
+
+                <div class="password-status" id="passwordStatus"></div>
+            </div>
+
+            <div class="password-popup-footer">
+                <button type="button" class="password-primary-btn" id="passwordConfirmBtn">Сохранить</button>
+                <button type="button" class="password-primary-btn password-cancel-btn" id="passwordCancelBtn">Отмена</button>
+            </div>
+        </div>
+    </div>
+
+
 </body>
 <script type="module" src="scripts/header.js"></script>
+<script type="module" src="scripts/profile/profile.js"></script>
+<script type="module">
+    import { initCreateGroupPopup, openCreateGroupPopup } from './scripts/calendar/createGroupPopup.js';
+    import { initMeetingUsersPopup } from './scripts/calendar/userSearchPopup.js';
+    
+    initMeetingUsersPopup();
+    initCreateGroupPopup();
+    
+    const addGroupBtn = document.getElementById('profileAddGroupBtn');
+    if (addGroupBtn) {
+        addGroupBtn.addEventListener('click', (e) => {
+            e.preventDefault();
+            openCreateGroupPopup();
+        });
+    }
+</script>
 </html>

@@ -5,24 +5,24 @@ import { buildHeader } from "./header.js";
 import { buildTimeCol, buildGrid, renderEvents, renderNowLine } from "./grid.js";
 import { openModal, closeModal, saveEvent } from "./slotModal.js";
 import { hideTooltip } from "./tooltip.js";
-import { DeleteSlot } from "./slotsRequests.js";
+import { DeleteSlot, GetCalendarSlots, mapSlotResponseToCalendarEvent } from "./slotsRequests.js";
 import { initMeetingModal, openMeetingModal } from "./meetingModal.js";
 import { initMiniCalendar, renderMiniCalendar } from "./miniCalendar.js";
 
 
-document.getElementById('prevBtn').onclick = () => {
+document.getElementById('prevBtn').onclick = async () => {
     state.weekOffset--;
-    buildAll();
+    await buildAll();
 };
 
-document.getElementById('nextBtn').onclick = () => {
+document.getElementById('nextBtn').onclick = async () => {
     state.weekOffset++;
-    buildAll();
+    await buildAll();
 };
 
-document.getElementById('todayBtn').onclick = () => {
+document.getElementById('todayBtn').onclick = async () => {
     state.weekOffset = 0;
-    buildAll();
+    await buildAll();
 };
 
 document.getElementById('addBtn').onclick = e => {
@@ -87,15 +87,48 @@ document.addEventListener('click', e => {
     if (!e.target.closest('.ev-tooltip') && !e.target.closest('.event-block')) hideTooltip();
 });
 
-function buildAll() {
+function getRequestedPeriodByWeekOffset() {
+    const weekStart = new Date();
+    const currentDay = (weekStart.getDay() + 6) % 7; // Monday = 0
+    weekStart.setDate(weekStart.getDate() - currentDay + state.weekOffset * 7);
+    weekStart.setHours(0, 0, 0, 0);
+
+    const weekEnd = new Date(weekStart);
+    weekEnd.setDate(weekEnd.getDate() + 7);
+
+    return {
+        startIso: weekStart.toISOString(),
+        endIso: weekEnd.toISOString()
+    };
+}
+
+async function loadSlotsFromDb() {
+    try {
+        const period = getRequestedPeriodByWeekOffset();
+        const slots = await GetCalendarSlots(period.startIso, period.endIso);
+        state.events = slots.map(slot => mapSlotResponseToCalendarEvent(slot));
+    } catch (error) {
+        const message = String(error?.message || "").toLowerCase();
+        const authError = message.includes("авторизац") || message.includes("отсутствует userid");
+        if (!authError) {
+            console.error(error);
+        }
+        state.events = [];
+    }
+}
+
+async function buildAll() {
+    await loadSlotsFromDb();
     buildHeader();
     buildTimeCol();
     buildGrid();
     renderMiniCalendar();
 }
-buildAll();
+await buildAll();
 initMeetingModal();
-initMiniCalendar(buildAll);
+initMiniCalendar(() => {
+    void buildAll();
+});
 
 /* Scroll to current hour */
 const now = new Date();
@@ -104,10 +137,4 @@ document.getElementById('calBody').scrollTop = Math.max((now.getHours() - 1) * H
 /* Update now-line every minute */
 setInterval(renderNowLine, 60000);
 
-/* Sample events */
-state.events.push(
-    { id: 1, name: 'Встреча команды', date: dateKey(new Date()), start: '10:00', end: '11:00', color: 0 },
-    { id: 2, name: 'Обед',            date: dateKey(new Date()), start: '13:00', end: '14:00', color: 1 },
-    { id: 3, name: 'Code review',     date: dateKey(new Date()), start: '15:30', end: '16:30', color: 0 },
-);
 renderEvents();

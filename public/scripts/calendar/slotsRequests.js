@@ -19,14 +19,11 @@ function normalizeAbilityName(value) {
 }
 
 function getAbilityTypeByName(name) {
-	const normalized = normalizeAbilityName(name);
-	if (normalized === ABILITY_TYPE.PARTIAL) {
-		return ABILITY_TYPE.PARTIAL;
-	}
-	if (normalized === ABILITY_TYPE.BUSY) {
-		return ABILITY_TYPE.BUSY;
-	}
-	return ABILITY_TYPE.BUSY;
+    const normalized = normalizeAbilityName(name);
+    if (normalized.includes("partial")) {
+        return ABILITY_TYPE.PARTIAL;
+    }
+    return ABILITY_TYPE.BUSY;
 }
 
 export function colorByAbilityName(name) {
@@ -123,11 +120,11 @@ function buildSlotPayload(eventData, abilityId) {
 	};
 }
 
-export function mapSlotResponseToCalendarEvent(slot, color = 0) {
+export function mapSlotResponseToCalendarEvent(slot, color = undefined) {
 	const start = new Date(slot.startTime);
 	const end = new Date(slot.endTime);
 	const abilityName = slot.ability?.ability || slot.ability?.name || "";
-	const resolvedColor = Number.isInteger(color) ? color : colorByAbilityName(abilityName);
+	const resolvedColor = color !== undefined ? color : colorByAbilityName(abilityName);
 
 	return {
 		id: slot.id,
@@ -170,4 +167,18 @@ export async function DeleteSlot(slotId) {
 	return requestJson(`${API_URL}/users/${userId}/calendar/slots/${slotId}`, {
 		method: "DELETE"
 	});
+}
+
+export async function GetCalendarSlots(periodStartIso, periodEndIso) {
+	const userId = getCurrentUserId();
+	const params = new URLSearchParams({
+		Start: periodStartIso,
+		End: periodEndIso
+	});
+
+	const response = await requestJson(`${API_URL}/users/${userId}/calendar?${params.toString()}`, {
+		method: "GET"
+	});
+
+	return Array.isArray(response?.slots) ? response.slots : [];
 }

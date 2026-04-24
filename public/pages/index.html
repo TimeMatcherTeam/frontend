@@ -12,6 +12,8 @@
     <link rel="stylesheet" href="styles/calendar.css">
     <link rel="stylesheet" href="styles/calendar-popups.css">
     <link rel="stylesheet" href="styles/meeting-modal.css">
+    <link rel="stylesheet" href="styles/user-groups-block.css">
+    <link rel="stylesheet" href="styles/group-popups.css">
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -21,6 +23,36 @@
 
 <body>
     <header id="pageHeader"></header>
+
+    <div id="authOverlay" class="modal-bg"  style="display: none;">
+        <form id="authForm" class="container">
+            <h2 id="formTitle">Вход</h2>
+            <div class="error" id="authError" style="display: none;"></div>
+            <div class="big-input-wrapper">
+                <input type="email" id="email" placeholder="Email" class="big-input" required>
+            </div>
+            <div class="big-input-wrapper" id="usernameWrapper"  style="display:none">
+                <input type="text" id="username" placeholder="Имя" class="big-input">
+            </div>
+            <div class="big-input-wrapper password-input">
+                <input type="password" id="password" placeholder="Пароль" class="big-input" required>
+                <button id="togglePassword" type="button" class="password-eye">
+                    <img src="/assets/eye.svg" alt="eye" id="passwordEye">
+                </button>
+            </div>
+            <div class="big-input-wrapper password-input" id="confirmPasswordWrapper"  style="display:none">
+                <input type="password" id="confirmPassword" placeholder="Подтвердите пароль" class="big-input">
+                <button id="toggleConfirmPassword" type="button" class="password-eye">
+                    <img src="/assets/eye.svg" alt="eye" id="confirmPasswordEye">
+                </button>
+            </div>
+            <button id="switchAuthBtn">Нет аккаунта? Зарегистрироваться</button>
+            <div class="submit-cancel-wrapper">
+                <button type="submit" class="submit-button" id="submitAuthBtn">Войти</button>
+                <button type="reset" class="cancel-button" id="cancelAuthBtn">Отмена</button>
+            </div>
+        </form>
+    </div>
 
     <div class="page-shell">
         <main class="page-main">
@@ -32,7 +64,7 @@
                     <div class="create-menu" id="createMenu">
                         <button class="create-item" id="actionEvent">мероприятие</button>
                         <button class="create-item" id="actionMeeting" type="button">встреча</button>
-                        <button class="create-item" type="button" disabled>группа</button>
+                        <button class="create-item" id="actionGroup" type="button">группа</button>
                     </div>
                 </div>
             </aside>
@@ -125,11 +157,16 @@
 
                 <div class="meeting-row meeting-row-duration">
                     <label>Продолжительность:</label>
-                    <input id="meetingDuration" type="time" value="01:00" step="60">
+                    <div class="meeting-duration-fields">
+                        <input id="meetingDurationH" type="number" min="0" max="23" value="1" placeholder="ч">
+                        <span>ч</span>
+                        <input id="meetingDurationM" type="number" min="0" max="59" step="5" value="0" placeholder="мин">
+                        <span>мин</span>
+                    </div>
                 </div>
 
-                <button type="button" class="meeting-secondary-btn" disabled>Добавить участников</button>
-                <button type="button" class="meeting-secondary-btn" disabled>Добавить участников из группы</button>
+                <button type="button" class="meeting-secondary-btn" id="meetingAddParticipantsBtn">Добавить участников</button>
+                <button type="button" class="meeting-secondary-btn" id="meetingAddGroupsBtn">Добавить участников из группы</button>
             </div>
 
             <div class="meeting-modal-footer">
@@ -139,38 +176,98 @@
         </div>
     </div>
 
-    <div id="authOverlay" class="modal-bg"  style="display: none;">
-        <form id="authForm" class="container">
-            <h2 id="formTitle">Вход</h2>
-            <div class="error" id="authError" style="display: none;"></div>
-            <div class="big-input-wrapper">
-                <input type="email" id="email" placeholder="Email" class="big-input" required>
+    <div class="meeting-users-popup-bg" id="meetingUsersPopupBg" style="display:none">
+        <div class="meeting-users-popup">
+            <div class="meeting-users-popup-header">
+                <div class="meeting-users-popup-title">поиск пользователей</div>
+                <button type="button" class="meeting-users-popup-close" id="meetingUsersPopupCloseBtn">&times;</button>
             </div>
-            <div class="big-input-wrapper" id="usernameWrapper"  style="display:none">
-                <input type="text" id="username" placeholder="Имя" class="big-input">
+
+            <div class="meeting-users-popup-body">
+                <label for="meetingUsersSearchInput">Введите имя или email</label>
+                <input id="meetingUsersSearchInput" type="search" placeholder="например, ivan или mail@example.com">
+                <div class="meeting-users-search-status" id="meetingUsersSearchStatus"></div>
+
+                <div class="meeting-users-section">
+                    <div class="meeting-users-section-title">Найденные пользователи</div>
+                    <div class="meeting-users-results" id="meetingUsersResults"></div>
+                </div>
+
+                <div class="meeting-users-section">
+                    <div class="meeting-users-section-title">Выбранные участники</div>
+                    <div class="meeting-users-selected" id="meetingUsersSelected"></div>
+                </div>
             </div>
-            <div class="big-input-wrapper password-input">
-                <input type="password" id="password" placeholder="Пароль" class="big-input" required>
-                <button id="togglePassword" type="button" class="password-eye">
-                    <img src="/assets/eye.svg" alt="eye" id="passwordEye">
-                </button>
+
+            <div class="meeting-users-popup-footer">
+                <button type="button" class="meeting-primary-btn meeting-cancel-btn" id="meetingUsersPopupCancelBtn">Закрыть</button>
             </div>
-            <div class="big-input-wrapper password-input" id="confirmPasswordWrapper"  style="display:none">
-                <input type="password" id="confirmPassword" placeholder="Подтвердите пароль" class="big-input">
-                <button id="toggleConfirmPassword" type="button" class="password-eye">
-                    <img src="/assets/eye.svg" alt="eye" id="confirmPasswordEye">
-                </button>
+        </div>
+    </div>
+
+    <div class="meeting-groups-popup-bg" id="meetingGroupsPopupBg" style="display:none">
+        <div class="meeting-groups-popup">
+            <div class="meeting-users-popup-header">
+                <div class="meeting-users-popup-title">поиск групп</div>
+                <button type="button" class="meeting-users-popup-close" id="meetingGroupsPopupCloseBtn">&times;</button>
             </div>
-            <button id="switchAuthBtn">Нет аккаунта? Зарегистрироваться</button>
-            <div class="submit-cancel-wrapper">
-                <button type="submit" class="submit-button" id="submitAuthBtn">Войти</button>
-                <button type="reset" class="cancel-button" id="cancelAuthBtn">Отмена</button>
+
+            <div class="meeting-users-popup-body">
+                <label for="meetingGroupsSearchInput">Введите название группы или имя участника</label>
+                <input id="meetingGroupsSearchInput" type="search" placeholder="например, разработка">
+                <div class="meeting-users-search-status" id="meetingGroupsSearchStatus"></div>
+
+                <div class="meeting-users-section">
+                    <div class="meeting-users-section-title">Найденные группы</div>
+                    <div class="meeting-groups-results" id="meetingGroupsResults"></div>
+                </div>
+
+                <div class="meeting-users-section">
+                    <div class="meeting-users-section-title">Все группы пользователя</div>
+                    <div id="meetingAllGroupsBlock"></div>
+                </div>
             </div>
-        </form>
+
+            <div class="meeting-users-popup-footer">
+                <button type="button" class="meeting-primary-btn meeting-cancel-btn" id="meetingGroupsPopupCancelBtn">Закрыть</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Popup для создания группы -->
+    <div class="create-group-popup-bg" id="createGroupPopupBg" style="display:none">
+        <div class="create-group-popup">
+            <div class="create-group-popup-header">
+                <div class="create-group-popup-title">Создание группы</div>
+                <button type="button" class="create-group-popup-close" id="createGroupPopupCloseBtn">&times;</button>
+            </div>
+
+            <div class="create-group-popup-body">
+                <div class="create-group-field">
+                    <label for="createGroupTitleInput">Название группы:</label>
+                    <input id="createGroupTitleInput" type="text" placeholder="например, Команда разработки">
+                </div>
+
+                <button type="button" class="create-group-secondary-btn" id="createGroupAddParticipantsBtn">Добавить участников</button>
+
+                <div class="create-group-section">
+                    <div class="create-group-section-title">Выбранные участники</div>
+                    <div id="createGroupSelectedList"></div>
+                </div>
+
+                <div class="create-group-status" id="createGroupStatus"></div>
+            </div>
+
+            <div class="create-group-popup-footer">
+                <button type="button" class="create-group-primary-btn" id="createGroupConfirmBtn">Создать</button>
+                <button type="button" class="create-group-primary-btn create-group-cancel-btn" id="createGroupCancelBtn">Отмена</button>
+            </div>
+        </div>
     </div>
 
 </body>
 <script type="module" src="scripts/header.js"></script>
 <script type="module" src="scripts/calendar/calendar.js"></script>
 <script type="module" src="scripts/script.js"></script>
+
 </html>

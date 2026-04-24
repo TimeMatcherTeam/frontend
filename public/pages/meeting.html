@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="ru">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Meeting Calendar</title>
+
+    <link rel="stylesheet" href="styles/style.css">
+    <link rel="stylesheet" href="styles/header.css">
+    <link rel="stylesheet" href="styles/calendar.css">
+    <link rel="stylesheet" href="styles/meeting-page.css">
+    <link rel="stylesheet" href="styles/meeting-modal.css">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap"
+        rel="stylesheet">
+</head>
+
+<body class="meeting-page">
+    <header id="pageHeader"></header>
+
+    <div class="page-shell">
+        <main class="page-main">
+            <aside class="calendar-sidebar">
+                <div class="mini-calendar-box" id="miniCalendarBox"></div>
+
+                <div class="meeting-participants-box">
+                    <div class="meeting-participants-title">Участники встречи</div>
+                    <input
+                        id="meetingParticipantSearch"
+                        class="meeting-participants-search"
+                        type="search"
+                        placeholder="Добавить участника"
+                    >
+                    <div class="meeting-participants-search-results" id="meetingParticipantSearchResults"></div>
+                    <div class="meeting-participants-list" id="meetingParticipantsList"></div>
+                </div>
+                <div class="meeting-range-label" id="meetingRangeLabel">Диапазон встречи не выбран</div>
+                <div class="meeting-selected-time" id="meetingSelectedTimeLabel" style="display:none"></div>
+                <div class="meeting-sidebar-actions">
+                    <button type="button" class="meeting-sidebar-btn" id="meetingSelectTimeBtn">Выбрать время</button>
+                    <button type="button" class="meeting-sidebar-btn" id="meetingConfirmBtn" disabled>Подтвердить</button>
+                </div>
+            </aside>
+
+            <div class="cal-root" id="calRoot">
+                <div class="cal-header">
+                    <span class="app-title" id="meetingTitle">Объединенный календарь встречи</span>
+                    <button class="nav-btn" id="prevBtn">&#8249;</button>
+                    <button class="nav-btn" id="nextBtn">&#8250;</button>
+                    <span class="week-label" id="weekLabel"></span>
+                    <button class="today-btn" id="todayBtn">Сегодня</button>
+                </div>
+                <div class="col-head" id="colHead">
+                    <div class="th-time"></div>
+                </div>
+                <div class="cal-body" id="calBody">
+                    <div class="time-col" id="timeCol"></div>
+                    <div class="grid-area" id="gridArea"></div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <div class="meeting-time-popup-bg" id="meetingTimePopupBg" style="display:none">
+        <div class="meeting-time-popup">
+            <div class="meeting-users-popup-header">
+                <div class="meeting-users-popup-title">выбор времени</div>
+                <button type="button" class="meeting-users-popup-close" id="meetingTimePopupClose">&times;</button>
+            </div>
+
+            <div class="meeting-time-popup-body">
+                <div class="meeting-time-manual">
+                    <label>Начало</label>
+                    <input type="datetime-local" id="meetingTimeStart">
+                    <label>Конец</label>
+                    <input type="datetime-local" id="meetingTimeEnd">
+                    <button type="button" class="meeting-time-apply-btn" id="meetingTimeApplyBtn">Применить</button>
+                </div>
+
+                <div class="meeting-time-divider">или выберите вариант</div>
+
+                <div class="meeting-slots-status" id="meetingTimeStatus"></div>
+                <div class="meeting-time-slots-list" id="meetingTimeSlotsList"></div>
+            </div>
+        </div>
+    </div>
+
+    <script type="module" src="scripts/header.js"></script>
+    <script type="module" src="scripts/calendar/meetingPage.js"></script>
+</body>
+
+</html>
