@@ -352,9 +352,8 @@ async function loadMergedCalendar() {
     }
 
     const period = getRequestedPeriod();
-    const apiBase = API_URL.endsWith("/api") ? API_URL.slice(0, -4) : API_URL;
 
-    const response = await fetch(`${apiBase}/merge-calendar`, {
+    const response = await fetch(`${API_URL}/users/merge-calendar`, {
         method: "POST",
         headers: getAuthHeaders(),
         body: JSON.stringify({
