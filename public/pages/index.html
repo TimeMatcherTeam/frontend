@@ -24,36 +24,6 @@
 <body>
     <header id="pageHeader"></header>
 
-    <div id="authOverlay" class="modal-bg"  style="display: none;">
-        <form id="authForm" class="container">
-            <h2 id="formTitle">Вход</h2>
-            <div class="error" id="authError" style="display: none;"></div>
-            <div class="big-input-wrapper">
-                <input type="email" id="email" placeholder="Email" class="big-input" required>
-            </div>
-            <div class="big-input-wrapper" id="usernameWrapper"  style="display:none">
-                <input type="text" id="username" placeholder="Имя" class="big-input">
-            </div>
-            <div class="big-input-wrapper password-input">
-                <input type="password" id="password" placeholder="Пароль" class="big-input" required>
-                <button id="togglePassword" type="button" class="password-eye">
-                    <img src="/assets/eye.svg" alt="eye" id="passwordEye">
-                </button>
-            </div>
-            <div class="big-input-wrapper password-input" id="confirmPasswordWrapper"  style="display:none">
-                <input type="password" id="confirmPassword" placeholder="Подтвердите пароль" class="big-input">
-                <button id="toggleConfirmPassword" type="button" class="password-eye">
-                    <img src="/assets/eye.svg" alt="eye" id="confirmPasswordEye">
-                </button>
-            </div>
-            <button id="switchAuthBtn">Нет аккаунта? Зарегистрироваться</button>
-            <div class="submit-cancel-wrapper">
-                <button type="submit" class="submit-button" id="submitAuthBtn">Войти</button>
-                <button type="reset" class="cancel-button" id="cancelAuthBtn">Отмена</button>
-            </div>
-        </form>
-    </div>
-
     <div class="page-shell">
         <main class="page-main">
             <aside class="calendar-sidebar">
@@ -263,6 +233,36 @@
                 <button type="button" class="create-group-primary-btn create-group-cancel-btn" id="createGroupCancelBtn">Отмена</button>
             </div>
         </div>
+    </div>
+
+    <div id="authOverlay" class="modal-bg"  style="display: none;">
+        <form id="authForm" class="container">
+            <h2 id="formTitle">Вход</h2>
+            <div class="error" id="authError" style="display: none;"></div>
+            <div class="big-input-wrapper">
+                <input type="email" id="email" placeholder="Email" class="big-input" required>
+            </div>
+            <div class="big-input-wrapper" id="usernameWrapper"  style="display:none">
+                <input type="text" id="username" placeholder="Имя" class="big-input">
+            </div>
+            <div class="big-input-wrapper password-input">
+                <input type="password" id="password" placeholder="Пароль" class="big-input" required>
+                <button id="togglePassword" type="button" class="password-eye">
+                    <img src="/assets/eye.svg" alt="eye" id="passwordEye">
+                </button>
+            </div>
+            <div class="big-input-wrapper password-input" id="confirmPasswordWrapper"  style="display:none">
+                <input type="password" id="confirmPassword" placeholder="Подтвердите пароль" class="big-input">
+                <button id="toggleConfirmPassword" type="button" class="password-eye">
+                    <img src="/assets/eye.svg" alt="eye" id="confirmPasswordEye">
+                </button>
+            </div>
+            <button id="switchAuthBtn">Нет аккаунта? Зарегистрироваться</button>
+            <div class="submit-cancel-wrapper">
+                <button type="submit" class="submit-button" id="submitAuthBtn">Войти</button>
+                <button type="reset" class="cancel-button" id="cancelAuthBtn">Отмена</button>
+            </div>
+        </form>
     </div>
 
 </body>
