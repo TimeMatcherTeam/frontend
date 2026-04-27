@@ -1,5 +1,6 @@
 import { API_URL } from "./requests.js";
 import { getCookie, getToken } from "./jwtUtils.js";
+import { showAuthForm } from "./popups/authPopup.js";
 
 function buildHeaderNode() {
     const header = document.createElement("div");
@@ -23,7 +24,17 @@ function buildHeaderNode() {
     userProfileLink.id = "userProfileLink";
     userProfileLink.className = "page-link";
     userProfileLink.href = "/profile";
-    userProfileLink.textContent = "my_nickname";
+    userProfileLink.textContent = "войти";
+    userProfileLink.addEventListener("click", (event) => {
+        event.preventDefault();
+        const token = getToken();
+        if (!token) {
+            showAuthForm();
+        }
+        else {
+            window.location.href = "/profile";
+        }
+    });
 
     nav.append(myCalendarLink, userProfileLink);
     header.append(brandLink, nav);
@@ -52,8 +63,8 @@ async function hydrateUserHeader() {
     try {
         const response = await fetch(`${API_URL}/users/${userId}`, {
             headers: {
-                Authorization: `Bearer ${token}`
-            }
+                Authorization: `Bearer ${token}`,
+            },
         });
 
         if (!response.ok) {
