@@ -6,8 +6,31 @@ const app = express();
 const PORT = 3000;
 
 app.post("/api/users/merge-calendar", (req, res) => {
-    console.log("🎯 Поймали merge-calendar до прокси!");
-    res.json({ message: "Test" });
+    const http = require("http");
+    
+    let body = "";
+    req.on("data", chunk => body += chunk);
+    req.on("end", () => {
+        const options = {
+            hostname: "localhost",
+            port: 5000,
+            path: "/api/users/merge-calendar",
+            method: "POST",
+            headers: req.headers
+        };
+        
+        const proxyReq = http.request(options, (proxyRes) => {
+            res.writeHead(proxyRes.statusCode, proxyRes.headers);
+            proxyRes.pipe(res);
+        });
+        
+        proxyReq.on("error", (err) => {
+            res.status(502).json({ error: err.message });
+        });
+        
+        proxyReq.write(body);
+        proxyReq.end();
+    });
 });
 
 app.use(
@@ -15,7 +38,6 @@ app.use(
     createProxyMiddleware({
         target: "http://localhost:5000/api",
         changeOrigin: true,
-        method: "POST",
         onError: (err, req, res) => {
             console.error("Proxy error:", err);
         },
