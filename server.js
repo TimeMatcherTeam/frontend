@@ -15,6 +15,10 @@ app.use(
     createProxyMiddleware({
         target: "http://localhost:5000/api",
         changeOrigin: true,
+        method: "POST",
+        onError: (err, req, res) => {
+            console.error("Proxy error:", err);
+        },
     })
 );
 
