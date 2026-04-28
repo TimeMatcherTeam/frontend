@@ -5,6 +5,11 @@ const { createProxyMiddleware } = require("http-proxy-middleware");
 const app = express();
 const PORT = 3000;
 
+app.post("/api/users/merge-calendar", (req, res) => {
+    console.log("🎯 Поймали merge-calendar до прокси!");
+    res.json({ message: "Test" });
+});
+
 app.use(
     "/api",
     createProxyMiddleware({
