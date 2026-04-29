@@ -1,5 +1,5 @@
 import { API_URL } from "../requests.js";
-import { getToken } from "../jwtUtils.js";
+import { getCookie, getToken } from "../jwtUtils.js";
 
 const SEARCH_LIMIT = 8;
 const MIN_SEARCH_LENGTH = 2;
@@ -7,6 +7,10 @@ const MIN_SEARCH_LENGTH = 2;
 let popupInitialized = false;
 let searchTimer = null;
 let selectedUsers = [];
+
+function getCurrentUserId() {
+    return getCookie("userId") || null;
+}
 
 function normalizeUser(user) {
     const id = user?.id ?? user?.userId;
@@ -24,7 +28,8 @@ function normalizeUser(user) {
 function addUsersToSelection(users) {
     const normalizedUsers = (Array.isArray(users) ? users : [])
         .map(normalizeUser)
-        .filter(Boolean);
+        .filter(Boolean)
+        .filter(user => String(user.id) !== String(getCurrentUserId()));
 
     if (normalizedUsers.length === 0) {
         return false;
@@ -228,8 +233,14 @@ async function runSearch() {
 
     try {
         const users = await getUsers(searchText);
-        renderStatus(users.length > 0 ? `Найдено: ${users.length}` : "Совпадений нет");
-        renderResults(users);
+        const currentUserId = getCurrentUserId();
+        const filteredUsers = (Array.isArray(users) ? users : [])
+            .map(normalizeUser)
+            .filter(Boolean)
+            .filter(user => String(user.id) !== String(currentUserId));
+
+        renderStatus(filteredUsers.length > 0 ? `Найдено: ${filteredUsers.length}` : "Совпадений нет");
+        renderResults(filteredUsers);
     } catch (error) {
         renderStatus(error?.message || "Не удалось выполнить поиск", true);
         renderResults([]);
