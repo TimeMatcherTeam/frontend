@@ -44,6 +44,10 @@
   height: 30px;
 }
 
+.password-eye::-ms-reveal {
+  display: none;
+}
+
 .password-eye img {
   width: 30px;
   height: 30px;
