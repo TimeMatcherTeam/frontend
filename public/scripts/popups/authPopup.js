@@ -3,108 +3,149 @@ import { JWT } from "../globals.js";
 
 let isLogin = true;
 
-const authOverlay = document.getElementById("authOverlay");
-const authForm = document.getElementById("authForm");
-const formTitle = document.getElementById("formTitle");
-const emailInput = document.getElementById("email");
-const usernameInput = document.getElementById("username");
-const usernameWrapper = document.getElementById("usernameWrapper");
-const passwordInput = document.getElementById("password");
-const confirmPasswordInput = document.getElementById("confirmPassword");
-const confirmPasswordWrapper = document.getElementById("confirmPasswordWrapper");
-const submitBtn = document.getElementById("submitAuthBtn");
-const cancelBtn = document.getElementById("cancelAuthBtn");
-const switchBtn = document.getElementById("switchAuthBtn");
-const errorDiv = document.getElementById("authError");
-const togglePassword = document.getElementById("togglePassword");
-const toggleConfirmPassword = document.getElementById("toggleConfirmPassword");
-const passwordEye = document.getElementById("passwordEye");
-const confirmPasswordEye = document.getElementById("confirmPasswordEye");
+// Lazily resolve DOM elements. This prevents errors on pages that don't include the auth overlay.
+function el(id) {
+  return typeof document !== 'undefined' ? document.getElementById(id) : null;
+}
 
-switchBtn.addEventListener("click", (event) => {
-  event.preventDefault();
-  isLogin = !isLogin;
+function setupHandlers() {
+  const authOverlay = el("authOverlay");
+  const authForm = el("authForm");
+  const formTitle = el("formTitle");
+  const emailInput = el("email");
+  const usernameInput = el("username");
+  const usernameWrapper = el("usernameWrapper");
+  const passwordInput = el("password");
+  const confirmPasswordInput = el("confirmPassword");
+  const confirmPasswordWrapper = el("confirmPasswordWrapper");
+  const submitBtn = el("submitAuthBtn");
+  const cancelBtn = el("cancelAuthBtn");
+  const switchBtn = el("switchAuthBtn");
+  const errorDiv = el("authError");
+  const togglePassword = el("togglePassword");
+  const toggleConfirmPassword = el("toggleConfirmPassword");
+  const passwordEye = el("passwordEye");
+  const confirmPasswordEye = el("confirmPasswordEye");
 
-  if (isLogin) {
-    formTitle.textContent = "Вход";
-    submitBtn.textContent = "Войти";
-    switchBtn.textContent = "Нет аккаунта? Зарегистрироваться";
-    usernameWrapper.style.display = "none";
-    confirmPasswordWrapper.style.display = "none";
-  } else {
-    formTitle.textContent = "Регистрация";
-    submitBtn.textContent = "Зарегистрироваться";
-    switchBtn.textContent = "Уже есть аккаунт? Войти";
-    usernameWrapper.style.display = "";
-    confirmPasswordWrapper.style.display = "";
+  if (switchBtn) {
+    switchBtn.addEventListener("click", (event) => {
+      event.preventDefault();
+      isLogin = !isLogin;
+
+      if (formTitle && submitBtn && switchBtn) {
+        if (isLogin) {
+          formTitle.textContent = "Вход";
+          submitBtn.textContent = "Войти";
+          switchBtn.textContent = "Нет аккаунта? Зарегистрироваться";
+        } else {
+          formTitle.textContent = "Регистрация";
+          submitBtn.textContent = "Зарегистрироваться";
+          switchBtn.textContent = "Уже есть аккаунт? Войти";
+        }
+      }
+
+      if (usernameWrapper) usernameWrapper.style.display = isLogin ? "none" : "";
+      if (confirmPasswordWrapper) confirmPasswordWrapper.style.display = isLogin ? "none" : "";
+
+      if (errorDiv) errorDiv.textContent = "";
+    });
   }
 
-  errorDiv.textContent = "";
-});
+  if (authForm) {
+    authForm.addEventListener("submit", async (event) => {
+      event.preventDefault();
 
-authForm.addEventListener("submit", async (event) => {
-  event.preventDefault();
-  console.log("submit");
+      const email = emailInput ? emailInput.value : "";
+      const password = passwordInput ? passwordInput.value : "";
 
-  const email = emailInput.value;
-  const password = passwordInput.value;
+      if (!email || !password) {
+        if (errorDiv) {
+          errorDiv.style.display = "";
+          errorDiv.textContent = "Заполните email и пароль";
+        }
+        return;
+      }
 
-  if (!email || !password) {
-    errorDiv.style.display = "";
-    errorDiv.textContent = "Заполните email и пароль";
-    return;
+      if (!isLogin && confirmPasswordInput && confirmPasswordInput.value !== password) {
+        if (errorDiv) {
+          errorDiv.style.display = "";
+          errorDiv.textContent = "Пароли не совпадают";
+        }
+        return;
+      }
+
+      if (!isLogin && (!usernameInput || !usernameInput.value)) {
+        if (errorDiv) {
+          errorDiv.style.display = "";
+          errorDiv.textContent = "Введите имя пользователя";
+        }
+        return;
+      }
+
+      try {
+        if (isLogin) {
+          await loginAuth(email, password);
+        } else {
+          await registerAuth(email, usernameInput.value, password);
+        }
+        location.reload();
+      } catch (error) {
+        if (errorDiv) {
+          errorDiv.style.display = "";
+          errorDiv.textContent = error.message;
+        }
+      }
+    });
   }
 
-  if (!isLogin && confirmPasswordInput.value !== password) {
-    errorDiv.style.display = "";
-    errorDiv.textContent = "Пароли не совпадают";
-    return;
+  if (cancelBtn && authOverlay) {
+    cancelBtn.addEventListener("click", () => {
+      authOverlay.style.display = "none";
+    });
   }
 
-  if (!isLogin && !usernameInput.value) {
-    errorDiv.style.display = "";
-    errorDiv.textContent = "Введите имя пользователя";
-    return;
+  if (togglePassword && passwordInput && passwordEye) {
+    togglePassword.addEventListener("click", () => {
+      if (passwordInput.type === 'password') {
+        passwordInput.type = "text";
+        passwordEye.src = "/assets/closed_eye.svg";
+      } else {
+        passwordInput.type = "password";
+        passwordEye.src = "/assets/eye.svg";
+      }
+    });
   }
-  try {
-    if (isLogin) {
-      await loginAuth(email, password);
-    } else {
-      await registerAuth(email, usernameInput.value, password);
-    }
-    location.reload();
-  } catch (error) {
-    errorDiv.style.display = "";
-    errorDiv.textContent = error.message;
-  }
-});
 
-cancelBtn.addEventListener("click", () => {
-  authOverlay.style.display = "none";
-});
-
-export function showAuthForm() {
-  if (!JWT) {
-    authOverlay.style.display = "";
+  if (toggleConfirmPassword && confirmPasswordInput && confirmPasswordEye) {
+    toggleConfirmPassword.addEventListener("click", () => {
+      if (confirmPasswordInput.type === 'password') {
+        confirmPasswordInput.type = "text";
+        confirmPasswordEye.src = "/assets/closed_eye.svg";
+      } else {
+        confirmPasswordInput.type = "password";
+        confirmPasswordEye.src = "/assets/eye.svg";
+      }
+    });
   }
 }
 
-togglePassword.addEventListener("click", () => {
-  if (passwordInput.type === 'password') {
-    passwordInput.type = "text";
-    passwordEye.src = "/assets/closed_eye.svg"
+// Initialize handlers if DOM is ready
+if (typeof document !== 'undefined') {
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', setupHandlers);
   } else {
-    passwordInput.type = "password"
-    passwordEye.src = "/assets/eye.svg"
+    setupHandlers();
   }
-})
+}
 
-toggleConfirmPassword.addEventListener("click", () => {
-  if (confirmPasswordInput.type === 'password') {
-    confirmPasswordInput.type = "text";
-    confirmPasswordEye.src = "/assets/closed_eye.svg"
-  } else {
-    confirmPasswordInput.type = "password"
-    confirmPasswordEye.src = "/assets/eye.svg"
+export function showAuthForm() {
+  const authOverlay = el("authOverlay");
+  if (!JWT) {
+    if (authOverlay) {
+      authOverlay.style.display = "";
+    } else {
+      // If overlay not present, fallback to alert
+      alert('Пожалуйста, войдите в систему.');
+    }
   }
-})
+}
