@@ -1,6 +1,7 @@
 import { API_URL } from "../requests.js";
 import { getCookie, getToken } from "../jwtUtils.js";
 import { createUserGroupsBlock } from "../calendar/components/userGroupsBlock.js";
+import { logout } from "../auth.js";
 
 function getCurrentUserId() {
     const userId = getCookie("userId");
@@ -59,8 +60,9 @@ function getElements() {
     return {
         nicknameInput: document.getElementById("profileNickname"),
         emailInput: document.getElementById("profileEmail"),
-        saveBtn: document.getElementById("profileSaveBtn"),
+        saveButton: document.getElementById("profileSaveBtn"),
         changePasswordButton: document.getElementById("profileChangePasswordBtn"),
+        logoutButton: document.getElementById("profileLogoutBtn"),
         status: document.getElementById("profileStatus"),
         groupsHost: document.getElementById("profileGroupsHost"),
         profileLink: document.getElementById("userProfileLink")
@@ -122,7 +124,7 @@ async function loadProfile() {
 
 async function saveProfile() {
     const userId = getCurrentUserId();
-    const { nicknameInput, emailInput, saveBtn } = getElements();
+    const { nicknameInput, emailInput, saveButton } = getElements();
     const userName = nicknameInput?.value?.trim() || "";
     const email = emailInput?.value?.trim() || "";
 
@@ -131,8 +133,8 @@ async function saveProfile() {
         return;
     }
 
-    if (saveBtn) {
-        saveBtn.disabled = true;
+    if (saveButton) {
+        saveButton.disabled = true;
     }
 
     try {
@@ -153,23 +155,28 @@ async function saveProfile() {
     } catch (error) {
         renderStatus(error?.message || "Не удалось сохранить профиль", true);
     } finally {
-        if (saveBtn) {
-            saveBtn.disabled = false;
+        if (saveButton) {
+            saveButton.disabled = false;
         }
     }
 }
 
 function initProfilePage() {
-    const { saveBtn } = getElements();
+    const { saveButton, logoutButton } = getElements();
 
     // Set up global handlers for group updates
     window.onGroupCreated = () => {
         void loadGroups();
     };
 
-    saveBtn.addEventListener("click", () => {
+    saveButton.addEventListener("click", () => {
         void saveProfile();
     });
+
+    logoutButton.addEventListener("click", () => {
+        logout();
+        window.location = "/";
+    })
 
     void loadProfile().catch(error => {
         renderStatus(error?.message || "Не удалось загрузить профиль", true);
