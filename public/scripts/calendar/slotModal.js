@@ -74,10 +74,7 @@ export async function saveEvent() {
             if (!ev) return;
 
             if (isGuid(state.editId)) {
-                const updatedSlot = await UpdateSlot(state.editId, {
-                    ...payload,
-                    abilityId: ev.abilityId
-                });
+                const updatedSlot = await UpdateSlot(state.editId, payload);
 
                 const normalized = mapSlotResponseToCalendarEvent(updatedSlot, state.selColor);
                 ev.id = normalized.id;
@@ -110,13 +107,26 @@ export async function saveEvent() {
 function renderColorPicker() {
     const row = document.getElementById('colorRow');
     row.replaceChildren();
-    const labels = ['Занят', 'Частично занят'];
-    COLORS.forEach((c, i) => {
+    const labels = ['Занят', 'Встреча нежелательна'];
+    // Только первые 2 цвета для личного календаря (зелёный только для встреч)
+    for (let i = 0; i < 2; i++) {
+        const c = COLORS[i];
+
+        const wrapper = document.createElement('div');
+        wrapper.className = 'color-item';
+
         const dot = document.createElement('div');
         dot.className = 'color-dot' + (i === state.selColor ? ' selected' : '');
         dot.style.background = c.border;
-        dot.title = labels[i] || labels[0];
+        dot.title = labels[i];
         dot.onclick = () => { state.selColor = i; renderColorPicker(); };
-        row.appendChild(dot);
-    });
+
+        const labelSpan = document.createElement('div');
+        labelSpan.className = 'color-label';
+        labelSpan.textContent = labels[i];
+
+        wrapper.appendChild(dot);
+        wrapper.appendChild(labelSpan);
+        row.appendChild(wrapper);
+    }
 }
