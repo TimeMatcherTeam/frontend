@@ -28,10 +28,7 @@
 
 .create-item:last-child { border-bottom: none; }
 .create-item:hover:not(:disabled) { background: var(--element-bg-color); }
-.create-item:disabled {
-    color: var(--element-color);
-    cursor: not-allowed;
-}
+
 
 .modal-bg {
     position: fixed;
@@ -138,30 +135,22 @@
     padding: 8px 18px;
     border-radius: 20px;
     border: none;
-    background: transparent;
     cursor: pointer;
     font-size: 13px;
-    color: var(--text-color);
     font-family: inherit;
     font-weight: 500;
 }
-
-.btn-cancel:hover { background: var(--element-bg-color); }
 
 .btn-save {
     padding: 8px 18px;
     border-radius: 20px;
     border: none;
-    background: var(--accent-color);
-    color: var(--bg-color);
     cursor: pointer;
     font-size: 13px;
     font-weight: 500;
     font-family: inherit;
     transition: background 0.15s;
 }
-
-.btn-save:hover { background: var(--accent-color-desaturated); }
 
 .ev-tooltip {
     position: fixed;

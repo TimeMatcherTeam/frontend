@@ -176,27 +176,15 @@
     height: 34px;
     border: 0;
     border-radius: 20px;
-    background: var(--accent-color);
-    color: var(--bg-color);
     font-size: 13px;
     font-weight: 500;
     font-family: inherit;
     cursor: pointer;
 }
 
-.create-group-primary-btn:hover:not(:disabled) {
-    background: var(--accent-color-desaturated);
-}
-
 .create-group-primary-btn:disabled {
     opacity: 0.6;
     cursor: not-allowed;
-}
-
-.create-group-cancel-btn {
-    background: transparent;
-    border: 1px solid var(--element-color);
-    color: var(--text-color);
 }
 
 @media (max-width: 900px) {

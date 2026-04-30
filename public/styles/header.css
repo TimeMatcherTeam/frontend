@@ -38,5 +38,5 @@
 }
 
 .page-link:hover {
-    color: var(--accent-color-desaturated);
+    color: var(--accent-color);
 }

@@ -55,7 +55,7 @@
         </section>
     </main>
 
-    <div class="meeting-users-popup-bg" id="meetingUsersPopupBg" style="display:none">
+    <div class="overlay" id="meetingUsersPopupBg" style="display:none">
         <div class="meeting-users-popup">
             <div class="meeting-users-popup-header">
                 <div class="meeting-users-popup-title">поиск пользователей</div>
@@ -85,7 +85,7 @@
     </div>
 
     <!-- Popup для создания группы -->
-    <div class="create-group-popup-bg" id="createGroupPopupBg" style="display:none">
+    <div class="overlay" id="createGroupPopupBg" style="display:none">
         <div class="create-group-popup">
             <div class="create-group-popup-header">
                 <div class="create-group-popup-title">Создание группы</div>
@@ -98,7 +98,8 @@
                     <input id="createGroupTitleInput" type="text" placeholder="например, Команда разработки">
                 </div>
 
-                <button type="button" class="create-group-secondary-btn" id="createGroupAddParticipantsBtn">Добавить участников</button>
+                <button type="button" class="create-group-secondary-btn" id="createGroupAddParticipantsBtn">Добавить
+                    участников</button>
 
                 <div class="create-group-section">
                     <div class="create-group-section-title">Выбранные участники</div>
@@ -109,14 +110,16 @@
             </div>
 
             <div class="create-group-popup-footer">
-                <button type="button" class="create-group-primary-btn" id="createGroupConfirmBtn">Создать</button>
-                <button type="button" class="create-group-primary-btn create-group-cancel-btn" id="createGroupCancelBtn">Отмена</button>
+                <button type="button" class="create-group-primary-btn action-button"
+                    id="createGroupConfirmBtn">Создать</button>
+                <button type="button" class="create-group-primary-btn cancel-button create-group-cancel-btn"
+                    id="createGroupCancelBtn">Отмена</button>
             </div>
         </div>
     </div>
 
     <!-- Popup для смены пароля -->
-    <div class="password-popup-bg" id="passwordPopupBg" style="display:none">
+    <div class="overlay" id="passwordPopupBg" style="display:none">
         <div class="password-popup">
             <div class="password-popup-header">
                 <div class="password-popup-title">Смена пароля</div>
@@ -149,7 +152,7 @@
         </div>
     </div>
 
-    <div id="authOverlay" class="modal-bg"  style="display: none;">
+    <div id="authOverlay" class="overlay"  style="display: none;">
         <form id="authForm" class="container">
             <h2 id="formTitle">Вход</h2>
             <div class="error" id="authError" style="display: none;"></div>
@@ -171,9 +174,9 @@
                     <img src="/assets/eye.svg" alt="eye" id="confirmPasswordEye">
                 </button>
             </div>
-            <button id="switchAuthBtn">Нет аккаунта? Зарегистрироваться</button>
+            <button id="switchAuthBtn" class="action-button">Нет аккаунта? Зарегистрироваться</button>
             <div class="submit-cancel-wrapper">
-                <button type="submit" class="submit-button" id="submitAuthBtn">Войти</button>
+                <button type="submit" class="action-button" id="submitAuthBtn">Войти</button>
                 <button type="reset" class="cancel-button" id="cancelAuthBtn">Отмена</button>
             </div>
         </form>

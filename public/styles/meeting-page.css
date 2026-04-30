@@ -108,13 +108,6 @@
     background: var(--accent-color-desaturated);
 }
 
-.meeting-participant-action:disabled,
-.meeting-participant-action:disabled:hover {
-    cursor: not-allowed;
-    background: #f3f5f8;
-    color: #8d98a8;
-}
-
 .meeting-participants-empty {
     border: 1px dashed var(--element-color);
     border-radius: 8px;
@@ -150,17 +143,8 @@
     height: 34px;
     border-radius: 8px;
     border: 1px solid var(--element-color);
-    background: var(--bg-color);
-    color: var(--text-color);
     font-size: 12px;
     font-weight: 600;
-}
-
-.meeting-sidebar-btn:disabled {
-    opacity: 0.5;
-    cursor: not-allowed;
-    background: #f3f5f8;
-    color: #8d98a8;
 }
 
 .merged-event-block {
@@ -263,8 +247,6 @@
     height: 34px;
     border: 0;
     border-radius: 20px;
-    background: var(--accent-color);
-    color: var(--bg-color);
     font-size: 13px;
     font-weight: 500;
     font-family: inherit;
@@ -272,9 +254,6 @@
     margin-top: 4px;
 }
 
-.meeting-time-apply-btn:hover {
-    background: var(--accent-color-desaturated);
-}
 
 .meeting-time-divider {
     text-align: center;

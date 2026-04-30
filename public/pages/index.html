@@ -63,7 +63,7 @@
     </div>
 
     <!-- Модальное окно создания/редактирования события -->
-    <div class="modal-bg" id="modalBg" style="display:none">
+    <div class="overlay" id="modalBg" style="display:none">
         <div class="modal">
             <div class="modal-header">
                 <span id="modalTitle">Новое событие</span>
@@ -88,8 +88,8 @@
                 <div class="color-row" id="colorRow"></div>
             </div>
             <div class="modal-footer">
-                <button class="btn-cancel" id="cancelBtn">Отмена</button>
-                <button class="btn-save" id="saveBtn">Сохранить</button>
+                <button class="btn-save action-button" id="saveBtn">Сохранить</button>
+                <button class="btn-cancel cancel-button" id="cancelBtn">Отмена</button>
             </div>
         </div>
     </div>
@@ -105,7 +105,7 @@
     </div>
 
     <!-- Модальное окно создания встречи -->
-    <div class="meeting-modal-bg" id="meetingModalBg" style="display:none">
+    <div class="overlay" id="meetingModalBg" style="display:none">
         <div class="meeting-modal">
             <div class="meeting-modal-title">создание встречи</div>
             <div class="meeting-modal-body">
@@ -133,23 +133,28 @@
                     <div class="meeting-duration-fields">
                         <input id="meetingDurationH" type="number" min="0" max="23" value="1" placeholder="ч">
                         <span>ч</span>
-                        <input id="meetingDurationM" type="number" min="0" max="59" step="5" value="0" placeholder="мин">
+                        <input id="meetingDurationM" type="number" min="0" max="59" step="5" value="0"
+                            placeholder="мин">
                         <span>мин</span>
                     </div>
                 </div>
 
-                <button type="button" class="meeting-secondary-btn" id="meetingAddParticipantsBtn">Добавить участников</button>
-                <button type="button" class="meeting-secondary-btn" id="meetingAddGroupsBtn">Добавить участников из группы</button>
+                <button type="button" class="meeting-secondary-btn" id="meetingAddParticipantsBtn">Добавить
+                    участников</button>
+                <button type="button" class="meeting-secondary-btn" id="meetingAddGroupsBtn">Добавить участников из
+                    группы</button>
             </div>
 
             <div class="meeting-modal-footer">
-                <button type="button" class="meeting-primary-btn" id="meetingConfirmBtn">Подтвердить</button>
-                <button type="button" class="meeting-primary-btn meeting-cancel-btn" id="meetingCancelBtn">Отмена</button>
+                <button type="button" class="meeting-primary-btn action-button"
+                    id="meetingConfirmBtn">Подтвердить</button>
+                <button type="button" class="meeting-primary-btn cancel-button meeting-cancel-btn"
+                    id="meetingCancelBtn">Отмена</button>
             </div>
         </div>
     </div>
 
-    <div class="meeting-users-popup-bg" id="meetingUsersPopupBg" style="display:none">
+    <div class="overlay" id="meetingUsersPopupBg" style="display:none">
         <div class="meeting-users-popup">
             <div class="meeting-users-popup-header">
                 <div class="meeting-users-popup-title">поиск пользователей</div>
@@ -173,12 +178,13 @@
             </div>
 
             <div class="meeting-users-popup-footer">
-                <button type="button" class="meeting-primary-btn meeting-cancel-btn" id="meetingUsersPopupCancelBtn">Закрыть</button>
+                <button type="button" class="meeting-primary-btn cancel-button meeting-cancel-btn"
+                    id="meetingUsersPopupCancelBtn">Закрыть</button>
             </div>
         </div>
     </div>
 
-    <div class="meeting-groups-popup-bg" id="meetingGroupsPopupBg" style="display:none">
+    <div class="overlay" id="meetingGroupsPopupBg" style="display:none">
         <div class="meeting-groups-popup">
             <div class="meeting-users-popup-header">
                 <div class="meeting-users-popup-title">поиск групп</div>
@@ -202,13 +208,14 @@
             </div>
 
             <div class="meeting-users-popup-footer">
-                <button type="button" class="meeting-primary-btn meeting-cancel-btn" id="meetingGroupsPopupCancelBtn">Закрыть</button>
+                <button type="button" class="meeting-primary-btn cancel-button meeting-cancel-btn"
+                    id="meetingGroupsPopupCancelBtn">Закрыть</button>
             </div>
         </div>
     </div>
 
     <!-- Popup для создания группы -->
-    <div class="create-group-popup-bg" id="createGroupPopupBg" style="display:none">
+    <div class="overlay" id="createGroupPopupBg" style="display:none">
         <div class="create-group-popup">
             <div class="create-group-popup-header">
                 <div class="create-group-popup-title">Создание группы</div>
@@ -221,7 +228,8 @@
                     <input id="createGroupTitleInput" type="text" placeholder="например, Команда разработки">
                 </div>
 
-                <button type="button" class="create-group-secondary-btn" id="createGroupAddParticipantsBtn">Добавить участников</button>
+                <button type="button" class="create-group-secondary-btn" id="createGroupAddParticipantsBtn">Добавить
+                    участников</button>
 
                 <div class="create-group-section">
                     <div class="create-group-section-title">Выбранные участники</div>
@@ -232,20 +240,22 @@
             </div>
 
             <div class="create-group-popup-footer">
-                <button type="button" class="create-group-primary-btn" id="createGroupConfirmBtn">Создать</button>
-                <button type="button" class="create-group-primary-btn create-group-cancel-btn" id="createGroupCancelBtn">Отмена</button>
+                <button type="button" class="create-group-primary-btn action-button"
+                    id="createGroupConfirmBtn">Создать</button>
+                <button type="button" class="create-group-primary-btn cancel-button create-group-cancel-btn"
+                    id="createGroupCancelBtn">Отмена</button>
             </div>
         </div>
     </div>
 
-    <div id="authOverlay" class="modal-bg"  style="display: none;">
+    <div id="authOverlay" class="overlay" style="display: none;">
         <form id="authForm" class="container">
             <h2 id="formTitle">Вход</h2>
             <div class="error" id="authError" style="display: none;"></div>
             <div class="big-input-wrapper">
                 <input type="email" id="email" placeholder="Email" class="big-input" required>
             </div>
-            <div class="big-input-wrapper" id="usernameWrapper"  style="display:none">
+            <div class="big-input-wrapper" id="usernameWrapper" style="display:none">
                 <input type="text" id="username" placeholder="Имя" class="big-input">
             </div>
             <div class="big-input-wrapper password-input">
@@ -254,15 +264,15 @@
                     <img src="/assets/eye.svg" alt="eye" id="passwordEye">
                 </button>
             </div>
-            <div class="big-input-wrapper password-input" id="confirmPasswordWrapper"  style="display:none">
+            <div class="big-input-wrapper password-input" id="confirmPasswordWrapper" style="display:none">
                 <input type="password" id="confirmPassword" placeholder="Подтвердите пароль" class="big-input">
                 <button id="toggleConfirmPassword" type="button" class="password-eye">
                     <img src="/assets/eye.svg" alt="eye" id="confirmPasswordEye">
                 </button>
             </div>
-            <button id="switchAuthBtn">Нет аккаунта? Зарегистрироваться</button>
+            <button id="switchAuthBtn" class="action-button">Нет аккаунта? Зарегистрироваться</button>
             <div class="submit-cancel-wrapper">
-                <button type="submit" class="submit-button" id="submitAuthBtn">Войти</button>
+                <button type="submit" class="action-button" id="submitAuthBtn">Войти</button>
                 <button type="reset" class="cancel-button" id="cancelAuthBtn">Отмена</button>
             </div>
         </form>

@@ -43,8 +43,8 @@
                 <div class="meeting-range-label" id="meetingRangeLabel">Диапазон встречи не выбран</div>
                 <div class="meeting-selected-time" id="meetingSelectedTimeLabel" style="display:none"></div>
                 <div class="meeting-sidebar-actions">
-                    <button type="button" class="meeting-sidebar-btn" id="meetingSelectTimeBtn">Выбрать время</button>
-                    <button type="button" class="meeting-sidebar-btn" id="meetingConfirmBtn" disabled>Подтвердить</button>
+                    <button type="button" class="meeting-sidebar-btn action-button" id="meetingSelectTimeBtn">Выбрать время</button>
+                    <button type="button" class="meeting-sidebar-btn action-button" id="meetingConfirmBtn" disabled>Подтвердить</button>
                 </div>
             </aside>
 
@@ -67,7 +67,7 @@
         </main>
     </div>
 
-    <div class="meeting-time-popup-bg" id="meetingTimePopupBg" style="display:none">
+    <div class="overlay" id="meetingTimePopupBg" style="display:none">
         <div class="meeting-time-popup">
             <div class="meeting-users-popup-header">
                 <div class="meeting-users-popup-title">выбор времени</div>
@@ -80,7 +80,7 @@
                     <input type="datetime-local" id="meetingTimeStart">
                     <label>Конец</label>
                     <input type="datetime-local" id="meetingTimeEnd">
-                    <button type="button" class="meeting-time-apply-btn" id="meetingTimeApplyBtn">Применить</button>
+                    <button type="button" class="meeting-time-apply-btn action-button" id="meetingTimeApplyBtn">Применить</button>
                 </div>
 
                 <div class="meeting-time-divider">или выберите вариант</div>
@@ -91,14 +91,14 @@
         </div>
     </div>
 
-    <div id="authOverlay" class="modal-bg"  style="display: none;">
+    <div id="authOverlay" class="overlay" style="display: none;">
         <form id="authForm" class="container">
             <h2 id="formTitle">Вход</h2>
             <div class="error" id="authError" style="display: none;"></div>
             <div class="big-input-wrapper">
                 <input type="email" id="email" placeholder="Email" class="big-input" required>
             </div>
-            <div class="big-input-wrapper" id="usernameWrapper"  style="display:none">
+            <div class="big-input-wrapper" id="usernameWrapper" style="display:none">
                 <input type="text" id="username" placeholder="Имя" class="big-input">
             </div>
             <div class="big-input-wrapper password-input">
@@ -107,15 +107,15 @@
                     <img src="/assets/eye.svg" alt="eye" id="passwordEye">
                 </button>
             </div>
-            <div class="big-input-wrapper password-input" id="confirmPasswordWrapper"  style="display:none">
+            <div class="big-input-wrapper password-input" id="confirmPasswordWrapper" style="display:none">
                 <input type="password" id="confirmPassword" placeholder="Подтвердите пароль" class="big-input">
                 <button id="toggleConfirmPassword" type="button" class="password-eye">
                     <img src="/assets/eye.svg" alt="eye" id="confirmPasswordEye">
                 </button>
             </div>
-            <button id="switchAuthBtn">Нет аккаунта? Зарегистрироваться</button>
+            <button id="switchAuthBtn" class="action-button">Нет аккаунта? Зарегистрироваться</button>
             <div class="submit-cancel-wrapper">
-                <button type="submit" class="submit-button" id="submitAuthBtn">Войти</button>
+                <button type="submit" class="action-button" id="submitAuthBtn">Войти</button>
                 <button type="reset" class="cancel-button" id="cancelAuthBtn">Отмена</button>
             </div>
         </form>

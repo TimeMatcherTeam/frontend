@@ -1,21 +1,61 @@
 :root {
   --bg-color: #F7F7F7;
+  --text-color: #000000;
   --element-bg-color: #ECECF2;
   --element-color: #C9CCD5;
   --accent-color: #5BB7D5;
   --accent-color-desaturated: #B4DBE8;
-  --logout-color: #e09d8e;
-  --logout-color-desaturated: #e6c0b7;
+  --cancel-color: #e09d8e;
+  --cancel-color-desaturated: #e6c0b7;
   --busy-bg-color: #fce8e6;
   --busy-border-color: #ea4335;
   --busy-text-color: #c62828;
   --partially-busy-bg-color: #fff4e5;
   --partially-busy-border-color: #f39c12;
   --partially-busy-text-color: #b05900;
+  --disabled-color: #f3f5f8;
+  --disabled-text-color: #8d98a8;
+  --overlay-color: rgba(0, 0, 0, 0.55);
 
   --border-radius: 10px;
 
   font-family: 'Monsterrat', sans-serif;
+  color: var(--text-color);
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --bg-color: #121212;
+    --text-color: #f0f0f0;
+    --element-bg-color: #1E1E2E;
+    --element-color: #2A2A3A;
+    --accent-color: #5BB7D5;
+    --accent-color-desaturated: #3A6D7E;
+    --cancel-color: #c75f45;
+    --cancel-color-desaturated: #7A4A3E;
+    --busy-bg-color: #2D1A1A;
+    --busy-border-color: #ea4335;
+    --busy-text-color: #ff6b6b;
+    --partially-busy-bg-color: #2A241A;
+    --partially-busy-border-color: #f39c12;
+    --partially-busy-text-color: #ffb347;
+    --disabled-color: #2D2D3A;
+    --disabled-text-color: #8D8D9E;
+  }
+}
+
+.overlay {
+  display: none;
+  position: fixed;
+  width: 100%;
+  height: 100%;
+  inset: 0;
+  background-color: rgba(0, 0, 0, 0.55);
+  backdrop-filter: blur(4px);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
 }
 
 .busy {
@@ -36,60 +76,18 @@ h2 {
   margin: 0;
 }
 
-.label-input-container {
-  height: 49px;
-  display: flex;
-  flex-direction: row;
-  justify-content: space-between;
-  align-items: center;
-}
-
-.big-input-wrapper {
-  position: relative;
-  height: 82px;
-  border-radius: var(--border-radius);
-  background-color: var(--element-color);
-  display: flex;
-  align-items: center;
-}
-
-.big-input {
-  font-size: 28px;
-  font-weight: 400;
-  border-radius: var(--border-radius);
-  background-color: transparent;
-  border: 0;
-  text-align: center;
-  width: 100%;
-  height: 100%;
-}
-
-.big-input:focus {
-  outline: none;
-}
-
-.big-input-wrapper:focus-within {
-  outline: 2px solid var(--accent-color);
-  
-}
-
-input:autofill {
-  background-color: transparent;
-}
-
-.submit-cancel-wrapper {
-  display: flex;
-  flex-direction: row;
-  gap: 18px;
-  height: 82px;
-}
-
 button {
   border: 0;
   border-radius: var(--border-radius);
   cursor: pointer;
-  font-size: 28px;
-  font-weight: 400;
+  color: var(--text-color);
+}
+
+button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  background: var(--disabled-color);
+  color: var(--disabled-text-color);
 }
 
 .submit-button {
@@ -99,11 +97,21 @@ button {
 }
 
 .cancel-button {
-  background-color: var(--accent-color);
-  height: 100%;
-  width: 100%;
+  background-color: var(--cancel-color-desaturated);
+}
+
+.cancel-button:hover:not(:disabled) {
+  background-color: var(--cancel-color);
 }
 
 .error {
   color: red;
+}
+
+.action-button {
+  background-color: var(--accent-color-desaturated);
+}
+
+.action-button:hover:not(:disabled) {
+  background-color: var(--accent-color);
 }

@@ -26,7 +26,7 @@ body.profile-page {
     padding: 24px;
     border: 1px solid var(--element-color);
     border-radius: 22px;
-    background: rgba(247, 247, 247, 0.82);
+    background: var(--bg-color);
     backdrop-filter: blur(10px);
     box-shadow: 0 18px 36px rgba(21, 32, 53, 0.08);
 }
@@ -100,41 +100,37 @@ body.profile-page {
     font-size: 14px;
     font-weight: 600;
     color: var(--text-color);
+    background-color: var(--accent-color-desaturated);
     transition: background 0.15s ease, border-color 0.15s ease, transform 0.15s ease;
 }
 
 .profile-logout-btn {
-    background-color: var(--logout-color);
+    background-color: var(--cancel-color-desaturated);
 }
 
 .profile-logout-btn:hover {
-    background-color: var(--logout-color-desaturated);
+    background-color: var(--cancel-color);
     border-color: var(--accent-color);
     transform: translateY(-1.5px);
     box-shadow: 0 8px 16px rgba(91, 183, 213, 0.25);
 }
 
-.profile-save-btn {
+.profile-tn {
     background: var(--accent-color-desaturated);
 }
 
 .profile-save-btn:hover {
-    background: #d5ecf4;
+    background: var(--accent-color);
     border-color: var(--accent-color);
     transform: translateY(-1.5px);
     box-shadow: 0 8px 16px rgba(91, 183, 213, 0.25);
-}
-
-.profile-password-btn,
-.profile-add-group-btn {
-    background: var(--bg-color);
 }
 
 .profile-password-btn:disabled,
 .profile-add-group-btn:disabled {
     opacity: 0.5;
     cursor: not-allowed;
-    color: #8d98a8;
+    color: var(--disabled-text-color);
 }
 
 .profile-status {
@@ -225,7 +221,7 @@ body.profile-page {
     padding: 24px;
     border: 1px solid var(--element-color);
     border-radius: 22px;
-    background: rgba(247, 247, 247, 0.95);
+    background: var(--bg-color);
     backdrop-filter: blur(10px);
     box-shadow: 0 18px 36px rgba(21, 32, 53, 0.08);
     display: flex;
@@ -337,11 +333,6 @@ body.profile-page {
     color: var(--text-color);
 }
 
-.password-cancel-btn {
-    background: var(--bg-color);
-    color: var(--text-color);
-}
-
 .password-primary-btn:hover {
     background: #d5ecf4;
     border-color: var(--accent-color);
@@ -352,7 +343,7 @@ body.profile-page {
 .password-cancel-btn:hover,
 .profile-password-btn:hover,
 .profile-add-group-btn:hover {
-    background: #fcfcfc;
+    background-color: var(--accent-color);
     border-color: var(--accent-color);
     transform: translateY(-1.5px);
     box-shadow: 0 8px 16px rgba(21, 32, 53, 0.08);
