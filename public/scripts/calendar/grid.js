@@ -1,4 +1,4 @@
-import { HOUR_H, COLORS } from "./constants.js";
+import { HOUR_H, COLORS, EVENT_CLASS_NAMES } from "./constants.js";
 import { state } from "./state.js";
 import { getWeekStart, dateKey, fmt2 } from "./utils.js";
 import { openModal } from "./slotModal.js";
@@ -87,14 +87,11 @@ export function renderEvents() {
         const top    = (sh * 60 + sm) / 60 * HOUR_H;
         const height = Math.max(((eh * 60 + em) - (sh * 60 + sm)) / 60 * HOUR_H, 20);
 
-        const c = COLORS[ev.color || 0];
+        const eventClassName = EVENT_CLASS_NAMES[ev.color || 0]
         const block = document.createElement('div');
-        block.className = 'event-block';
+        block.classList.add('event-block', eventClassName)
         block.style.top = top + 'px';
         block.style.height = height + 'px';
-        block.style.background = c.bg;
-        block.style.borderLeftColor = c.border;
-        block.style.color = c.text;
 
         const nameSpan = document.createElement('span');
         nameSpan.className = 'ev-name';

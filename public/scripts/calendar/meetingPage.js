@@ -1,10 +1,10 @@
 import { API_URL } from "../requests.js";
 import { getCookie, getToken } from "../jwtUtils.js";
-import { HOUR_H, COLORS } from "./constants.js";
+import { HOUR_H, COLORS, EVENT_CLASS_NAMES } from "./constants.js";
 import { state } from "./state.js";
 import { buildHeader } from "./header.js";
 import { initMiniCalendar, renderMiniCalendar } from "./miniCalendar.js";
-import { getWeekStart, dateKey, fmt2 } from "./utils.js";
+import { getWeekStart, dateKey, fmt2, eventBorderColor } from "./utils.js";
 import { openTimePickerPopup, restoreSelectedTime } from "./timePickerPopup.js";
 import { getLastSlots, triggerSlotSuggester } from "./slotSuggester.js";
 
@@ -467,19 +467,22 @@ export function renderMergedEvents() {
         const top = ((sh * 60 + sm) / 60) * HOUR_H;
         const height = Math.max((((eh * 60 + em) - (sh * 60 + sm)) / 60) * HOUR_H, 8);
 
-        const c = COLORS[ev.color || 0];
+        const eventClassName = EVENT_CLASS_NAMES[ev.color || 0]
         const isSelected = ev.id === "__selected_slot__";
         const alpha = isSelected ? 0.5 : 0.15;
+        console.log(alpha)
 
         const block = document.createElement("div");
-        block.className = "merged-event-block";
+        block.classList.add("merged-event-block", eventClassName);
         block.style.top = `${top}px`;
         block.style.height = `${height}px`;
-        block.style.background = hexToRgba(c.border, alpha);
+        block.style.backgroundColor = eventBorderColor(eventClassName);
+        block.style.opacity = alpha;
 
         if (isSelected) {
-            block.style.border = `2px solid ${c.border}`;
-            block.style.borderLeft = `4px solid ${c.border}`;
+            block.style.borderStyle = 'solid';
+            block.style.borderWidth = '2px';
+            block.style.borderLeftWidth = '4px';
         }
 
         col.appendChild(block);

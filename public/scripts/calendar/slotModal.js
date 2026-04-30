@@ -1,8 +1,8 @@
 import { state } from "./state.js";
-import { COLORS } from "./constants.js";
+import { COLORS, EVENT_CLASS_NAMES } from "./constants.js";
 import { renderEvents } from "./grid.js";
 import { hideTooltip } from "./tooltip.js";
-import { getWeekStart, dateKey } from "./utils.js";
+import { getWeekStart, dateKey, eventBorderColor } from "./utils.js";
 import {
     AddSlot,
     UpdateSlot,
@@ -110,14 +110,14 @@ function renderColorPicker() {
     const labels = ['Занят', 'Встреча нежелательна'];
     // Только первые 2 цвета для личного календаря (зелёный только для встреч)
     for (let i = 0; i < 2; i++) {
-        const c = COLORS[i];
+        const eventClassName = EVENT_CLASS_NAMES[i]
 
         const wrapper = document.createElement('div');
         wrapper.className = 'color-item';
 
         const dot = document.createElement('div');
         dot.className = 'color-dot' + (i === state.selColor ? ' selected' : '');
-        dot.style.background = c.border;
+        dot.style.backgroundColor = eventBorderColor(eventClassName);
         dot.title = labels[i];
         dot.onclick = () => { state.selColor = i; renderColorPicker(); };
 
