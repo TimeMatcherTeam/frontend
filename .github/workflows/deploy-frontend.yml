@@ -1,0 +1,22 @@
+name: Deploy Frontend
+
+on:
+  push:
+    branches: [ main ]
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Connect to VPS and update
+        uses: appleboy/ssh-action@v0.1.0
+        with:
+          host: ${{ secrets.VPS_HOST }}
+          username: ozsh_bot_vm
+          key: ${{ secrets.VPS_SSH_KEY }}
+          script: |
+            cd ~/TimeMatcher/frontend
+            git checkout main
+            git pull
+            sudo systemctl restart timematcher_frontend
+            echo "✅ Deployment completed!"
