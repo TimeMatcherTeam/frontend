@@ -68,7 +68,7 @@ document.getElementById('ttDel').onclick = async () => {
         hideTooltip();
         renderEvents();
     } catch (error) {
-        alert(error?.message || "Не удалось удалить событие");
+        //alert(error?.message || "Не удалось удалить событие");
     }
 };
 

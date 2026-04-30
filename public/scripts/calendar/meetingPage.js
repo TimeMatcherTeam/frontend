@@ -520,7 +520,7 @@ async function buildAll() {
             void triggerSlotSuggester(participantUsers, meetingRange, durationMinutes ?? 60);
         }
     } catch (error) {
-        alert(error?.message || "Не удалось загрузить объединенный календарь");
+        //alert(error?.message || "Не удалось загрузить объединенный календарь");
     }
 }
 

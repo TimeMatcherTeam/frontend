@@ -96,7 +96,7 @@ export async function saveEvent() {
             state.events.push(mapSlotResponseToCalendarEvent(createdSlot, state.selColor));
         }
     } catch (error) {
-        alert(error?.message || "Не удалось сохранить событие");
+        //alert(error?.message || "Не удалось сохранить событие");
         return;
     }
 

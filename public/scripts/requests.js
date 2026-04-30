@@ -5,9 +5,5 @@ export async function getAbilities() {
   const json = await response.json();
   if (response.ok) {
     return json;
-  } else {
-    alert(
-      `Не удалось войти, ответ сервера: ${JSON.stringify(json.errors)}, код ответа: ${response.status}`
-    );
   }
 }
