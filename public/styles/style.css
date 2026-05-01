@@ -115,3 +115,7 @@ button:disabled {
 .action-button:hover:not(:disabled) {
   background-color: var(--accent-color);
 }
+
+#meetingUsersPopupBg {
+  z-index: 1100;
+}
