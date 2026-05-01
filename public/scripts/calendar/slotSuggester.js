@@ -20,14 +20,18 @@ function getAuthHeaders() {
     };
 }
 
-async function fetchUserBusyIntervals(userId, start, end) {
-    const params = new URLSearchParams({
-        Start: start.toISOString(),
-        End: end.toISOString()
-    });
+async function fetchMergedIntervals(participantIds, start, end) {
 
-    const response = await fetch(`${API_URL}/users/${userId}/calendar?${params}`, {
-        headers: getAuthHeaders()
+    const response = await fetch(`${API_URL}/users/merge-calendar`, {
+        method: "POST",
+        headers: getAuthHeaders(),
+        body: JSON.stringify({
+            userIds: participantIds,
+            requestedPeriod: {
+                start: start.toISOString(),
+                end: end.toISOString()
+            }
+        })
     });
 
     if (!response.ok) {
@@ -48,25 +52,13 @@ export async function triggerSlotSuggester(participants, range, durationMinutes)
     currentParticipants = participants;
     currentRange = range;
 
-    const participantsWithIntervals = await Promise.all(
-        participants.map(async participant => {
-            const busyIntervals = await fetchUserBusyIntervals(participant.id, range.start, range.end);
-            return { ...participant, busyIntervals };
-        })
-    );
+    const participantIds = participants.map(p => p.id).filter(Boolean);
 
-    lastSlots = findBestSlots(participantsWithIntervals, range, durationMinutes);
+    const mergedIntervals = await fetchMergedIntervals(participantIds, range.start, range.end);
+    lastSlots = findBestSlots(mergedIntervals, range, durationMinutes, participants.length);
 }
 
-function isNightHour(hour) {
-    return hour >= 23 || hour < 6;
-}
-
-function isOffHour(hour) {
-    return hour >= 21 || hour < 9;
-}
-
-function findBestSlots(participants, searchRange, durationMinutes, maxResults = 20) {
+function findBestSlots(mergedIntervals, searchRange, durationMinutes, totalParticipants = 1, maxResults = 20) {
     const SLOT_STEP = 5;
     const MS_PER_SLOT = SLOT_STEP * 60000;
 
@@ -87,28 +79,23 @@ function findBestSlots(participants, searchRange, durationMinutes, maxResults = 
         return [];
     }
 
-    const busyMap = [];
-    participants.forEach(participant => {
-        if (!Array.isArray(participant.busyIntervals)) {
-            return;
-        }
+    const busySlots = new Array(totalSlots).fill(null).map(() => ({ busy: 0, partial: 0 }));
 
-        participant.busyIntervals.forEach(interval => {
-            const busyStart = interval.start.getTime();
-            const busyEnd = interval.end.getTime();
+    mergedIntervals.forEach(interval => {
+        const intervalStart = interval.start.getTime();
+        const intervalEnd = interval.end.getTime();
 
-            const slotFrom = Math.max(0, Math.floor((busyStart - rangeStart) / MS_PER_SLOT));
-            const slotTo = Math.min(totalSlots, Math.ceil((busyEnd - rangeStart) / MS_PER_SLOT));
+        const slotFrom = Math.max(0, Math.floor((intervalStart - rangeStart) / MS_PER_SLOT));
+        const slotTo = Math.min(totalSlots, Math.ceil((intervalEnd - rangeStart) / MS_PER_SLOT));
 
-            for (let i = slotFrom; i < slotTo; i++) {
-                if (!busyMap[i]) busyMap[i] = [];
-                busyMap[i].push({ name: participant.userName, ability: interval.ability });
+        for (let i = slotFrom; i < slotTo; i++) {
+            if (interval.ability === "busy") {
+                busySlots[i].busy++;
+            } else {
+                busySlots[i].partial++;
             }
-        });
+        }
     });
-
-    const results = [];
-    const usedStarts = [];
 
     const candidates = [];
 
@@ -118,42 +105,37 @@ function findBestSlots(participants, searchRange, durationMinutes, maxResults = 
         const startHour = startDate.getHours();
         const startMinutes = startDate.getMinutes();
 
-        const reasons = [];
+        let score = 0;
 
         let hasBusy = false;
+        let maxPartial = 0;
+
         for (let w = 0; w < windowSlots; w++) {
-            const slotReasons = busyMap[i + w];
-            if (!slotReasons) continue;
-            for (const r of slotReasons) {
-                if (r.ability === "busy") {
-                    hasBusy = true;
-                    break;
-                }
+            const slot = busySlots[i + w];
+            if (slot.busy > 0) {
+                hasBusy = true;
+                break;
             }
-            if (hasBusy) break;
+            if (slot.partial > maxPartial) {
+                maxPartial = slot.partial;
+            }
         }
 
         if (hasBusy) continue;
 
-        const partialNames = new Set();
-        for (let w = 0; w < windowSlots; w++) {
-            const slotReasons = busyMap[i + w];
-            if (!slotReasons) continue;
-            for (const r of slotReasons) {
-                if (r.ability === "partial") {
-                    partialNames.add(r.name);
-                }
-            }
+        const reasons = [];
+
+        if (maxPartial > 0) {
+            reasons.push(`частично ${maxPartial == 1?'занят':'заняты'} ${` ${maxPartial} `} ${(maxPartial%10 >=2 && maxPartial%10 <= 4)?'человека':'человек'} `);
         }
+        score += maxPartial * 100;
 
-        partialNames.forEach(name => {
-            reasons.push(`частично занят ${name}`);
-        });
-
-        if (isNightHour(startHour)) {
+        if (startHour >= 23 || startHour < 6) {
             reasons.push("ночное время");
-        } else if (isOffHour(startHour)) {
+            score += 300;
+        } else if (startHour >= 21 || startHour < 9) {
             reasons.push("нерабочее время");
+            score += 100;
         }
 
         let beautyPenalty = 0;
@@ -166,10 +148,10 @@ function findBestSlots(participants, searchRange, durationMinutes, maxResults = 
         } else {
             beautyPenalty = 3;
         }
+        score += beautyPenalty;
 
         candidates.push({
-            index: i,
-            score: reasons.length * 100 + beautyPenalty,
+            score: score,
             reasons,
             start: new Date(startMs),
             end: new Date(startMs + durationMinutes * 60000)
@@ -178,10 +160,15 @@ function findBestSlots(participants, searchRange, durationMinutes, maxResults = 
 
     candidates.sort((a, b) => a.score - b.score);
 
+    const results = [];
+    const usedStarts = [];
+
     for (const candidate of candidates) {
         if (results.length >= maxResults) break;
 
         const startMs = candidate.start.getTime();
+        const overlaps = usedStarts.some(s => Math.abs(startMs - s) < 30 * 60000);
+        if (overlaps) continue;
 
         usedStarts.push(startMs);
         results.push(candidate);

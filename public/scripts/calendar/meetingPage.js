@@ -597,8 +597,8 @@ document.getElementById("meetingConfirmBtn")?.addEventListener("click", async ()
         });
 
         if (!response.ok) {
-            const errorText = await response.text();
-            throw new Error(`Ошибка создания встречи: ${response.status}`);
+            const errorJson = await response.json();
+            throw new Error(`Ошибка создания встречи: ${response.status}\n${errorJson.detail}`);
         }
 
 

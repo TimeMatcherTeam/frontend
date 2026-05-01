@@ -2,7 +2,6 @@ import { closeMeetingUsersPopup, initMeetingUsersPopup } from "./userSearchPopup
 import { closeMeetingGroupsPopup, initMeetingGroupsPopup } from "./groupSearchPopup.js";
 import { getCookie } from "../jwtUtils.js";
 import { getMeetingSelectedUsers } from "./userSearchPopup.js";
-import { triggerSlotSuggester } from "./slotSuggester.js";
 
 function parseDateTime(value) {
     if (!value) {
@@ -67,19 +66,6 @@ function buildMeetingDraft() {
     };
 }
 
-function tryTriggerSlots(startInput, endInput) {
-    const start = parseDateTime(startInput.value);
-    const end = parseDateTime(endInput.value);
-    const durationMinutes = parseDurationMinutes();
-
-    if (!start || !end || end <= start) {
-        return;
-    }
-
-    const selectedUsers = getMeetingSelectedUsers();
-    void triggerSlotSuggester(selectedUsers, { start, end }, durationMinutes ?? 60);
-}
-
 export function initMeetingModal() {
     const modalBg = document.getElementById('meetingModalBg');
     const cancelBtn = document.getElementById('meetingCancelBtn');
@@ -105,13 +91,6 @@ export function initMeetingModal() {
         const rangeMinutes = Math.floor((end.getTime() - start.getTime()) / 60000);
         return durationMinutes <= rangeMinutes;
     };
-
-    const onTimeChange = () => tryTriggerSlots(startInput, endInput);
-
-    startInput.addEventListener('change', onTimeChange);
-    endInput.addEventListener('change', onTimeChange);
-    durationH.addEventListener('change', onTimeChange);
-    durationM.addEventListener('change', onTimeChange);
 
     modalBg.addEventListener('click', e => {
         if (e.target === modalBg) {
@@ -149,8 +128,6 @@ export function openMeetingModal() {
 
         if (durationH) durationH.value = "1";
         if (durationM) durationM.value = "0";
-
-        tryTriggerSlots(startInput, endInput);
     }
 
     modalBg.style.display = 'flex';
