@@ -328,11 +328,6 @@ body.profile-page {
     transition: all 0.15s ease;
 }
 
-.password-primary-btn {
-    background: var(--accent-color-desaturated);
-    color: var(--text-color);
-}
-
 .password-primary-btn:hover {
     background: #d5ecf4;
     border-color: var(--accent-color);
