@@ -157,7 +157,7 @@ body {
     background: var(--accent-color-desaturated);
 }
 
-.app-title {
+.calendar-title {
     font-size: 20px;
     font-weight: 600;
     color: var(--text-color);
@@ -380,5 +380,9 @@ body {
 
     .cal-root {
         min-height: calc(100vh - 210px);
+    }
+
+    .calendar-title {
+        display: none;
     }
 }

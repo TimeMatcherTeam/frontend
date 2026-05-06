@@ -577,7 +577,7 @@ document.addEventListener("slots:slotSelected", () => {
 document.getElementById("meetingConfirmBtn")?.addEventListener("click", async () => {
     const draft = readDraft();
     if (!draft?.meetingStart || !draft?.meetingEnd) {
-        alert("Выберите время встречи");
+        alert("Выберите диапазон встречи");
         return;
     }
 

@@ -45,7 +45,7 @@
             <!-- Календарь -->
             <div class="cal-root" id="calRoot">
                 <div class="cal-header">
-                    <span class="app-title">Календарь</span>
+                    <span class="calendar-title">Календарь</span>
                     <button class="nav-btn" id="prevBtn">&#8249;</button>
                     <button class="nav-btn" id="nextBtn">&#8250;</button>
                     <span class="week-label" id="weekLabel"></span>
@@ -120,7 +120,7 @@
                 </div>
 
                 <div class="meeting-row meeting-row-time">
-                    <label>Время:</label>
+                    <label>Диапазон:</label>
                     <div class="meeting-time-fields">
                         <input id="meetingStart" type="datetime-local">
                         <span>-</span>
@@ -162,7 +162,7 @@
             </div>
 
             <div class="meeting-users-popup-body">
-                <label for="meetingUsersSearchInput">Введите имя или email</label>
+                <label for="meetingUsersSearchInput">Введите никнейм или email</label>
                 <input id="meetingUsersSearchInput" type="search" placeholder="например, ivan или mail@example.com">
                 <div class="meeting-users-search-status" id="meetingUsersSearchStatus"></div>
 
@@ -192,7 +192,7 @@
             </div>
 
             <div class="meeting-users-popup-body">
-                <label for="meetingGroupsSearchInput">Введите название группы или имя участника</label>
+                <label for="meetingGroupsSearchInput">Введите название группы или никнейм участника</label>
                 <input id="meetingGroupsSearchInput" type="search" placeholder="например, разработка">
                 <div class="meeting-users-search-status" id="meetingGroupsSearchStatus"></div>
 
@@ -256,7 +256,7 @@
                 <input type="email" id="email" placeholder="Email" class="big-input" required>
             </div>
             <div class="big-input-wrapper" id="usernameWrapper" style="display:none">
-                <input type="text" id="username" placeholder="Имя" class="big-input">
+                <input type="text" id="username" placeholder="Никнейм" class="big-input">
             </div>
             <div class="big-input-wrapper password-input">
                 <input type="password" id="password" placeholder="Пароль" class="big-input" required>

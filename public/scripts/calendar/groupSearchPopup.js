@@ -184,7 +184,7 @@ async function runSearch() {
         allGroupsBlock?.render(groups);
 
         if (searchText.length < MIN_SEARCH_LENGTH) {
-            renderStatus(`Введите название группы или имя участника.`);
+            renderStatus(`Введите название группы или никнейм участника.`);
         } else {
             renderStatus(filteredGroups.length > 0 ? `Найдено: ${filteredGroups.length}` : "Совпадений нет");
         }

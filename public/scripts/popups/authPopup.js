@@ -63,7 +63,7 @@ authForm.addEventListener("submit", async (event) => {
 
   if (!isLogin && !usernameInput.value) {
     errorDiv.style.display = "";
-    errorDiv.textContent = "Введите имя пользователя";
+    errorDiv.textContent = "Введите никнейм";
     return;
   }
   try {
