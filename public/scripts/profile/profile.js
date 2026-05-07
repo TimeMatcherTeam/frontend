@@ -1,6 +1,7 @@
 import { API_URL } from "../requests.js";
 import { getCookie, getToken } from "../jwtUtils.js";
 import { createUserGroupsBlock } from "../calendar/components/userGroupsBlock.js";
+import { initEditGroupPopup, openEditGroupPopup } from "./editGroupPopup.js";
 import { logout } from "../auth.js";
 
 function getCurrentUserId() {
@@ -97,7 +98,10 @@ async function loadGroups() {
         
         if (groupsHost) {
             const groupsBlock = createUserGroupsBlock(groupsHost, null);
-            groupsBlock.render(Array.isArray(groups) ? groups : []);
+            // provide edit handler via callbacks
+            groupsBlock.render(Array.isArray(groups) ? groups : [], { onEditGroup: (g) => openEditGroupPopup(g) });
+            // ensure edit popup is initialized
+            initEditGroupPopup();
         }
     } catch (error) {
         console.error("Ошибка при загрузке групп:", error);
