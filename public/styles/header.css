@@ -1,4 +1,10 @@
-*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+*,
+*::before,
+*::after {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
 
 .page-header {
     position: sticky;
@@ -47,6 +53,11 @@
     height: 32px;
 }
 
+
+.show-mini-calendar-button {
+    display: none;
+}
+
 @media (max-width: 900px) {
     .header-link-icon {
         display: block;
@@ -54,5 +65,23 @@
 
     .header-link-text {
         display: none;
+    }
+
+    .mini-calendar-overlay {
+        display: none;
+        position: fixed;
+        width: 100%;
+        height: 100%;
+        inset: 0;
+        background-color: rgba(0, 0, 0, 0.55);
+        backdrop-filter: blur(4px);
+        justify-content: center;
+        align-items: center;
+        z-index: 1000;
+    }
+
+    .show-mini-calendar-button {
+        display: block;
+        padding: 0px 18px;
     }
 }

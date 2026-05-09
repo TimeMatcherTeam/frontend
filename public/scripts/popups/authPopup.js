@@ -85,7 +85,7 @@ cancelBtn.addEventListener("click", () => {
 
 export function showAuthForm() {
   if (!JWT) {
-    authOverlay.style.display = "";
+    authOverlay.style.display = "flex";
   }
 }
 

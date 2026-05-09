@@ -1,70 +1,90 @@
-import { dateKey,} from "./utils.js";
-import { HOUR_H} from "./constants.js";
+import { dateKey } from "./utils.js";
+import { HOUR_H } from "./constants.js";
 import { state } from "./state.js";
 import { buildHeader } from "./calendarHeader.js";
-import { buildTimeCol, buildGrid, renderEvents, renderNowLine } from "./grid.js";
+import {
+    buildTimeCol,
+    buildGrid,
+    renderEvents,
+    renderNowLine,
+} from "./grid.js";
 import { openModal, closeModal, saveEvent } from "./slotModal.js";
 import { hideTooltip } from "./tooltip.js";
-import { DeleteSlot, GetCalendarSlots, mapSlotResponseToCalendarEvent } from "./slotsRequests.js";
+import {
+    DeleteSlot,
+    GetCalendarSlots,
+    mapSlotResponseToCalendarEvent,
+} from "./slotsRequests.js";
 import { initMeetingModal, openMeetingModal } from "./meetingModal.js";
 import { initMiniCalendar, renderMiniCalendar } from "./miniCalendar.js";
 
-
-document.getElementById('prevBtn').onclick = async () => {
+document.getElementById("prevBtn").onclick = async () => {
     state.weekOffset--;
     await buildAll();
 };
 
-document.getElementById('nextBtn').onclick = async () => {
+document.getElementById("nextBtn").onclick = async () => {
     state.weekOffset++;
     await buildAll();
 };
 
-document.getElementById('todayBtn').onclick = async () => {
+document.getElementById("todayBtn").onclick = async () => {
     state.weekOffset = 0;
     await buildAll();
 };
 
-document.getElementById('addBtn').onclick = e => {
+document.getElementById("addBtn").onclick = (e) => {
     e.stopPropagation();
-    document.getElementById('createDropdown').classList.toggle('open');
+    document.getElementById("createDropdown").classList.toggle("open");
 };
 
-document.getElementById('actionEvent').onclick = () => {
-    document.getElementById('createDropdown').classList.remove('open');
+document.getElementById("actionEvent").onclick = () => {
+    document.getElementById("createDropdown").classList.remove("open");
     openModal();
 };
 
-document.getElementById('actionMeeting').onclick = () => {
-    document.getElementById('createDropdown').classList.remove('open');
+document.getElementById("actionMeeting").onclick = () => {
+    document.getElementById("createDropdown").classList.remove("open");
     openMeetingModal();
 };
 
-document.getElementById('saveBtn').onclick = saveEvent;
-document.getElementById('cancelBtn').onclick = closeModal;
-document.getElementById('modalClose').onclick = closeModal;
+document.getElementById("saveBtn").onclick = saveEvent;
+document.getElementById("cancelBtn").onclick = closeModal;
+document.getElementById("modalClose").onclick = closeModal;
 
-document.getElementById('modalBg').onclick = e => {
-    if (e.target === document.getElementById('modalBg')) closeModal();
+document.getElementById("modalBg").onclick = (e) => {
+    if (e.target === document.getElementById("modalBg")) closeModal();
 };
 
-document.getElementById('evName').addEventListener('keydown', e => {
-    if (e.key === 'Enter')  saveEvent();
-    if (e.key === 'Escape') closeModal();
+document.getElementById("evName").addEventListener("keydown", (e) => {
+    if (e.key === "Enter") saveEvent();
+    if (e.key === "Escape") closeModal();
+});
+
+const showMiniCalendar = document.getElementById("showMiniCalendar");
+const miniCalendarOverlay = document.getElementById("miniCalendarOverlay");
+showMiniCalendar.addEventListener("click", (event) => {
+    miniCalendarOverlay.style.display = "flex";
+});
+
+miniCalendarOverlay.addEventListener("click", (event) => {
+    if (event.target === miniCalendarOverlay) {
+        miniCalendarOverlay.style.display = "none";
+    }
 });
 
 function isGuid(value) {
     return typeof value === "string" && /^[0-9a-fA-F-]{36}$/.test(value);
 }
 
-document.getElementById('ttDel').onclick = async () => {
+document.getElementById("ttDel").onclick = async () => {
     if (!state.tooltipEv) return;
 
     try {
         if (isGuid(state.tooltipEv.id)) {
             await DeleteSlot(state.tooltipEv.id);
         }
-        state.events = state.events.filter(e => e.id !== state.tooltipEv.id);
+        state.events = state.events.filter((e) => e.id !== state.tooltipEv.id);
         hideTooltip();
         renderEvents();
     } catch (error) {
@@ -72,7 +92,7 @@ document.getElementById('ttDel').onclick = async () => {
     }
 };
 
-document.getElementById('ttEdit').onclick = () => {
+document.getElementById("ttEdit").onclick = () => {
     if (state.tooltipEv) {
         const ev = state.tooltipEv;
         hideTooltip();
@@ -80,11 +100,12 @@ document.getElementById('ttEdit').onclick = () => {
     }
 };
 
-document.addEventListener('click', e => {
-    if (!e.target.closest('.create-dropdown')) {
-        document.getElementById('createDropdown').classList.remove('open');
+document.addEventListener("click", (e) => {
+    if (!e.target.closest(".create-dropdown")) {
+        document.getElementById("createDropdown").classList.remove("open");
     }
-    if (!e.target.closest('.ev-tooltip') && !e.target.closest('.event-block')) hideTooltip();
+    if (!e.target.closest(".ev-tooltip") && !e.target.closest(".event-block"))
+        hideTooltip();
 });
 
 function getRequestedPeriodByWeekOffset() {
@@ -98,7 +119,7 @@ function getRequestedPeriodByWeekOffset() {
 
     return {
         startIso: weekStart.toISOString(),
-        endIso: weekEnd.toISOString()
+        endIso: weekEnd.toISOString(),
     };
 }
 
@@ -106,10 +127,14 @@ async function loadSlotsFromDb() {
     try {
         const period = getRequestedPeriodByWeekOffset();
         const slots = await GetCalendarSlots(period.startIso, period.endIso);
-        state.events = slots.map(slot => mapSlotResponseToCalendarEvent(slot));
+        state.events = slots.map((slot) =>
+            mapSlotResponseToCalendarEvent(slot)
+        );
     } catch (error) {
         const message = String(error?.message || "").toLowerCase();
-        const authError = message.includes("авторизац") || message.includes("отсутствует userid");
+        const authError =
+            message.includes("авторизац") ||
+            message.includes("отсутствует userid");
         if (!authError) {
             console.error(error);
         }
@@ -132,7 +157,10 @@ initMiniCalendar(() => {
 
 /* Scroll to current hour */
 const now = new Date();
-document.getElementById('calBody').scrollTop = Math.max((now.getHours() - 1) * HOUR_H, 0);
+document.getElementById("calBody").scrollTop = Math.max(
+    (now.getHours() - 1) * HOUR_H,
+    0
+);
 
 /* Update now-line every minute */
 setInterval(renderNowLine, 60000);

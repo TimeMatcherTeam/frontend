@@ -17,7 +17,7 @@
   --disabled-text-color: #8d98a8;
   --overlay-color: rgba(0, 0, 0, 0.55);
 
-  --border-radius: 10px;
+  --border-radius: 20px;
 
   font-family: 'Monsterrat', sans-serif;
   color: var(--text-color);
@@ -52,7 +52,6 @@
   inset: 0;
   background-color: rgba(0, 0, 0, 0.55);
   backdrop-filter: blur(4px);
-  display: flex;
   justify-content: center;
   align-items: center;
   z-index: 1000;

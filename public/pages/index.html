@@ -44,8 +44,9 @@
     <div class="page-shell">
         <main class="page-main">
             <aside class="calendar-sidebar">
-                <div class="mini-calendar-box" id="miniCalendarBox"></div>
-
+                <div class="mini-calendar-overlay" id="miniCalendarOverlay">
+                    <div class="mini-calendar-box" id="miniCalendarBox"></div>
+                </div>
                 <div class="create-dropdown" id="createDropdown">
                     <button class="add-btn" id="addBtn">Создать <span class="add-caret">&#9662;</span></button>
                     <div class="create-menu" id="createMenu">
@@ -54,6 +55,7 @@
                         <button class="create-item" id="actionGroup" type="button">группа</button>
                     </div>
                 </div>
+                <button class="show-mini-calendar-button action-button" id="showMiniCalendar">Выбрать неделю</button>
             </aside>
 
             <!-- Календарь -->
