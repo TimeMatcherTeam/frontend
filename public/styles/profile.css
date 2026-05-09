@@ -164,7 +164,7 @@ body.profile-page {
     display: none;
 }
 
-@media (max-width: 980px) {
+@media (max-width: 900px) {
     .profile-shell {
         width: min(1240px, calc(100% - 20px));
     }

@@ -1,7 +1,7 @@
 import { dateKey,} from "./utils.js";
 import { HOUR_H} from "./constants.js";
 import { state } from "./state.js";
-import { buildHeader } from "./header.js";
+import { buildHeader } from "./calendarHeader.js";
 import { buildTimeCol, buildGrid, renderEvents, renderNowLine } from "./grid.js";
 import { openModal, closeModal, saveEvent } from "./slotModal.js";
 import { hideTooltip } from "./tooltip.js";

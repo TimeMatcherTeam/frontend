@@ -2,7 +2,7 @@ import { API_URL } from "../requests.js";
 import { getCookie, getToken } from "../jwtUtils.js";
 import { HOUR_H, COLORS, EVENT_CLASS_NAMES } from "./constants.js";
 import { state } from "./state.js";
-import { buildHeader } from "./header.js";
+import { buildHeader } from "./calendarHeader.js";
 import { initMiniCalendar, renderMiniCalendar } from "./miniCalendar.js";
 import { getWeekStart, dateKey, fmt2, eventBorderColor } from "./utils.js";
 import { openTimePickerPopup, restoreSelectedTime } from "./timePickerPopup.js";

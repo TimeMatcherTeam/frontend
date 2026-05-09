@@ -166,7 +166,9 @@ body {
 }
 
 .nav-btn {
-    width: 32px; height: 32px;
+    width: 32px; 
+    height: 32px;
+    min-width: 32px;
     border-radius: 50%;
     border: 1px solid var(--text-color);
     background: transparent;
@@ -357,7 +359,7 @@ body {
 .event-block .ev-name { font-weight: 600; font-size: 11px; display: block; }
 .event-block .ev-time { font-weight: 400; font-size: 10px; opacity: 0.85; }
 
-@media (max-width: 980px) {
+@media (max-width: 900px) {
     body {
         height: auto;
         min-height: 100vh;
@@ -384,5 +386,9 @@ body {
 
     .calendar-title {
         display: none;
+    }
+
+    .week-label {
+        min-width: 120px;
     }
 }
