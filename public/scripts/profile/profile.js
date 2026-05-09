@@ -114,11 +114,6 @@ async function loadProfile() {
         const user = await requestJson(`${API_URL}/users/${userId}`);
         setProfileForm(user);
 
-        const { profileLink } = getElements();
-        if (profileLink && user?.userName) {
-            profileLink.textContent = user.userName;
-        }
-
         await loadGroups();
         renderStatus("Данные профиля загружены");
     } catch (error) {

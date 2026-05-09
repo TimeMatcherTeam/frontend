@@ -40,3 +40,19 @@
 .page-link:hover {
     color: var(--accent-color);
 }
+
+.header-link-icon {
+    display: none;
+    width: 32px;
+    height: 32px;
+}
+
+@media (max-width: 900px) {
+    .header-link-icon {
+        display: block;
+    }
+
+    .header-link-text {
+        display: none;
+    }
+}
