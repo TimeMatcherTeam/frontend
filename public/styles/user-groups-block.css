@@ -66,6 +66,30 @@
     background: var(--element-bg-color);
 }
 
+.user-groups-block-actions {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.user-group-action-icon {
+    width: 20px;
+    height: 20px;
+    cursor: pointer;
+    opacity: 0.85;
+}
+
+.user-group-action-icon:hover { opacity: 1; }
+
+.create-group-user-remove {
+    margin-left: 8px;
+    background: transparent;
+    border: none;
+    color: var(--text-color);
+    font-size: 14px;
+    cursor: pointer;
+}
+
 .user-groups-block-empty {
     padding: 10px 12px;
     border: 1px dashed var(--element-color);

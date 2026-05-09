@@ -8,6 +8,11 @@ let popupInitialized = false;
 let searchTimer = null;
 let selectedUsers = [];
 
+function resetSelectedUsers() {
+    selectedUsers = [];
+    renderSelectedUsers();
+}
+
 function getCurrentUserId() {
     return getCookie("userId") || null;
 }
@@ -257,10 +262,14 @@ function scheduleSearch() {
     }, 250);
 }
 
-function openPopup() {
+function openPopup(options = {}) {
     const { popupBg, searchInput } = getElements();
     if (!popupBg) {
         return;
+    }
+
+    if (!options.preserveSelection) {
+        resetSelectedUsers();
     }
 
     popupBg.style.display = "flex";
@@ -274,8 +283,8 @@ function openPopup() {
     }
 }
 
-export function openMeetingUsersPopup() {
-    openPopup();
+export function openMeetingUsersPopup(options = {}) {
+    openPopup(options);
 }
 
 export function closeMeetingUsersPopup() {
@@ -290,6 +299,10 @@ export function closeMeetingUsersPopup() {
 
 export function addMeetingUsers(users) {
     return addUsersToSelection(users);
+}
+
+export function resetMeetingSelectedUsers() {
+    resetSelectedUsers();
 }
 
 export function getMeetingSelectedUsers() {
