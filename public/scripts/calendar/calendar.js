@@ -61,18 +61,6 @@ document.getElementById("evName").addEventListener("keydown", (e) => {
     if (e.key === "Escape") closeModal();
 });
 
-const showMiniCalendar = document.getElementById("showMiniCalendar");
-const miniCalendarOverlay = document.getElementById("miniCalendarOverlay");
-showMiniCalendar.addEventListener("click", (event) => {
-    miniCalendarOverlay.style.display = "flex";
-});
-
-miniCalendarOverlay.addEventListener("click", (event) => {
-    if (event.target === miniCalendarOverlay) {
-        miniCalendarOverlay.style.display = "none";
-    }
-});
-
 function isGuid(value) {
     return typeof value === "string" && /^[0-9a-fA-F-]{36}$/.test(value);
 }

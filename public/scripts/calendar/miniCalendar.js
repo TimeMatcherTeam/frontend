@@ -169,3 +169,15 @@ export function initMiniCalendar(onSelect) {
     visibleMonth.setDate(1);
     renderMiniCalendar();
 }
+
+const showMiniCalendar = document.getElementById("showMiniCalendar");
+const miniCalendarOverlay = document.getElementById("miniCalendarOverlay");
+showMiniCalendar.addEventListener("click", (event) => {
+    miniCalendarOverlay.style.display = "flex";
+});
+
+miniCalendarOverlay.addEventListener("click", (event) => {
+    if (event.target === miniCalendarOverlay) {
+        miniCalendarOverlay.style.display = "none";
+    }
+});

@@ -41,7 +41,9 @@
     <div class="page-shell">
         <main class="page-main">
             <aside class="calendar-sidebar">
-                <div class="mini-calendar-box" id="miniCalendarBox"></div>
+                <div class="mini-calendar-overlay" id="miniCalendarOverlay">
+                    <div class="mini-calendar-box" id="miniCalendarBox"></div>
+                </div>
 
                 <div class="meeting-participants-box">
                     <div class="meeting-participants-title">Участники встречи</div>
@@ -60,6 +62,7 @@
                     <button type="button" class="meeting-sidebar-btn action-button" id="meetingSelectTimeBtn">Выбрать время</button>
                     <button type="button" class="meeting-sidebar-btn action-button" id="meetingConfirmBtn" disabled>Подтвердить</button>
                 </div>
+                <button class="show-mini-calendar-button action-button" id="showMiniCalendar">Выбрать неделю</button>
             </aside>
 
             <div class="cal-root" id="calRoot">
