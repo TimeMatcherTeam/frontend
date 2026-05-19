@@ -1,5 +1,5 @@
 import { loginAuth, registerAuth } from "../auth.js";
-import { JWT } from "../globals.js";
+import { getToken } from "../jwtUtils.js";
 
 let isLogin = true;
 
@@ -84,7 +84,8 @@ cancelBtn.addEventListener("click", () => {
 });
 
 export function showAuthForm() {
-  if (!JWT) {
+    let token = getToken()
+  if (!token) {
     authOverlay.style.display = "flex";
   }
 }
