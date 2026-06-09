@@ -205,3 +205,44 @@
 }
 
 .tt-del:hover { background: var(--element-bg-color); }
+.meeting-edit-popup { max-width: 440px; width: 100%; }
+
+.meeting-edit-time-info {
+    font-size: 14px;
+    color: var(--text-secondary-color, #8a9ab0);
+    padding: 6px 0;
+}
+
+.meeting-edit-participant-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 8px 0;
+    border-bottom: 1px solid var(--element-color);
+    gap: 8px;
+}
+
+.meeting-edit-participant-row:last-child { border-bottom: none; }
+
+.meeting-edit-participant-info { display: flex; flex-direction: column; gap: 2px; }
+
+.meeting-edit-participant-name { font-size: 14px; color: var(--text-color); font-weight: 500; }
+
+.meeting-edit-participant-email { font-size: 12px; color: var(--text-secondary-color, #8a9ab0); }
+
+.meeting-edit-creator-badge {
+    font-size: 11px;
+    font-weight: 600;
+    color: var(--accent-color, #5b8dee);
+    background: rgba(91, 141, 238, 0.12);
+    border-radius: 6px;
+    padding: 2px 8px;
+    white-space: nowrap;
+    flex-shrink: 0;
+}
+
+.meeting-edit-participants-empty {
+    font-size: 13px;
+    color: var(--text-secondary-color, #8a9ab0);
+    padding: 8px 0;
+}

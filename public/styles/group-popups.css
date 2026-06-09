@@ -147,10 +147,40 @@
     padding: 8px 12px;
     font-size: 13px;
     cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 8px;
 }
 
 .create-group-user-chip:hover {
     background: var(--element-bg-color);
+}
+
+.create-group-user-creator-badge {
+    font-size: 11px;
+    font-weight: 600;
+    color: var(--accent-color, #5b8dee);
+    background: rgba(91, 141, 238, 0.12);
+    border-radius: 6px;
+    padding: 2px 8px;
+    white-space: nowrap;
+    flex-shrink: 0;
+}
+
+.create-group-user-remove {
+    background: none;
+    border: none;
+    color: var(--text-secondary-color, #8a9ab0);
+    cursor: pointer;
+    font-size: 16px;
+    line-height: 1;
+    padding: 0 2px;
+    flex-shrink: 0;
+}
+
+.create-group-user-remove:hover {
+    color: var(--red-accent, #e05a5a);
 }
 
 .create-group-status {

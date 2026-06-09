@@ -1,6 +1,7 @@
 import { dateKey } from "./utils.js";
 import { HOUR_H } from "./constants.js";
 import { state } from "./state.js";
+import { API_URL } from "../requests.js";
 import { buildHeader } from "./calendarHeader.js";
 import {
     buildTimeCol,
@@ -17,6 +18,8 @@ import {
 } from "./slotsRequests.js";
 import { initMeetingModal, openMeetingModal } from "./meetingModal.js";
 import { initMiniCalendar, renderMiniCalendar } from "./miniCalendar.js";
+import { initMeetingEditPopup, openMeetingEditPopup } from "./meetingEditPopup.js";
+import { getCookie, getToken } from "../jwtUtils.js";
 
 document.getElementById("prevBtn").onclick = async () => {
     state.weekOffset--;
@@ -67,23 +70,54 @@ function isGuid(value) {
 
 document.getElementById("ttDel").onclick = async () => {
     if (!state.tooltipEv) return;
+    const ev = state.tooltipEv;
+
+    if (ev.isMeeting) {
+        const currentUserId = getCookie("userId");
+        try {
+            const token = getToken();
+            const details = await fetch(`${API_URL}/meetings/${ev.meetingId}`, {
+                headers: { Authorization: `Bearer ${token}` }
+            }).then(r => r.json());
+
+            const organizer = details?.participants?.find(p => p.role === 0 || p.role === "Organizer");
+            const creatorId = organizer?.userId;
+
+            if (!creatorId || String(creatorId) !== String(currentUserId)) {
+                alert("Удалить встречу может только её организатор.");
+                return;
+            }
+
+            await fetch(`${API_URL}/meetings/${ev.meetingId}`, {
+                method: "DELETE",
+                headers: { Authorization: `Bearer ${token}` }
+            });
+
+            state.events = state.events.filter(e => e.meetingId !== ev.meetingId);
+            hideTooltip();
+            renderEvents();
+        } catch (error) {
+            alert(error.message);
+            console.error(error);
+        }
+        return;
+    }
 
     try {
-        if (isGuid(state.tooltipEv.id)) {
-            await DeleteSlot(state.tooltipEv.id);
-        }
-        state.events = state.events.filter((e) => e.id !== state.tooltipEv.id);
+        if (isGuid(ev.id)) await DeleteSlot(ev.id);
+        state.events = state.events.filter((e) => e.id !== ev.id);
         hideTooltip();
         renderEvents();
-    } catch (error) {
-        //alert(error?.message || "Не удалось удалить событие");
-    }
+    } catch (error) {}
 };
 
 document.getElementById("ttEdit").onclick = () => {
-    if (state.tooltipEv) {
-        const ev = state.tooltipEv;
-        hideTooltip();
+    if (!state.tooltipEv) return;
+    const ev = state.tooltipEv;
+    hideTooltip();
+    if (ev.isMeeting) {
+        openMeetingEditPopup(ev);
+    } else {
         openModal(ev);
     }
 };
@@ -139,6 +173,7 @@ async function buildAll() {
 }
 await buildAll();
 initMeetingModal();
+initMeetingEditPopup();
 initMiniCalendar(() => {
     void buildAll();
 });

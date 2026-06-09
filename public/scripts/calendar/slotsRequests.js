@@ -134,7 +134,9 @@ export function mapSlotResponseToCalendarEvent(slot, color = undefined) {
 		end: `${fmt2(end.getHours())}:${fmt2(end.getMinutes())}`,
 		color: resolvedColor,
 		abilityId: slot.ability?.id || null,
-		abilityName
+		abilityName,
+		isMeeting: !!slot.meetingId,
+		meetingId: slot.meetingId || null,
 	};
 }
 

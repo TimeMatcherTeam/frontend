@@ -6,6 +6,7 @@ let popupInitialized = false;
 let currentGroup = null;
 let originalParticipantIds = [];
 let selectedUsers = [];
+let currentGroupCreatorId = null;
 
 function normalizeParticipant(participant) {
     if (!participant) {
@@ -198,16 +199,28 @@ function renderSelectedUsers() {
     selectedUsers.forEach(user => {
         const chip = document.createElement("div");
         chip.className = "create-group-user-chip";
-        chip.textContent = `${user.userName} · ${user.email}`;
-        const removeBtn = document.createElement("button");
-        removeBtn.type = "button";
-        removeBtn.textContent = "×";
-        removeBtn.className = "create-group-user-remove";
-        removeBtn.addEventListener("click", () => {
-            selectedUsers = selectedUsers.filter(u => String(u.id) !== String(user.id));
-            renderSelectedUsers();
-        });
-        chip.appendChild(removeBtn);
+
+        const label = document.createElement("span");
+        label.textContent = `${user.userName} · ${user.email}`;
+        chip.appendChild(label);
+
+        const isCreator = currentGroupCreatorId && String(user.id) === String(currentGroupCreatorId);
+        if (isCreator) {
+            const badge = document.createElement("span");
+            badge.className = "create-group-user-creator-badge";
+            badge.textContent = "создатель";
+            chip.appendChild(badge);
+        } else {
+            const removeBtn = document.createElement("button");
+            removeBtn.type = "button";
+            removeBtn.textContent = "×";
+            removeBtn.className = "create-group-user-remove";
+            removeBtn.addEventListener("click", () => {
+                selectedUsers = selectedUsers.filter(u => String(u.id) !== String(user.id));
+                renderSelectedUsers();
+            });
+            chip.appendChild(removeBtn);
+        }
         host.appendChild(chip);
     });
 }
@@ -221,6 +234,8 @@ export function initEditGroupPopup() {
 export function openEditGroupPopup(group) {
     initEditGroupPopup();
     currentGroup = group;
+    const organizer = group?.participants?.find(p => p.role === 0 || p.role === "Organizer");
+    currentGroupCreatorId = organizer?.userId ?? null;
     selectedUsers = Array.isArray(group?.participants)
         ? group.participants.map(normalizeParticipant).filter(Boolean)
         : [];
@@ -234,7 +249,7 @@ export function openEditGroupPopup(group) {
     }
     // determine whether current user is likely the group creator
     const currentUserId = getCookie("userId");
-    const isCreator = selectedUsers.length > 0 && String(selectedUsers[0].id) === String(currentUserId);
+    const isCreator = currentGroupCreatorId && String(currentGroupCreatorId) === String(currentUserId);
 
     // adjust delete button semantics based on role
     const deleteBtn = document.getElementById("editGroupDeleteBtn");
@@ -269,6 +284,7 @@ export function closeEditGroupPopup() {
     if (!bg) return;
     bg.style.display = "none";
     currentGroup = null;
+    currentGroupCreatorId = null;
     originalParticipantIds = [];
     selectedUsers = [];
 }
