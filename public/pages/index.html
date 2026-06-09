@@ -110,6 +110,38 @@
         </div>
     </div>
 
+    <div class="overlay" id="meetingEditPopupBg" style="display:none">
+        <div class="create-group-popup meeting-edit-popup">
+            <div class="create-group-popup-header">
+                <div class="create-group-popup-title">Редактирование встречи</div>
+                <button type="button" class="create-group-popup-close" id="meetingEditCloseBtn">×</button>
+            </div>
+            <div class="create-group-popup-body">
+                <div class="create-group-field">
+                    <label for="meetingEditNameInput">Название встречи:</label>
+                    <input type="text" id="meetingEditNameInput">
+                </div>
+                <div class="create-group-field">
+                    <label for="meetingEditCommentInput">Комментарий:</label>
+                    <input type="text" id="meetingEditCommentInput">
+                </div>
+                <div class="create-group-field">
+                    <label>Время:</label>
+                    <div id="meetingEditTimeInfo" class="meeting-edit-time-info"></div>
+                </div>
+                <div class="create-group-section">
+                    <div class="create-group-section-title">Участники</div>
+                    <div id="meetingEditParticipantsList"></div>
+                </div>
+                <div class="create-group-status" id="meetingEditStatus"></div>
+            </div>
+            <div class="create-group-popup-footer">
+                <button type="button" class="create-group-primary-btn action-button" id="meetingEditSaveBtn">Сохранить</button>
+                <button type="button" class="create-group-primary-btn cancel-button" id="meetingEditCancelBtn">Отмена</button>
+            </div>
+        </div>
+    </div>
+
     <!-- Всплывающая подсказка события -->
     <div class="ev-tooltip" id="evTooltip" style="display:none">
         <div class="tt-title" id="ttTitle"></div>

@@ -1,8 +1,10 @@
 import { API_URL } from "../requests.js";
 import { getCookie, getToken } from "../jwtUtils.js";
+import { state } from "./state.js";
+import { renderEvents } from "./grid.js";
 
 let popupInitialized = false;
-let currentMeeting = null; // the calendar event object
+let currentMeeting = null;
 
 function getAuthHeaders() {
     const token = getToken();
@@ -95,114 +97,19 @@ function renderParticipants(participants, creatorId) {
     });
 }
 
-function createPopupDom() {
-    if (document.getElementById("meetingEditPopupBg")) return;
-
-    const bg = document.createElement("div");
-    bg.className = "overlay";
-    bg.id = "meetingEditPopupBg";
-    bg.style.display = "none";
-
-    const popup = document.createElement("div");
-    popup.className = "create-group-popup meeting-edit-popup";
-
-    // Header
-    const header = document.createElement("div");
-    header.className = "create-group-popup-header";
-    const title = document.createElement("div");
-    title.className = "create-group-popup-title";
-    title.textContent = "Редактирование встречи";
-    const closeBtn = document.createElement("button");
-    closeBtn.type = "button";
-    closeBtn.className = "create-group-popup-close";
-    closeBtn.id = "meetingEditCloseBtn";
-    closeBtn.textContent = "×";
-    header.append(title, closeBtn);
-
-    // Body
-    const body = document.createElement("div");
-    body.className = "create-group-popup-body";
-
-    // Name field
-    const nameField = document.createElement("div");
-    nameField.className = "create-group-field";
-    const nameLabel = document.createElement("label");
-    nameLabel.htmlFor = "meetingEditNameInput";
-    nameLabel.textContent = "Название встречи:";
-    const nameInput = document.createElement("input");
-    nameInput.type = "text";
-    nameInput.id = "meetingEditNameInput";
-    nameField.append(nameLabel, nameInput);
-
-    // Comment field
-    const commentField = document.createElement("div");
-    commentField.className = "create-group-field";
-    const commentLabel = document.createElement("label");
-    commentLabel.htmlFor = "meetingEditCommentInput";
-    commentLabel.textContent = "Комментарий:";
-    const commentInput = document.createElement("input");
-    commentInput.type = "text";
-    commentInput.id = "meetingEditCommentInput";
-    commentField.append(commentLabel, commentInput);
-
-    // Time info (read-only)
-    const timeField = document.createElement("div");
-    timeField.className = "create-group-field";
-    const timeLabel = document.createElement("label");
-    timeLabel.textContent = "Время:";
-    const timeInfo = document.createElement("div");
-    timeInfo.id = "meetingEditTimeInfo";
-    timeInfo.className = "meeting-edit-time-info";
-    timeField.append(timeLabel, timeInfo);
-
-    // Participants section
-    const section = document.createElement("div");
-    section.className = "create-group-section";
-    const sectionTitle = document.createElement("div");
-    sectionTitle.className = "create-group-section-title";
-    sectionTitle.textContent = "Участники";
-    const participantsList = document.createElement("div");
-    participantsList.id = "meetingEditParticipantsList";
-    section.append(sectionTitle, participantsList);
-
-    const status = document.createElement("div");
-    status.className = "create-group-status";
-    status.id = "meetingEditStatus";
-
-    body.append(nameField, commentField, timeField, section, status);
-
-    // Footer
-    const footer = document.createElement("div");
-    footer.className = "create-group-popup-footer";
-    const saveBtn = document.createElement("button");
-    saveBtn.type = "button";
-    saveBtn.className = "create-group-primary-btn action-button";
-    saveBtn.id = "meetingEditSaveBtn";
-    saveBtn.textContent = "Сохранить";
-    const cancelBtn = document.createElement("button");
-    cancelBtn.type = "button";
-    cancelBtn.className = "create-group-primary-btn cancel-button create-group-cancel-btn";
-    cancelBtn.id = "meetingEditCancelBtn";
-    cancelBtn.textContent = "Отмена";
-    footer.append(saveBtn, cancelBtn);
-
-    popup.append(header, body, footer);
-    bg.appendChild(popup);
-    document.body.appendChild(bg);
-
-    // Events
-    document.getElementById("meetingEditCloseBtn").addEventListener("click", closeMeetingEditPopup);
-    document.getElementById("meetingEditCancelBtn").addEventListener("click", closeMeetingEditPopup);
-    bg.addEventListener("click", e => { if (e.target === bg) closeMeetingEditPopup(); });
-
-    document.getElementById("meetingEditSaveBtn").addEventListener("click", async () => {
-        await saveMeetingChanges();
-    });
-}
 
 export function initMeetingEditPopup() {
     if (popupInitialized) return;
-    createPopupDom();
+
+    document.getElementById("meetingEditCloseBtn").addEventListener("click", closeMeetingEditPopup);
+    document.getElementById("meetingEditCancelBtn").addEventListener("click", closeMeetingEditPopup);
+    document.getElementById("meetingEditSaveBtn").addEventListener("click", async () => {
+        await saveMeetingChanges();
+    });
+    document.getElementById("meetingEditPopupBg").addEventListener("click", e => {
+        if (e.target === document.getElementById("meetingEditPopupBg")) closeMeetingEditPopup();
+    });
+
     popupInitialized = true;
 }
 
@@ -213,7 +120,6 @@ export async function openMeetingEditPopup(ev) {
     const bg = document.getElementById("meetingEditPopupBg");
     if (!bg) return;
 
-    // Fill fields from event
     const nameInput = document.getElementById("meetingEditNameInput");
     const commentInput = document.getElementById("meetingEditCommentInput");
     const timeInfo = document.getElementById("meetingEditTimeInfo");
@@ -225,7 +131,6 @@ export async function openMeetingEditPopup(ev) {
     renderStatus("Загружаем участников…");
     bg.style.display = "flex";
 
-    // Load full meeting details from API to get participants
     try {
         const targetId = ev.meetingId || ev.id;
         const details = await loadMeetingDetails(targetId);
@@ -233,8 +138,6 @@ export async function openMeetingEditPopup(ev) {
             ? details.participants
             : (Array.isArray(ev.participants) ? ev.participants : []);
         const creatorId = details?.creatorId || details?.organizerId || ev.creatorId;
-
-        // Update currentMeeting with fresh details
         currentMeeting = { ...ev, participants, creatorId: creatorId || ev.creatorId };
 
         if (nameInput && details?.name) nameInput.value = details.name;
@@ -245,7 +148,6 @@ export async function openMeetingEditPopup(ev) {
         renderParticipants(participants, creatorId);
         renderStatus("");
     } catch {
-        // Fallback: use data already in the event
         renderParticipants(ev.participants || [], ev.creatorId);
         renderStatus("");
     }
@@ -279,8 +181,12 @@ async function saveMeetingChanges() {
             body: JSON.stringify({ name, comment })
         });
         renderStatus("Изменения сохранены");
-        // Update event name in state if possible
-        if (currentMeeting) currentMeeting.name = name;
+        if (currentMeeting) {
+            state.events = state.events.map(e =>
+              e.meetingId === currentMeeting.meetingId ? { ...e, name, comment } : e
+            );
+            renderEvents();
+        }
         setTimeout(() => closeMeetingEditPopup(), 400);
     } catch (err) {
         renderStatus(err.message || "Не удалось сохранить изменения", true);
