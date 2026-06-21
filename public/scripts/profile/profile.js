@@ -1,4 +1,4 @@
-import { API_URL } from "../requests.js";
+import { API_URL, getAuthHeaders } from "../requests.js";
 import { getCookie, getToken } from "../jwtUtils.js";
 import { createUserGroupsBlock } from "../calendar/components/userGroupsBlock.js";
 import { initEditGroupPopup, openEditGroupPopup } from "./editGroupPopup.js";
@@ -13,17 +13,6 @@ function getCurrentUserId() {
     return userId;
 }
 
-function getAuthHeaders() {
-    const token = getToken();
-    if (!token) {
-        throw new Error("Необходима авторизация.");
-    }
-
-    return {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${token}`
-    };
-}
 
 async function requestJson(url, options = {}) {
     const response = await fetch(url, {

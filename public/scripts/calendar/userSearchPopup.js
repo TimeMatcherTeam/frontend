@@ -1,4 +1,4 @@
-import { API_URL } from "../requests.js";
+import { API_URL, getAuthHeaders } from "../requests.js";
 import { getCookie, getToken } from "../jwtUtils.js";
 
 const SEARCH_LIMIT = 8;
@@ -56,18 +56,6 @@ function addUsersToSelection(users) {
     }
 
     return changed;
-}
-
-function getAuthHeaders() {
-    const token = getToken();
-    if (!token) {
-        throw new Error("Необходима авторизация.");
-    }
-
-    return {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${token}`
-    };
 }
 
 async function requestJson(url) {

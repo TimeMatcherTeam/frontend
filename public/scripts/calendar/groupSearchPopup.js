@@ -1,4 +1,4 @@
-import { API_URL } from "../requests.js";
+import { API_URL, getAuthHeaders } from "../requests.js";
 import { getCookie, getToken } from "../jwtUtils.js";
 import { addMeetingUsers } from "./userSearchPopup.js";
 import { createUserGroupsBlock } from "./components/userGroupsBlock.js";
@@ -9,18 +9,6 @@ let popupInitialized = false;
 let groupsCache = null;
 let searchTimer = null;
 let allGroupsBlock = null;
-
-function getAuthHeaders() {
-    const token = getToken();
-    if (!token) {
-        throw new Error("Необходима авторизация.");
-    }
-
-    return {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${token}`
-    };
-}
 
 async function requestJson(url) {
     const response = await fetch(url, {

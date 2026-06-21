@@ -1,4 +1,4 @@
-import { API_URL } from "../requests.js";
+import { API_URL, getAuthHeaders } from "../requests.js";
 import { getCookie, getToken } from "../jwtUtils.js";
 import { dateKey, fmt2 } from "./utils.js";
 import { showAuthForm } from "../popups/authPopup.js";
@@ -39,17 +39,6 @@ function getCurrentUserId() {
 	return userId;
 }
 
-function getAuthHeaders() {
-	const token = getToken();
-	if (!token) {
-		showAuthForm()
-		throw new Error("Необходима авторизация.");
-	}
-	return {
-		"Content-Type": "application/json",
-		Authorization: `Bearer ${token}`
-	};
-}
 
 async function requestJson(url, options = {}) {
 	const response = await fetch(url, {

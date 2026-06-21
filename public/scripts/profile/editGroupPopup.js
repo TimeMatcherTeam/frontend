@@ -1,4 +1,4 @@
-import { API_URL } from "../requests.js";
+import { API_URL, getAuthHeaders } from "../requests.js";
 import { getCookie, getToken } from "../jwtUtils.js";
 import { openMeetingUsersPopup, addMeetingUsers, getMeetingSelectedUsers, resetMeetingSelectedUsers } from "../calendar/userSearchPopup.js";
 
@@ -25,11 +25,6 @@ function normalizeParticipant(participant) {
     };
 }
 
-function getAuthHeaders() {
-    const token = getToken();
-    if (!token) throw new Error("Необходима авторизация.");
-    return { "Content-Type": "application/json", Authorization: `Bearer ${token}` };
-}
 
 async function requestJson(url, options = {}) {
     const response = await fetch(url, { ...options, headers: { ...(options.headers || {}), ...getAuthHeaders() } });
