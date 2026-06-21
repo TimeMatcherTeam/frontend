@@ -2,6 +2,7 @@ import { API_URL, requestJson } from "../requests.js";
 import { getCookie, getToken } from "../jwtUtils.js";
 import { dateKey, fmt2 } from "./utils.js";
 import { showAuthForm } from "../popups/authPopup.js";
+import { getCurrentUserId } from "./utils.js";
 
 let cachedAbilities = null;
 
@@ -29,16 +30,6 @@ function getAbilityTypeByName(name) {
 export function colorByAbilityName(name) {
 	return getAbilityTypeByName(name) === ABILITY_TYPE.PARTIAL ? 1 : 0;
 }
-
-function getCurrentUserId() {
-	const userId = getCookie("userId");
-	if (!userId) {
-		showAuthForm();
-		throw new Error("Не удалось определить пользователя: отсутствует userId.");
-	}
-	return userId;
-}
-
 
 async function getAbilities() {
 	if (cachedAbilities) {

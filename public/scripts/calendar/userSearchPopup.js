@@ -1,5 +1,6 @@
 import { API_URL, requestJson } from "../requests.js";
 import { getCookie, getToken } from "../jwtUtils.js";
+import { getCurrentUserId } from "./utils.js";
 
 const SEARCH_LIMIT = 8;
 const MIN_SEARCH_LENGTH = 2;
@@ -13,9 +14,6 @@ function resetSelectedUsers() {
     renderSelectedUsers();
 }
 
-function getCurrentUserId() {
-    return getCookie("userId") || null;
-}
 
 function normalizeUser(user) {
     const id = user?.id ?? user?.userId;

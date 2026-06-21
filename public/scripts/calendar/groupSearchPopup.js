@@ -2,6 +2,7 @@ import { API_URL, requestJson } from "../requests.js";
 import { getCookie, getToken } from "../jwtUtils.js";
 import { addMeetingUsers } from "./userSearchPopup.js";
 import { createUserGroupsBlock } from "./components/userGroupsBlock.js";
+import { getCurrentUserId } from "./utils.js";
 
 const MIN_SEARCH_LENGTH = 1;
 
@@ -10,14 +11,6 @@ let groupsCache = null;
 let searchTimer = null;
 let allGroupsBlock = null;
 
-function getCurrentUserId() {
-    const userId = getCookie("userId");
-    if (!userId) {
-        throw new Error("Не удалось определить пользователя: отсутствует userId.");
-    }
-
-    return userId;
-}
 
 async function getGroups() {
     if (groupsCache) {

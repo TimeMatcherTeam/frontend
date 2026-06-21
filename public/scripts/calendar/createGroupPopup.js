@@ -1,18 +1,9 @@
 import { API_URL, requestJson } from "../requests.js";
-import { getCookie } from "../jwtUtils.js";
 import { getMeetingSelectedUsers, openMeetingUsersPopup } from "./userSearchPopup.js";
+import { getCurrentUserId } from "./utils.js";
 
 let popupInitialized = false;
 let selectedUsers = [];
-
-function getCurrentUserId() {
-    const userId = getCookie("userId");
-    if (!userId) {
-        throw new Error("Не удалось определить пользователя: отсутствует userId.");
-    }
-
-    return userId;
-}
 
 function getElements() {
     return {

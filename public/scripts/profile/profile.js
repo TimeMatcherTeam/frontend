@@ -3,15 +3,7 @@ import { getCookie, getToken } from "../jwtUtils.js";
 import { createUserGroupsBlock } from "../calendar/components/userGroupsBlock.js";
 import { initEditGroupPopup, openEditGroupPopup } from "./editGroupPopup.js";
 import { logout } from "../auth.js";
-
-function getCurrentUserId() {
-    const userId = getCookie("userId");
-    if (!userId) {
-        throw new Error("Не удалось определить пользователя: отсутствует userId.");
-    }
-
-    return userId;
-}
+import { getCurrentUserId } from "./utils.js";
 
 
 function getElements() {

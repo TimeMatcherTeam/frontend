@@ -1,3 +1,6 @@
+import { getCookie } from "../jwtUtils";
+import { showAuthForm } from "../popups/authPopup";
+
 export function fmt2(n) {
     return String(n).padStart(2, '0');
 }
@@ -32,4 +35,12 @@ export function hexToRgbA(hex, alpha){
         return 'rgba('+[(c>>16)&255, (c>>8)&255, c&255].join(',')+',1)';
     }
     throw new Error('Bad Hex');
+}
+export function getCurrentUserId() {
+    const userId = getCookie("userId");
+    if (!userId) {
+        //throw new Error("Не удалось определить пользователя: отсутствует userId.");
+        showAuthForm();
+    }
+    return userId;
 }
