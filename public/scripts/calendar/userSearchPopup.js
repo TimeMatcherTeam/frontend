@@ -1,4 +1,4 @@
-import { API_URL, getAuthHeaders } from "../requests.js";
+import { API_URL, requestJson } from "../requests.js";
 import { getCookie, getToken } from "../jwtUtils.js";
 
 const SEARCH_LIMIT = 8;
@@ -56,34 +56,6 @@ function addUsersToSelection(users) {
     }
 
     return changed;
-}
-
-async function requestJson(url) {
-    const response = await fetch(url, {
-        headers: getAuthHeaders()
-    });
-
-    if (!response.ok) {
-        let message = `Ошибка ${response.status}`;
-        try {
-            const error = await response.json();
-            message = error?.detail || error?.title || message;
-        } catch {
-            // Ignore non-json error body.
-        }
-        throw new Error(message);
-    }
-
-    if (response.status === 204) {
-        return null;
-    }
-
-    const contentType = response.headers.get("content-type") || "";
-    if (!contentType.includes("application/json")) {
-        return null;
-    }
-
-    return response.json();
 }
 
 async function getUsers(searchText) {

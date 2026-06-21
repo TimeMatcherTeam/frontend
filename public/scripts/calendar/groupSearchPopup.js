@@ -1,4 +1,4 @@
-import { API_URL, getAuthHeaders } from "../requests.js";
+import { API_URL, requestJson } from "../requests.js";
 import { getCookie, getToken } from "../jwtUtils.js";
 import { addMeetingUsers } from "./userSearchPopup.js";
 import { createUserGroupsBlock } from "./components/userGroupsBlock.js";
@@ -9,34 +9,6 @@ let popupInitialized = false;
 let groupsCache = null;
 let searchTimer = null;
 let allGroupsBlock = null;
-
-async function requestJson(url) {
-    const response = await fetch(url, {
-        headers: getAuthHeaders()
-    });
-
-    if (!response.ok) {
-        let message = `Ошибка ${response.status}`;
-        try {
-            const error = await response.json();
-            message = error?.detail || error?.title || message;
-        } catch {
-            // Ignore non-json error body.
-        }
-        throw new Error(message);
-    }
-
-    if (response.status === 204) {
-        return null;
-    }
-
-    const contentType = response.headers.get("content-type") || "";
-    if (!contentType.includes("application/json")) {
-        return null;
-    }
-
-    return response.json();
-}
 
 function getCurrentUserId() {
     const userId = getCookie("userId");

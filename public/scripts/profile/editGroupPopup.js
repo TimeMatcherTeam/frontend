@@ -1,4 +1,4 @@
-import { API_URL, getAuthHeaders } from "../requests.js";
+import { API_URL, requestJson } from "../requests.js";
 import { getCookie, getToken } from "../jwtUtils.js";
 import { openMeetingUsersPopup, addMeetingUsers, getMeetingSelectedUsers, resetMeetingSelectedUsers } from "../calendar/userSearchPopup.js";
 
@@ -23,20 +23,6 @@ function normalizeParticipant(participant) {
         userName: participant.userName ?? participant.UserName ?? "Без имени",
         email: participant.email ?? participant.Email ?? ""
     };
-}
-
-
-async function requestJson(url, options = {}) {
-    const response = await fetch(url, { ...options, headers: { ...(options.headers || {}), ...getAuthHeaders() } });
-    if (!response.ok) {
-        let message = `Ошибка ${response.status}`;
-        try { const error = await response.json(); message = error?.detail || error?.title || message; } catch {}
-        throw new Error(message);
-    }
-    if (response.status === 204) return null;
-    const contentType = response.headers.get("content-type") || "";
-    if (!contentType.includes("application/json")) return null;
-    return response.json();
 }
 
 function createElement(tagName, className, options = {}) {
