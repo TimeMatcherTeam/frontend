@@ -1,5 +1,5 @@
-import { getCookie } from "../jwtUtils";
-import { showAuthForm } from "../popups/authPopup";
+import { getCookie } from "../jwtUtils.js";
+import { showAuthForm } from "../popups/authPopup.js";
 
 export function fmt2(n) {
     return String(n).padStart(2, '0');
