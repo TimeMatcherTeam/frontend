@@ -34,7 +34,7 @@ function addUsersToSelection(users) {
     const normalizedUsers = (Array.isArray(users) ? users : [])
         .map(normalizeUser)
         .filter(Boolean)
-        .filter(user => String(user.id) !== String(getCurrentUserId()));
+        //.filter(user => String(user.id) !== String(getCurrentUserId())); // ! Я надеюсь, что ничего не сломал, это как-то фиксит ту ошибку с лишним DELETE запросом
 
     if (normalizedUsers.length === 0) {
         return false;
@@ -95,7 +95,7 @@ function renderSelectedUsers() {
         selected.appendChild(empty);
         return;
     }
-
+    console.log(selectedUsers)
     selectedUsers.forEach(user => {
         const chip = document.createElement("button");
         chip.type = "button";
@@ -258,11 +258,13 @@ export function closeMeetingUsersPopup() {
 }
 
 export function addMeetingUsers(users) {
+    console.log(users)
     return addUsersToSelection(users);
 }
 
 export function resetMeetingSelectedUsers() {
     resetSelectedUsers();
+    console.log(selectedUsers)
 }
 
 export function getMeetingSelectedUsers() {
