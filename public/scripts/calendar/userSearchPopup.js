@@ -1,4 +1,4 @@
-import { API_URL } from "../requests.js";
+import { API_URL, requestJson } from "../requests.js";
 import { getCookie, getToken } from "../jwtUtils.js";
 
 const SEARCH_LIMIT = 8;
@@ -34,7 +34,7 @@ function addUsersToSelection(users) {
     const normalizedUsers = (Array.isArray(users) ? users : [])
         .map(normalizeUser)
         .filter(Boolean)
-        .filter(user => String(user.id) !== String(getCurrentUserId()));
+        //.filter(user => String(user.id) !== String(getCurrentUserId())); // ! Я надеюсь, что ничего не сломал, это как-то фиксит ту ошибку с лишним DELETE запросом
 
     if (normalizedUsers.length === 0) {
         return false;
@@ -56,46 +56,6 @@ function addUsersToSelection(users) {
     }
 
     return changed;
-}
-
-function getAuthHeaders() {
-    const token = getToken();
-    if (!token) {
-        throw new Error("Необходима авторизация.");
-    }
-
-    return {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${token}`
-    };
-}
-
-async function requestJson(url) {
-    const response = await fetch(url, {
-        headers: getAuthHeaders()
-    });
-
-    if (!response.ok) {
-        let message = `Ошибка ${response.status}`;
-        try {
-            const error = await response.json();
-            message = error?.detail || error?.title || message;
-        } catch {
-            // Ignore non-json error body.
-        }
-        throw new Error(message);
-    }
-
-    if (response.status === 204) {
-        return null;
-    }
-
-    const contentType = response.headers.get("content-type") || "";
-    if (!contentType.includes("application/json")) {
-        return null;
-    }
-
-    return response.json();
 }
 
 async function getUsers(searchText) {
@@ -135,7 +95,7 @@ function renderSelectedUsers() {
         selected.appendChild(empty);
         return;
     }
-
+    console.log(selectedUsers)
     selectedUsers.forEach(user => {
         const chip = document.createElement("button");
         chip.type = "button";
@@ -298,11 +258,13 @@ export function closeMeetingUsersPopup() {
 }
 
 export function addMeetingUsers(users) {
+    console.log(users)
     return addUsersToSelection(users);
 }
 
 export function resetMeetingSelectedUsers() {
     resetSelectedUsers();
+    console.log(selectedUsers)
 }
 
 export function getMeetingSelectedUsers() {

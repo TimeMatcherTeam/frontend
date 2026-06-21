@@ -1,4 +1,4 @@
-import { API_URL } from "../requests.js";
+import { API_URL, requestJson } from "../requests.js";
 import { getCookie, getToken } from "../jwtUtils.js";
 import { state } from "./state.js";
 import { renderEvents } from "./grid.js";
@@ -6,27 +6,6 @@ import { renderEvents } from "./grid.js";
 let popupInitialized = false;
 let currentMeeting = null;
 
-function getAuthHeaders() {
-    const token = getToken();
-    if (!token) throw new Error("Необходима авторизация.");
-    return { "Content-Type": "application/json", Authorization: `Bearer ${token}` };
-}
-
-async function requestJson(url, options = {}) {
-    const response = await fetch(url, {
-        ...options,
-        headers: { ...(options.headers || {}), ...getAuthHeaders() }
-    });
-    if (!response.ok) {
-        let message = `Ошибка ${response.status}`;
-        try { const err = await response.json(); message = err?.detail || err?.title || message; } catch {}
-        throw new Error(message);
-    }
-    if (response.status === 204) return null;
-    const ct = response.headers.get("content-type") || "";
-    if (!ct.includes("application/json")) return null;
-    return response.json();
-}
 
 async function loadMeetingDetails(meetingId) {
     return requestJson(`${API_URL}/meetings/${meetingId}`, { method: "GET" });

@@ -1,4 +1,4 @@
-import { API_URL } from "../requests.js";
+import { API_URL, getAuthHeaders } from "../requests.js";
 import { getCookie, getToken } from "../jwtUtils.js";
 import { HOUR_H, COLORS, EVENT_CLASS_NAMES } from "./constants.js";
 import { state } from "./state.js";
@@ -302,17 +302,6 @@ async function initParticipants() {
     renderParticipants();
 }
 
-function getAuthHeaders() {
-    const token = getToken();
-    if (!token) {
-        throw new Error("Необходима авторизация.");
-    }
-
-    return {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${token}`
-    };
-}
 
 function getRequestedPeriod() {
     const start = getWeekStart(state.weekOffset);
