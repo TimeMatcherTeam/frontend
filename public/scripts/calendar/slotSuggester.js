@@ -1,4 +1,4 @@
-import { API_URL } from "../requests.js";
+import { API_URL, getAuthHeaders } from "../requests.js";
 import { getToken } from "../jwtUtils.js";
 
 let currentParticipants = [];
@@ -7,17 +7,6 @@ let lastSlots = [];
 
 export function getLastSlots() {
     return lastSlots;
-}
-
-function getAuthHeaders() {
-    const token = getToken();
-    if (!token) {
-        throw new Error("Необходима авторизация.");
-    }
-    return {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${token}`
-    };
 }
 
 async function fetchMergedIntervals(participantIds, start, end) {
