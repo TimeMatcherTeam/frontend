@@ -3,7 +3,7 @@ import { getCookie, getToken } from "../jwtUtils.js";
 import { createUserGroupsBlock } from "../calendar/components/userGroupsBlock.js";
 import { initEditGroupPopup, openEditGroupPopup } from "./editGroupPopup.js";
 import { logout } from "../auth.js";
-import { getCurrentUserId } from "./utils.js";
+import { getCurrentUserId } from "../calendar/utils.js";
 
 
 function getElements() {
