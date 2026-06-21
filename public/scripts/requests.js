@@ -1,4 +1,4 @@
-import { getToken } from "./jwtUtils";
+import { getToken } from "./jwtUtils.js";
 
 export const API_URL = "/api";
 
